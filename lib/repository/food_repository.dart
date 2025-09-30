@@ -10,6 +10,7 @@ class FoodRepository {
       category: CategoryEnum.popular.label,
       imgAsset: "lib/img/chicken_drumsticks.png",
       price: 12.90,
+      artikelNr: null,
     );
     // 1. Gegrillte Spieße
     Food(
@@ -19,6 +20,7 @@ class FoodRepository {
       category: CategoryEnum.popular.label,
       imgAsset: "lib/img/food2.png",
       price: 13.50,
+      artikelNr: null,
     );
 
     // 2. Scharf-Süße Flügel
@@ -28,6 +30,7 @@ class FoodRepository {
           "Crisp wings coated in a sticky, sweet-spicy chili glaze. Perfect for sharing.",
       category: CategoryEnum.popular.label,
       imgAsset: "lib/img/food1.png",
+      artikelNr: null,
       price: 9.90,
     );
     Food(
@@ -36,6 +39,7 @@ class FoodRepository {
           "with tomatosauce, Mozzarella, spicy Salami, Mushroom's and Onion's.",
       category: CategoryEnum.main.label,
       imgAsset: "lib/img/pizza_angela1",
+      artikelNr: null,
       price: 12.50,
     );
 
@@ -44,6 +48,7 @@ class FoodRepository {
       description: "with tomatosauce, Mozzarella, Tuna and Onion's.",
       category: CategoryEnum.main.label,
       imgAsset: "lib/img/pizza_tonno.png",
+      artikelNr: null,
       price: 14.90,
     );
 
@@ -53,8 +58,8 @@ class FoodRepository {
           "with tomatosauce, Mozzarella, black Olive's, caper's, anchovies and artichokes .",
       category: CategoryEnum.main.label,
       imgAsset: "lib/img/pizza_nonna.png",
+      artikelNr: null,
       price: 15.90,
     );
   }
 }
-

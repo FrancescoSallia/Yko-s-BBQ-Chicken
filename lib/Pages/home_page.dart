@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
-import 'package:ykos_bbq_chicken/components/grid_item.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -55,8 +54,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         surfaceTintColor: Colors.transparent,
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Image.asset("lib/img/user.png", height: double.infinity),
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 3),
+            child: Image.asset("lib/img/user.png"),
           ),
         ],
       ),

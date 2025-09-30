@@ -51,8 +51,8 @@ class _FavoritedPageState extends State<FavoritedPage>
         centerTitle: true,
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: Image.asset("lib/img/user.png", height: double.infinity),
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 3),
+            child: Image.asset("lib/img/user.png"),
           ),
         ],
       ),

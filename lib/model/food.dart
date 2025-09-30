@@ -1,8 +1,8 @@
 import 'package:uuid/uuid.dart';
-import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 
 class Food {
   final String id = Uuid().v4();
+  final String? artikelNr;
   final String name;
   final String description;
   final String category;
@@ -10,6 +10,7 @@ class Food {
   final double price;
 
   Food({
+    required this.artikelNr,
     required this.name,
     required this.description,
     required this.category,

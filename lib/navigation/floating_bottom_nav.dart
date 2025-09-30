@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:ykos_bbq_chicken/Pages/cart_page.dart';
 import 'package:ykos_bbq_chicken/Pages/home_page.dart';
-import 'package:ykos_bbq_chicken/Pages/login/favorited_page.dart';
+import 'package:ykos_bbq_chicken/Pages/favorited_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class FloatingBottomNav extends StatefulWidget {
