@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 900),
@@ -26,12 +25,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
     );
     _animationController.forward();
+
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _animationController
+        .stop(); // Wenn du zu schnell die Pages hin und her wechselst kommt es zu einem Fehler im Compiler -> erst stoppen dann disposen und anschließend die super.dispose(), genau diese Reihenfolge!
     _animationController.dispose();
+    super.dispose();
   }
 
   @override

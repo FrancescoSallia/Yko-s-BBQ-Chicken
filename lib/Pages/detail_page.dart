@@ -20,8 +20,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
-
     //Scale & Rotatation Animaiton
     _scaleController = AnimationController(
       vsync: this,
@@ -47,13 +45,16 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
     _likedController.reverse();
 
     _likedController.value = 0.0;
+    super.initState();
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _likedController.stop();
+    _scaleController.stop(); 
     _scaleController.dispose();
     _likedController.dispose();
+    super.dispose();
   }
 
   @override

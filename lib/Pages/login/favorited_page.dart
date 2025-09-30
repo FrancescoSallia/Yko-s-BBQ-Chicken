@@ -19,20 +19,21 @@ class _FavoritedPageState extends State<FavoritedPage>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 900),
     );
     _animation = Tween(
       begin: 0.3,
       end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
   }
 
   @override
   void dispose() {
-    super.dispose();
+    _controller.stop();
     _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -93,13 +94,40 @@ class _FavoritedPageState extends State<FavoritedPage>
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-                            Image.asset(
-                              "lib/img/plate.png",
-                              height: containerHeight * 0.53, // proportional
-                            ),
-                            Image.asset(
-                              "lib/img/food1.png",
-                              height: containerHeight * 0.45,
+                            RotationTransition(
+                              turns: _animation,
+                              child: ScaleTransition(
+                                scale: _animation,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 6,
+                                        color: Colors.black.withValues(
+                                          alpha: 0.4,
+                                        ),
+                                        offset: Offset(15, 10),
+                                      ),
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Image.asset(
+                                        "lib/img/plate.png",
+                                        height:
+                                            containerHeight *
+                                            0.53, // proportional
+                                      ),
+                                      Image.asset(
+                                        "lib/img/food1.png",
+                                        height: containerHeight * 0.45,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ),
                           ],
                         ),
