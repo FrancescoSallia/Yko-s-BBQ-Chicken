@@ -40,7 +40,8 @@ class _FavoritedPageState extends State<FavoritedPage>
     return Scaffold(
       backgroundColor: AppColors.secondary,
       appBar: AppBar(
-        backgroundColor: AppColors.secondary,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         title: Text(
           "Favorite",
           style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold),
@@ -55,8 +56,11 @@ class _FavoritedPageState extends State<FavoritedPage>
       ),
       drawer: Drawer(),
       body: GridView.builder(
+        padding: EdgeInsets.only(top: 40, bottom: 120),
         itemCount: 7,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          mainAxisSpacing: 30,
+          crossAxisSpacing: 16,
           crossAxisCount: 2,
         ),
         itemBuilder: (context, index) {
@@ -65,7 +69,7 @@ class _FavoritedPageState extends State<FavoritedPage>
           final itemHeight = itemWidth * 1.3; // Höhe proportional zur Breite
 
           return Container(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Container(
               width: itemWidth,
               height: itemHeight,
@@ -82,7 +86,7 @@ class _FavoritedPageState extends State<FavoritedPage>
                       Positioned(
                         top:
                             -containerHeight *
-                            0.12, // 15% ragt raus (proportional!)
+                            0.12, // 12% ragt raus (proportional!)
                         left: 0,
                         right: 0,
                         // bottom: 0,
@@ -106,17 +110,26 @@ class _FavoritedPageState extends State<FavoritedPage>
                         right: 0,
                         bottom: 0,
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                            left: 10.0,
+                            right: 10,
+                            bottom: 5,
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  "Jollof Rice with 1/4 Chicken & Plantain",
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                                child: Container(
+                                  constraints: BoxConstraints(maxWidth: 150),
+                                  child: Text(
+                                    "Jollof Rice with 1/4 Chicken & Plantain dfibdsifbdsbfds",
+                                    style: GoogleFonts.inter(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
