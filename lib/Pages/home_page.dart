@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
+import 'package:ykos_bbq_chicken/components/grid_item.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -49,6 +52,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       backgroundColor: AppColors.secondary,
       appBar: AppBar(
         backgroundColor: AppColors.secondary,
+        surfaceTintColor: Colors.transparent,
         actions: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -118,24 +122,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 35, left: 18.0, bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Popular",
-                    style: GoogleFonts.inter(
-                      color: AppColors.primaryButton,
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
 
-            CardItem(scaleAnimation: _animation, rotationAnimation: _animation),
+            CardItem(
+              scaleAnimation: _animation,
+              rotationAnimation: _animation,
+              largeTitle: 'Popular',
+              gesture: () {
+                Navigator.of(
+                  context,
+                ).push(CupertinoPageRoute(builder: (context) => DetailPage()));
+              },
+            ),
+            CardItem(
+              scaleAnimation: _animation,
+              rotationAnimation: _animation,
+              largeTitle: 'Menu',
+              gesture: () {},
+            ),
+            SizedBox(height: 130),
           ],
         ),
       ),
