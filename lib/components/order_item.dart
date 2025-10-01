@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
+import 'package:ykos_bbq_chicken/Pages/sheet_note_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class OrderItem extends StatelessWidget {
@@ -35,7 +37,23 @@ class OrderItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 OutlinedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                      ),
+                      builder: (context) {
+                        return FractionallySizedBox(
+                          heightFactor: 0.6,
+                          child: SheetNotePage(),
+                        );
+                      },
+                    );
+                  },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: AppColors.primary.withValues(
                       alpha: 0.1,

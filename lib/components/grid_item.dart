@@ -5,7 +5,11 @@ import 'package:ykos_bbq_chicken/theme/colors.dart';
 class GridItem extends StatelessWidget {
   final Animation<double> rotateAnimation;
   final Animation<double> scaleAnimation;
-  const GridItem({super.key, required this.rotateAnimation, required this.scaleAnimation});
+  const GridItem({
+    super.key,
+    required this.rotateAnimation,
+    required this.scaleAnimation,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +116,13 @@ class GridItem extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            IconButton.filled(
-                              style: IconButton.styleFrom(
-                                backgroundColor: Colors.black,
-                              ),
-                              onPressed: () {},
-                              icon: Icon(Icons.favorite),
+                            GestureDetector(
+                              onTap: () {
+                                //Unlike Function Todo
+                              },
+                              child: Image.asset("lib/img/liked.png"),
                             ),
+
                             IconButton.filled(
                               style: IconButton.styleFrom(
                                 backgroundColor: Colors.black,

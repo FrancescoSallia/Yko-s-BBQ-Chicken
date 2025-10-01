@@ -51,7 +51,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   @override
   void dispose() {
     _likedController.stop();
-    _scaleController.stop(); 
+    _scaleController.stop();
     _scaleController.dispose();
     _likedController.dispose();
     super.dispose();
@@ -103,115 +103,117 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           ),
         ],
       ),
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: Column(
-          children: [
-            const Spacer(),
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Column(
+            children: [
+              const Spacer(),
 
-            RotationTransition(
-              turns: _scaleAnimation,
-              child: ScaleTransition(
-                scale: _scaleAnimation,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 280, // Teller größer
-                      height: 280,
-                      child: Transform.scale(
-                        scale: 2.0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(400),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.4),
-                                blurRadius: 8,
-                                spreadRadius: -60,
-                                offset: Offset(5, 6),
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Image.asset("lib/img/plate.png", width: 150),
-                              Image.asset(
-                                "lib/img/pizza_angela1.png",
-                                width: 120,
-                              ),
-                            ],
+              RotationTransition(
+                turns: _scaleAnimation,
+                child: ScaleTransition(
+                  scale: _scaleAnimation,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
+                        width: 280, // Teller größer
+                        height: 280,
+                        child: Transform.scale(
+                          scale: 2.0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(400),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withValues(alpha: 0.4),
+                                  blurRadius: 8,
+                                  spreadRadius: -60,
+                                  offset: Offset(5, 6),
+                                ),
+                              ],
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Image.asset("lib/img/plate.png", width: 150),
+                                Image.asset(
+                                  "lib/img/pizza_angela1.png",
+                                  width: 120,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    // SizedBox(
-                    //   width: 300, // Essen kleiner
-                    //   // height: 200,
-                    //   child: Image.asset("lib/img/food1.png", width: 100),
-                    // ),
-                  ],
+                      // SizedBox(
+                      //   width: 300, // Essen kleiner
+                      //   // height: 200,
+                      //   child: Image.asset("lib/img/food1.png", width: 100),
+                      // ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            const Spacer(),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 15.0,
-                  right: 15,
-                  bottom: 50,
-                  top: 10,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // const SizedBox(height: 120),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [Image.asset("lib/img/peper_detail.png")],
-                    ),
-                    SizedBox(
-                      width: 250,
-                      child: Text(
-                        "Jollof Rice with 1/4 Chicken & Plantain",
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 15.0,
+                    right: 15,
+                    bottom: 50,
+                    top: 10,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // const SizedBox(height: 120),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [Image.asset("lib/img/peper_detail.png")],
+                      ),
+                      SizedBox(
+                        width: 250,
+                        child: Text(
+                          "Jollof Rice with 1/4 Chicken & Plantain",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26,
+                          ),
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 20.0),
+                        child: Image(image: AssetImage("lib/img/rating.png")),
+                      ),
+                      Text(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
                         style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26,
+                          color: const Color.fromARGB(255, 91, 91, 91),
                         ),
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 20.0),
-                      child: Image(image: AssetImage("lib/img/rating.png")),
-                    ),
-                    Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
-                      style: GoogleFonts.inter(
-                        color: const Color.fromARGB(255, 91, 91, 91),
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [AddRemoveButton(), MyToCartButton()],
                       ),
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [AddRemoveButton(), MyToCartButton()],
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

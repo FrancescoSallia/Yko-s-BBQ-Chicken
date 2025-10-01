@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -10,6 +9,7 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int lengthList = 5;
     return Scaffold(
       backgroundColor: AppColors.secondary,
       appBar: AppBar(
@@ -26,10 +26,10 @@ class CartPage extends StatelessWidget {
       ),
       drawer: Drawer(),
       body: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        itemCount: 9 + 1,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+        itemCount: lengthList + 1,
         itemBuilder: (context, index) {
-          if (index < 9) {
+          if (index < lengthList) {
             return OrderItem();
           } else {
             return Column(children: [SummaryBox(), SizedBox(height: 110)]);

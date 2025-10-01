@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class SummaryBox extends StatelessWidget {
@@ -89,13 +86,15 @@ class SummaryBox extends StatelessWidget {
             ],
           ),
         ),
+        SizedBox(height: 10),
 
         TextButton(
           onPressed: () {},
           style: TextButton.styleFrom(
             backgroundColor: Colors.black,
             foregroundColor: Colors.white,
-            minimumSize: Size(double.infinity, 40),
+            minimumSize: Size(double.infinity, 55),
+
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -107,11 +106,11 @@ class SummaryBox extends StatelessWidget {
                 "Order Now",
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
               ),
               SizedBox(width: 10),
-              Icon(Icons.delivery_dining_outlined, size: 22),
+              Icon(Icons.delivery_dining_outlined, size: 24),
             ],
           ),
         ),

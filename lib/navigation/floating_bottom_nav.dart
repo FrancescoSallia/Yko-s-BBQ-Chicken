@@ -3,6 +3,7 @@ import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:ykos_bbq_chicken/Pages/cart_page.dart';
 import 'package:ykos_bbq_chicken/Pages/home_page.dart';
 import 'package:ykos_bbq_chicken/Pages/favorited_page.dart';
+import 'package:ykos_bbq_chicken/Pages/timer_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class FloatingBottomNav extends StatefulWidget {
@@ -20,6 +21,7 @@ class _FloatingBottomNavState extends State<FloatingBottomNav> {
     FavoritedPage(),
     Center(child: Text("👤 Profile Page")),
     CartPage(),
+    TimerPage(),
   ];
 
   @override
@@ -61,7 +63,13 @@ class _FloatingBottomNavState extends State<FloatingBottomNav> {
                 1,
               ),
               _buildNavItem(Icons.search, 2),
-              _buildNavItem(Icons.shopping_cart_outlined, 3),
+              _buildNavItem(
+                currentIndex == 3
+                    ? Icons.shopping_cart
+                    : Icons.shopping_cart_outlined,
+                3,
+              ),
+              _buildNavItem(Icons.av_timer_rounded, 4),
             ],
           ),
         ),
