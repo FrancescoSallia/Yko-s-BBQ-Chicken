@@ -11,4 +11,5 @@ class AppColors {
   ); // im figma ist es auf 35% überprüfe ob das so hinhaut eins zu eins
   static const Color primaryButton = Colors.black;
   static const Color textFieldColor = Color.fromARGB(255, 172, 172, 172);
+  static const Color timerPrimary = Color.fromRGBO(255, 89, 0, 0.5);
 }
