@@ -9,35 +9,92 @@ class TimerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<Map<String, String>> _orderedList = [
+      {"Pizza Marghertia": "12,50€"},
+      {"Pizza Tonno": "11,50€"},
+      {"Pizza Vegetale": "10,90€"},
+      {"Pizza Salami": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+      {"Pizza Funghi": "10,90€"},
+    ];
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Bestellung:",
-                  style: GoogleFonts.inter(
-                    color: Colors.deepOrangeAccent,
-                    fontSize: 24,
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Bestellung:",
+                    style: GoogleFonts.inter(
+                      color: Colors.deepOrangeAccent,
+                      fontSize: 24,
+                    ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Text(
-                  "#245444",
-                  style: GoogleFonts.inter(color: Colors.black, fontSize: 24),
-                ),
-              ],
+                  SizedBox(width: 10),
+                  Text(
+                    "#245444",
+                    style: GoogleFonts.inter(color: Colors.black, fontSize: 24),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Timer(),
+            Timer(),
 
-          //Lottie-Gif-Animaton
-        ],
+            //Ankunft Zeit Text
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Ankunft:",
+                    style: GoogleFonts.inter(color: Colors.black, fontSize: 18),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    "ca. 20:45 - 21:10 Uhr",
+                    style: GoogleFonts.inter(
+                      color: Colors.deepOrangeAccent,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Expanded(
+              child: ListView.builder(
+                itemCount: _orderedList.length,
+                itemBuilder: (context, index) {
+                  final orderedItem = _orderedList[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 6.0,
+                      horizontal: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(orderedItem.keys.toString()),
+                        Text(orderedItem.values.toString()),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
