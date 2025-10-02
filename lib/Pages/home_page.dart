@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -68,7 +70,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.all(30),
+                  padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                   child: Column(
                     children: [
                       Text(
@@ -91,6 +93,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                 ),
               ],
+            ),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 18,
+              ),
+              child: CupertinoSearchTextField(),
             ),
 
             SizedBox(
@@ -125,18 +135,53 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             CardItem(
               scaleAnimation: _animation,
               rotationAnimation: _animation,
-              largeTitle: 'Popular',
+              largeTitle: 'Recommended',
               gesture: () {
                 Navigator.of(
                   context,
                 ).push(CupertinoPageRoute(builder: (context) => DetailPage()));
               },
             ),
-            CardItem(
-              scaleAnimation: _animation,
-              rotationAnimation: _animation,
-              largeTitle: 'Menu',
-              gesture: () {},
+
+            ListView.builder(
+              itemCount: 5,
+              shrinkWrap:
+                  true, // <- Passt die Höhe an den Inhalt an und gibt nicht den typischen ´Fehler zurück von wegen mit SingleScrollview geht es nicht !s
+              physics:
+                  NeverScrollableScrollPhysics(), // <- verhindert doppeltes Scrollen
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8.0,
+                    horizontal: 20,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.all(20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Gericht ${index + 1}',
+                          style: GoogleFonts.inter(
+                            color: AppColors.primaryButton,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.primaryButton,
+                          size: 16,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
             SizedBox(height: 130),
           ],

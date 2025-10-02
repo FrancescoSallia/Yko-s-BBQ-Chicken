@@ -23,7 +23,7 @@ class CardItem extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 35, left: 18.0, bottom: 10),
+          padding: const EdgeInsets.only(top: 28, left: 18.0, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -31,7 +31,7 @@ class CardItem extends StatelessWidget {
                 largeTitle,
                 style: GoogleFonts.inter(
                   color: AppColors.primaryButton,
-                  fontSize: 26,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -70,7 +70,7 @@ class CardItem extends StatelessWidget {
               gesture,
 
           child: SizedBox(
-            height: 280,
+            height: 225,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: 10,
@@ -79,15 +79,15 @@ class CardItem extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     top: 60.0,
                     left: 20,
-                    right: 28,
+                    right: 10,
                   ),
                   child: Stack(
                     clipBehavior:
                         Clip.none, // WICHTIG: erlaubt das "Herausragen" des Tellers
                     children: [
                       Container(
-                        height: 230,
-                        width: 182,
+                        // height: 230,
+                        width: 145,
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(8),
@@ -102,8 +102,8 @@ class CardItem extends StatelessWidget {
                                 child: Text(
                                   "Jollof Rice with 1/4 Chicken & Plantain",
                                   style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 14,
                                   ),
                                 ),
                               ),
@@ -114,11 +114,11 @@ class CardItem extends StatelessWidget {
                                   Text(
                                     "15€",
                                     style: GoogleFonts.inter(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
                                     ),
                                   ),
-                                  Image.asset("lib/img/peper.png"),
+                                  Image.asset("lib/img/peper.png", width: 30),
                                 ],
                               ),
                             ],
@@ -127,8 +127,8 @@ class CardItem extends StatelessWidget {
                       ),
                       // 🍕 Das Bild ragt nach oben heraus
                       Positioned(
-                        top: -50,
-                        left: 20,
+                        top: -56,
+                        left: 23,
                         child: RotationTransition(
                           turns: rotationAnimation,
                           child: ScaleTransition(
@@ -148,24 +148,24 @@ class CardItem extends StatelessWidget {
                                         blurRadius:
                                             10, // wie weich der Schatten ist
                                         spreadRadius:
-                                            1, // wie weit er sich ausbreitet
+                                            0, // wie weit er sich ausbreitet
                                         offset: const Offset(
-                                          18,
-                                          15,
+                                          10,
+                                          10,
                                         ), // Abstand nach unten (Schattenwurf)
                                       ),
                                     ],
                                   ),
                                   child: Image.asset(
                                     "lib/img/plate.png",
-                                    width: 130,
+                                    width: 100,
                                   ),
                                 ),
 
                                 // 🍗 Das Food-Bild leicht darüber
                                 Image.asset(
                                   "lib/img/chicken_drumsticks.png",
-                                  width: 110,
+                                  width: 80,
                                 ),
                               ],
                             ),
