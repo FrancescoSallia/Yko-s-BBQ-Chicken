@@ -61,11 +61,11 @@ class GridItem extends StatelessWidget {
                                 Image.asset(
                                   "lib/img/plate.png",
                                   height:
-                                      containerHeight * 0.48, // proportional
+                                      containerHeight * 0.40, // proportional
                                 ),
                                 Image.asset(
                                   "lib/img/food2.png",
-                                  height: containerHeight * 0.40,
+                                  height: containerHeight * 0.32,
                                 ),
                               ],
                             ),
@@ -91,14 +91,14 @@ class GridItem extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
+                          padding: const EdgeInsets.only(left: 8, bottom: 8.0),
                           child: Container(
                             constraints: BoxConstraints(maxWidth: 150),
                             child: Text(
                               "Jollof Rice with 1/4 Chicken & Plantain",
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 15,
+                                fontSize: 13,
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -109,7 +109,7 @@ class GridItem extends StatelessWidget {
                           "15€",
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
-                            fontSize: 15,
+                            fontSize: 13,
                           ),
                         ),
 
@@ -120,7 +120,10 @@ class GridItem extends StatelessWidget {
                               onTap: () {
                                 //Unlike Function Todo
                               },
-                              child: Image.asset("lib/img/liked.png"),
+                              child: Image.asset(
+                                "lib/img/liked.png",
+                                width: 32,
+                              ),
                             ),
 
                             IconButton.filled(
@@ -128,7 +131,7 @@ class GridItem extends StatelessWidget {
                                 backgroundColor: Colors.black,
                               ),
                               onPressed: () {},
-                              icon: Icon(Icons.shopping_cart),
+                              icon: Icon(Icons.shopping_cart, size: 20),
                             ),
                             // Image.asset("lib/img/peper.png"),
                           ],

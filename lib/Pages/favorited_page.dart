@@ -41,37 +41,47 @@ class _FavoritedPageState extends State<FavoritedPage>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        title: Text(
-          "Favorite",
-          style: GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 100),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Image.asset("lib/img/logo_ykos.png", height: 28),
+                SizedBox(width: 10),
+                Text(
+                  "Favorite's",
+                  style: GoogleFonts.inter(
+                    fontWeight: FontWeight.w700,
+
+                    fontSize: 22,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.only(top: 40, bottom: 120),
+              itemCount: 7,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                childAspectRatio: 1.0,
+                mainAxisSpacing: 55,
+                crossAxisSpacing: 0,
+                crossAxisCount: 2,
+              ),
+              itemBuilder: (context, index) {
+                return GridItem(
+                  rotateAnimation: _animation,
+                  scaleAnimation: _animation,
+                );
+              },
+            ),
+          ],
         ),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 3),
-            child: Image.asset("lib/img/user.png"),
-          ),
-        ],
-      ),
-      drawer: Drawer(),
-      body: GridView.builder(
-        padding: EdgeInsets.only(top: 40, bottom: 120),
-        itemCount: 7,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          childAspectRatio: 0.89,
-          mainAxisSpacing: 55,
-          crossAxisSpacing: 16,
-          crossAxisCount: 2,
-        ),
-        itemBuilder: (context, index) {
-          return GridItem(
-            rotateAnimation: _animation,
-            scaleAnimation: _animation,
-          );
-        },
       ),
     );
   }

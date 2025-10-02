@@ -86,34 +86,7 @@ class SummaryBox extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 10),
-
-        TextButton(
-          onPressed: () {},
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.black,
-            foregroundColor: Colors.white,
-            minimumSize: Size(double.infinity, 55),
-
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Order Now",
-                style: GoogleFonts.inter(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              SizedBox(width: 10),
-              Icon(Icons.delivery_dining_outlined, size: 24),
-            ],
-          ),
-        ),
+        SizedBox(height: 30),
       ],
     );
   }

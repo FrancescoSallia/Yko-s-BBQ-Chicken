@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/Pages/sheet_note_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 

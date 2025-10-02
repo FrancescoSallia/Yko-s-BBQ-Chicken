@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class CardItem extends StatelessWidget {

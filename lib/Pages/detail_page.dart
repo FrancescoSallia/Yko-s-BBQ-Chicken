@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -12,28 +13,29 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
+  late AnimationController _scaleController;
+  late AnimationController _likedController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _likedAnimation;
-  late AnimationController _likedController;
-  late AnimationController _scaleController;
   bool _isLiked = false;
 
   @override
   void initState() {
-    //Scale & Rotatation Animaiton
+    super.initState();
+
     _scaleController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 900),
     );
+
     _scaleAnimation = Tween(
       begin: 0.3,
       end: 1.0,
     ).animate(CurvedAnimation(parent: _scaleController, curve: Curves.easeOut));
 
-    //Liked Animation & Controller
     _likedController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 150),
     );
 
     _likedAnimation = Tween(
@@ -42,16 +44,10 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
     ).animate(CurvedAnimation(parent: _likedController, curve: Curves.easeOut));
 
     _scaleController.forward();
-    _likedController.reverse();
-
-    _likedController.value = 0.0;
-    super.initState();
   }
 
   @override
   void dispose() {
-    _likedController.stop();
-    _scaleController.stop();
     _scaleController.dispose();
     _likedController.dispose();
     super.dispose();
@@ -59,10 +55,13 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: AppColors.primary,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
         title: Text(
           "Food Details",
           style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
@@ -70,25 +69,22 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
         centerTitle: true,
         leading: IconButton.filled(
           style: IconButton.styleFrom(backgroundColor: AppColors.primaryButton),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.arrow_back_rounded, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
         ),
         actions: [
           GestureDetector(
             onTap: () {
               setState(() {
                 _isLiked = !_isLiked;
-                _likedController.reset();
-                _likedController.forward().then((value) {
-                  _likedController.reverse();
-                });
+                _likedController
+                    .forward(from: 0)
+                    .then((_) => _likedController.reverse());
               });
             },
             child: Container(
-              padding: EdgeInsets.all(2),
-              margin: EdgeInsets.only(right: 20, top: 5),
+              padding: const EdgeInsets.all(2),
+              margin: const EdgeInsets.only(right: 20, top: 5),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(100),
                 color: Colors.white,
@@ -97,116 +93,148 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                 scale: _likedAnimation,
                 child: Image.asset(
                   _isLiked ? "lib/img/liked.png" : "lib/img/unliked.png",
+                  width: 28,
                 ),
               ),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
+
+      body: NotificationListener<OverscrollIndicatorNotification>(
+        onNotification: (overscroll) {
+          overscroll.disallowIndicator();
+          return true;
+        },
+        child: SingleChildScrollView(
+          physics: const ClampingScrollPhysics(),
           child: Column(
             children: [
-              const Spacer(),
-
-              RotationTransition(
-                turns: _scaleAnimation,
-                child: ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 280, // Teller größer
-                        height: 280,
-                        child: Transform.scale(
-                          scale: 2.0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(400),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.4),
-                                  blurRadius: 8,
-                                  spreadRadius: -60,
-                                  offset: Offset(5, 6),
-                                ),
-                              ],
-                            ),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset("lib/img/plate.png", width: 150),
-                                Image.asset(
-                                  "lib/img/pizza_angela1.png",
-                                  width: 120,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      // SizedBox(
-                      //   width: 300, // Essen kleiner
-                      //   // height: 200,
-                      //   child: Image.asset("lib/img/food1.png", width: 100),
-                      // ),
-                    ],
+              // STACK mit Pizza und Teller
+              Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  // Hintergrundfarbe
+                  Container(
+                    height: size.height * 0.45,
+                    color: AppColors.primary,
                   ),
-                ),
+
+                  // Teller + Pizza
+                  RotationTransition(
+                    turns: _scaleAnimation,
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Teller (größer)
+                          Image.asset(
+                            "lib/img/plate.png",
+                            width: MediaQuery.of(context).size.width * 0.65,
+                            fit: BoxFit.contain,
+                          ),
+                          // Pizza (etwas kleiner)
+                          Image.asset(
+                            "lib/img/food1.png",
+                            width: MediaQuery.of(context).size.width * 0.52,
+
+                            fit: BoxFit.contain,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
-              const Spacer(),
+              // Weißer Sheet-Bereich (scrollt mit nach oben)
               Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
+                width: double.infinity,
+                decoration: const BoxDecoration(
                   color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
                   ),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 15.0,
-                    right: 15,
-                    bottom: 50,
-                    top: 10,
+                    left: 20,
+                    top: 20,
+                    right: 20,
+                    bottom: 40,
                   ),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // const SizedBox(height: 120),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.end,
-                        children: [Image.asset("lib/img/peper_detail.png")],
+                        children: [
+                          Image.asset("lib/img/peper_detail.png", height: 40),
+                        ],
                       ),
-                      SizedBox(
-                        width: 250,
-                        child: Text(
-                          "Jollof Rice with 1/4 Chicken & Plantain",
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 26,
-                          ),
+                      Text(
+                        "Jollof Rice with 1/4 Chicken & Plantain",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
                         ),
                       ),
                       const Padding(
-                        padding: EdgeInsets.only(bottom: 20.0),
+                        padding: EdgeInsets.only(top: 10, bottom: 20),
                         child: Image(image: AssetImage("lib/img/rating.png")),
                       ),
                       Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua...",
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...",
                         style: GoogleFonts.inter(
                           color: const Color.fromARGB(255, 91, 91, 91),
+                          height: 1.5,
                         ),
                       ),
+                      SizedBox(height: 20),
+                      Text(
+                        "Zutaten",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 26,
+                        ),
+                      ),
+                      ListView(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                        ],
+                      ),
                       const SizedBox(height: 30),
-                      Row(
+                      Text(
+                        "Extra's",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 26,
+                        ),
+                      ),
+                      ListView(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                          AddExtraIcons(),
+                        ],
+                      ),
+                      const SizedBox(height: 30),
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [AddRemoveButton(), MyToCartButton()],
+                        children: [AddRemoveButton(), MyToCartButton()],
                       ),
                     ],
                   ),

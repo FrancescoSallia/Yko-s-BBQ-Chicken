@@ -19,7 +19,6 @@ class _FloatingBottomNavState extends State<FloatingBottomNav> {
   final List<Widget> pages = const [
     HomePage(),
     FavoritedPage(),
-    Center(child: Text("👤 Profile Page")),
     CartPage(),
     TimerPage(),
   ];
@@ -62,14 +61,13 @@ class _FloatingBottomNavState extends State<FloatingBottomNav> {
                 currentIndex == 1 ? Icons.favorite : Icons.favorite_border,
                 1,
               ),
-              _buildNavItem(Icons.search, 2),
               _buildNavItem(
-                currentIndex == 3
+                currentIndex == 2
                     ? Icons.shopping_cart
                     : Icons.shopping_cart_outlined,
-                3,
+                2,
               ),
-              _buildNavItem(Icons.av_timer_rounded, 4),
+              _buildNavItem(Icons.av_timer_rounded, 3),
             ],
           ),
         ),

@@ -12,4 +12,6 @@ class AppColors {
   static const Color primaryButton = Colors.black;
   static const Color textFieldColor = Color.fromARGB(255, 172, 172, 172);
   static const Color timerPrimary = Color.fromRGBO(255, 89, 0, 0.5);
+  static const Color timerPrimary2 = Color.fromARGB(255, 248, 186, 0);
+  static const Color timerTextPrimary = Color.fromARGB(255, 255, 110, 64);
 }
