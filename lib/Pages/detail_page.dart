@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -21,7 +22,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   late AnimationController _likedController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _likedAnimation;
-  // bool _isLiked = false;
 
   @override
   void initState() {
@@ -86,7 +86,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           GestureDetector(
             onTap: () {
               setState(() {
-                // _isLiked = !_isLiked;
                 viewModelMenu.toggleFavorite(widget.item);
 
                 _likedController
@@ -181,7 +180,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                     bottom: 40,
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,13 +215,13 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                       },
                                     ).toList()
                                     : [
-                                      Text(
-                                        "F,A",
-                                        style: GoogleFonts.inter(
-                                          fontWeight: FontWeight.w700,
-                                          fontSize: 12,
-                                        ),
-                                      ),
+                                      // Text(
+                                      //   "F,A",
+                                      //   style: GoogleFonts.inter(
+                                      //     fontWeight: FontWeight.w700,
+                                      //     fontSize: 12,
+                                      //   ),
+                                      // ),
                                     ],
                           ),
 
@@ -245,22 +244,31 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      Text(
-                        widget.item.name,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          widget.item.name,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                          ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 10, bottom: 20),
-                        child: Image(image: AssetImage("lib/img/rating.png")),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          widget.item.price.toEuroString(),
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                       Text(
                         widget.item.description,
                         style: GoogleFonts.inter(
                           color: const Color.fromARGB(255, 91, 91, 91),
-                          height: 1.5,
+                          fontSize: 14,
                         ),
                       ),
                       SizedBox(height: 30),
@@ -288,14 +296,21 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                       //   ],
                       // ),
                       // const SizedBox(height: 10),
+                      Divider(color: Colors.black, height: 0),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "Extra's",
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 26,
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              bottom: 20.0,
+                              top: 20,
+                            ),
+                            child: Text(
+                              "Extra's",
+                              style: GoogleFonts.inter(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 22,
+                              ),
                             ),
                           ),
                         ],

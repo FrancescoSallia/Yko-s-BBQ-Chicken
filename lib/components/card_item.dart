@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
@@ -86,7 +87,7 @@ class CardItem extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "${menuItem.price}€",
+                                    menuItem.price.toEuroString(),
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18,

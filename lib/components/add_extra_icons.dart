@@ -14,68 +14,75 @@ class AddExtraIcons extends StatefulWidget {
 class _AddExtraIconsState extends State<AddExtraIcons> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
       children: [
-        Text(
-          widget.extraItem.name,
-          style: GoogleFonts.inter(fontWeight: FontWeight.w500),
-        ),
-        Spacer(),
-
-        Padding(
-          padding: const EdgeInsets.only(right: 10.0),
-          child: Text(
-            widget.extraItem.price % 1 == 0
-                ? "${widget.extraItem.price.toInt()} €" // glatte Zahl
-                : "${widget.extraItem.price.toStringAsFixed(2).replaceAll('.', ',')} €", // 2 Nachkommastellen
-          ),
-        ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton.filled(
-              style: IconButton.styleFrom(
-                iconSize: 12,
-                backgroundColor: AppColors.primaryButton,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                minimumSize: const Size(18, 18),
-              ),
-              onPressed: () {
-                setState(() {
-                  if (widget.extraItem.anzahl > 0) {
-                    widget.extraItem.anzahl--;
-                  }
-                });
-              },
-              icon: Icon(Icons.remove),
+            Text(
+              widget.extraItem.name,
+              style: GoogleFonts.inter(fontWeight: FontWeight.w500),
             ),
-            SizedBox(
-              width: 15,
-              child: Center(child: Text(widget.extraItem.anzahl.toString())),
-            ),
+            Spacer(),
 
-            IconButton.filled(
-              style: IconButton.styleFrom(
-                iconSize: 12,
-                backgroundColor: AppColors.timerPrimary2,
-                foregroundColor: AppColors.primaryButton,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                minimumSize: const Size(18, 18),
+            Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Text(
+                widget.extraItem.price % 1 == 0
+                    ? "${widget.extraItem.price.toInt()} €" // glatte Zahl
+                    : "${widget.extraItem.price.toStringAsFixed(2).replaceAll('.', ',')} €", // 2 Nachkommastellen
               ),
-              onPressed: () {
-                setState(() {
-                  widget.extraItem.anzahl++;
-                });
-              },
-              icon: Icon(Icons.add),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton.filled(
+                  style: IconButton.styleFrom(
+                    iconSize: 12,
+                    backgroundColor: AppColors.primaryButton,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    minimumSize: const Size(18, 18),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (widget.extraItem.anzahl > 0) {
+                        widget.extraItem.anzahl--;
+                      }
+                    });
+                  },
+                  icon: Icon(Icons.remove),
+                ),
+                SizedBox(
+                  width: 15,
+                  child: Center(
+                    child: Text(widget.extraItem.anzahl.toString()),
+                  ),
+                ),
+
+                IconButton.filled(
+                  style: IconButton.styleFrom(
+                    iconSize: 12,
+                    backgroundColor: AppColors.timerPrimary2,
+                    foregroundColor: AppColors.primaryButton,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    minimumSize: const Size(18, 18),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      widget.extraItem.anzahl++;
+                    });
+                  },
+                  icon: Icon(Icons.add),
+                ),
+              ],
             ),
           ],
         ),
+        Divider(height: 0),
       ],
     );
   }

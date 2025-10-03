@@ -13,7 +13,7 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10, top: 6, bottom: 6),
+      // padding: EdgeInsets.only(left: 10, right: 10, top: 2, bottom: 2),
       decoration: BoxDecoration(
         color: AppColors.secondaryButton,
         borderRadius: BorderRadius.circular(8),
@@ -38,13 +38,18 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
               });
             },
             icon: Icon(Icons.remove, color: AppColors.primaryButton),
+            iconSize: 17,
+            style: IconButton.styleFrom(minimumSize: Size(17, 17)),
           ),
-          Text(
-            widget.anzahl.toString(),
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: AppColors.primaryButton,
-              fontSize: 16,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Text(
+              widget.anzahl.toString(),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: AppColors.primaryButton,
+                fontSize: 14,
+              ),
             ),
           ),
           IconButton(
@@ -54,6 +59,8 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
               });
             },
             icon: Icon(Icons.add, color: AppColors.primaryButton),
+            iconSize: 17,
+            style: IconButton.styleFrom(minimumSize: Size(20, 20)),
           ),
         ],
       ),

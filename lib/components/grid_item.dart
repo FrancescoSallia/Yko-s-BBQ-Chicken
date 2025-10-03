@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -13,7 +14,8 @@ class GridItem extends StatelessWidget {
     super.key,
     required this.rotateAnimation,
     required this.scaleAnimation,
-    required this.favoritedItem, required this.toggleFavoriteGesture,
+    required this.favoritedItem,
+    required this.toggleFavoriteGesture,
   });
 
   @override
@@ -112,9 +114,7 @@ class GridItem extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          favoritedItem.price % 1 == 0
-                              ? "${favoritedItem.price.toInt()}"
-                              : "${favoritedItem.price.toStringAsFixed(2).replaceAll(".", ",")} €",
+                          favoritedItem.price.toEuroString(),
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
