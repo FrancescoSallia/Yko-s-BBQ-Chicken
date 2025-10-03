@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class DetailPage extends StatefulWidget {
   final Food item;
@@ -23,6 +25,10 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      viewModelMenu.loadExtrasForItem(widget.item.category.name);
+    });
     super.initState();
 
     _scaleController = AnimationController(
@@ -57,6 +63,8 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final viewModelMenu = context.watch<ViewmodelMenu>();
+
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -252,30 +260,30 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                         ),
                       ),
                       SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Zutaten",
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 26,
-                            ),
-                          ),
-                        ],
-                      ),
-                      ListView(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     Text(
+                      //       "Zutaten",
+                      //       style: GoogleFonts.inter(
+                      //         fontWeight: FontWeight.w600,
+                      //         fontSize: 26,
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      // ListView(
+                      //   shrinkWrap: true,
+                      //   physics: NeverScrollableScrollPhysics(),
+                      //   children: [
+                      //     AddExtraIcons(),
+                      //     AddExtraIcons(),
+                      //     AddExtraIcons(),
+                      //     AddExtraIcons(),
+                      //     AddExtraIcons(),
+                      //   ],
+                      // ),
+                      // const SizedBox(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -288,21 +296,23 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           ),
                         ],
                       ),
-                      ListView(
-                        shrinkWrap: true,
+
+                      ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                          AddExtraIcons(),
-                        ],
+                        shrinkWrap: true,
+                        itemCount: viewModelMenu.currentExtras.length,
+                        itemBuilder: (context, index) {
+                          final extra = viewModelMenu.currentExtras[index];
+                          return AddExtraIcons(extraItem: extra);
+                        },
                       ),
                       const SizedBox(height: 10),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [AddRemoveButton(), MyToCartButton()],
+                        children: [
+                          AddRemoveButton(anzahl: widget.item.anzahl),
+                          MyToCartButton(),
+                        ],
                       ),
                     ],
                   ),

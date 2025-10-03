@@ -1,6 +1,13 @@
-
-
-enum CategoryEnum<String> { recommend, starters, menu, main, drinks }
+enum CategoryEnum<String> {
+  recommend,
+  starters,
+  menu,
+  main,
+  drinks,
+  pizza,
+  pasta,
+  salat,
+}
 
 extension CategoryName on CategoryEnum {
   String get label {
@@ -15,6 +22,12 @@ extension CategoryName on CategoryEnum {
         return "Drink's";
       case CategoryEnum.main:
         return "Main";
+      case CategoryEnum.pizza:
+        return "Pizza";
+      case CategoryEnum.pasta:
+        return "Pasta";
+      case CategoryEnum.salat:
+        return "Salat";
     }
   }
 }

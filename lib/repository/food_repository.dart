@@ -1,5 +1,6 @@
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
+import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 
 class FoodRepository {
@@ -25,6 +26,7 @@ class FoodRepository {
           name: CategoryEnum.recommend.label,
           categoryImg: "lib/img/category1.png",
         ),
+        extras: [],
       ),
       // 1. Gegrillte Spieße
       Food(
@@ -40,6 +42,7 @@ class FoodRepository {
         artikelNr: null,
         labels: [],
         allergens: ["2", "1", "P"],
+        extras: [],
       ),
       // 2. Scharf-Süße Flügel
       Food(
@@ -55,6 +58,7 @@ class FoodRepository {
         price: 9.90,
         labels: [],
         allergens: ["G", "S"],
+        extras: [],
       ),
       Food(
         name: "Pizza Angela",
@@ -69,6 +73,7 @@ class FoodRepository {
         price: 12.50,
         labels: [],
         allergens: ["2", "1", "P"],
+        extras: [],
       ),
       Food(
         name: "Pizza Tonno",
@@ -82,6 +87,7 @@ class FoodRepository {
         price: 14.90,
         labels: [],
         allergens: ["A", "F"],
+        extras: [],
       ),
       Food(
         name: "Pizza della Nonna",
@@ -96,6 +102,7 @@ class FoodRepository {
         price: 15.90,
         labels: [],
         allergens: ["2", "LM", "P"],
+        extras: [],
       ),
 
       Food(
@@ -110,6 +117,7 @@ class FoodRepository {
         price: 15.90,
         labels: [],
         allergens: ["2", "LM", "P"],
+        extras: [],
       ),
       Food(
         name: "Cocktail Orange Rum",
@@ -124,9 +132,66 @@ class FoodRepository {
         price: 15.90,
         labels: [],
         allergens: ["2", "LM", "P"],
+        extras: [],
       ),
     ];
 
     return _list;
+  }
+
+  // Funktion: Liefert eine Liste von Extras
+  List<Extra> getExtras() {
+    return [
+      // Pizza Extras
+      Extra(
+        name: "Extra Käse",
+        price: 1.5,
+        extraCategory: CategoryEnum.main,
+        anzahl: 0,
+      ),
+      Extra(
+        name: "Salami",
+        price: 2.0,
+        extraCategory: CategoryEnum.recommend,
+        anzahl: 0,
+      ),
+      Extra(
+        name: "Schinken",
+        price: 2.0,
+        extraCategory: CategoryEnum.recommend,
+        anzahl: 0,
+      ),
+      Extra(
+        name: "Pilze",
+        price: 1.0,
+        extraCategory: CategoryEnum.starters,
+        anzahl: 0,
+      ),
+
+      // Salat Extras
+      Extra(
+        name: "Oliven",
+        price: 0.8,
+        extraCategory: CategoryEnum.main,
+        anzahl: 0,
+      ),
+      Extra(
+        name: "Tomaten",
+        price: 0.7,
+        extraCategory: CategoryEnum.recommend,
+        anzahl: 0,
+      ),
+      Extra(name: "Gurken", price: 0.5, extraCategory: CategoryEnum.drinks),
+
+      // Nudeln Extras
+      Extra(
+        name: "Parmesan",
+        price: 1.0,
+        extraCategory: CategoryEnum.drinks,
+        anzahl: 0,
+      ),
+      Extra(name: "Basilikum", price: 0.5, extraCategory: CategoryEnum.pasta),
+      Extra(name: "Knoblauch", price: 0.3, extraCategory: CategoryEnum.pasta),
+    ];
   }
 }

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
-class AddRemoveButton extends StatelessWidget {
-  const AddRemoveButton({super.key});
+class AddRemoveButton extends StatefulWidget {
+  int anzahl;
+  AddRemoveButton({super.key, required this.anzahl});
 
+  @override
+  State<AddRemoveButton> createState() => _AddRemoveButtonState();
+}
+
+class _AddRemoveButtonState extends State<AddRemoveButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,11 +30,17 @@ class AddRemoveButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                if (widget.anzahl > 1) {
+                  widget.anzahl--;
+                }
+              });
+            },
             icon: Icon(Icons.remove, color: AppColors.primaryButton),
           ),
           Text(
-            "1",
+            widget.anzahl.toString(),
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: AppColors.primaryButton,
@@ -36,7 +48,11 @@ class AddRemoveButton extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              setState(() {
+                widget.anzahl++;
+              });
+            },
             icon: Icon(Icons.add, color: AppColors.primaryButton),
           ),
         ],
