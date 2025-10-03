@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -329,8 +331,21 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          AddRemoveButton(anzahl: widget.item.anzahl),
-                          MyToCartButton(),
+                          AddRemoveButton(
+                            item: widget.item,
+                            gesture: (p0) {
+                              viewModelMenu.updateMeal(p0);
+                            },
+                          ),
+                          MyToCartButton(
+                            gesture: () {
+                              setState(() {
+                                print(widget.item.count);
+                                viewModelMenu.addToCart(widget.item);
+                                print(widget.item.count);
+                              });
+                            },
+                          ),
                         ],
                       ),
                     ],

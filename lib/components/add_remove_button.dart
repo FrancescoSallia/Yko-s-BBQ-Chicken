@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class AddRemoveButton extends StatefulWidget {
-  int anzahl;
-  AddRemoveButton({super.key, required this.anzahl});
+  final Food item;
+  final Function(Food) gesture;
+  const AddRemoveButton({super.key, required this.item, required this.gesture});
 
   @override
   State<AddRemoveButton> createState() => _AddRemoveButtonState();
@@ -32,8 +34,9 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
           IconButton(
             onPressed: () {
               setState(() {
-                if (widget.anzahl > 1) {
-                  widget.anzahl--;
+                if (widget.item.count > 1) {
+                  widget.item.count--;
+                  widget.gesture(widget.item);
                 }
               });
             },
@@ -44,7 +47,7 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              widget.anzahl.toString(),
+              widget.item.count.toString(),
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: AppColors.primaryButton,
@@ -55,7 +58,8 @@ class _AddRemoveButtonState extends State<AddRemoveButton> {
           IconButton(
             onPressed: () {
               setState(() {
-                widget.anzahl++;
+                widget.item.count++;
+                widget.gesture(widget.item);
               });
             },
             icon: Icon(Icons.add, color: AppColors.primaryButton),

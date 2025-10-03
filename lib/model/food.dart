@@ -10,7 +10,8 @@ class Food {
   final Category category;
   final String? imgAsset;
   final double price;
-  int anzahl;
+  final String? note;
+  int count;
   bool isFavorited;
   final List<String>? labels;
   final List<String> allergens;
@@ -23,8 +24,9 @@ class Food {
     required this.category,
     required this.imgAsset,
     required this.price,
-    this.anzahl = 1,
+    this.count = 1,
     this.isFavorited = false,
+    this.note = "",
     required this.labels,
     required this.allergens,
     required this.extras,

@@ -1,15 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
-class CartPage extends StatelessWidget {
+class CartPage extends StatefulWidget {
   const CartPage({super.key});
 
   @override
+  State<CartPage> createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      viewModelMenu.loadCartList();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final int lengthList = 5;
+    final viewModelMenu = context.watch<ViewmodelMenu>();
+
+    // final int lengthList = 5;
     return Scaffold(
       backgroundColor: AppColors.secondary,
       body: SingleChildScrollView(
@@ -20,10 +38,11 @@ class CartPage extends StatelessWidget {
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-              itemCount: lengthList + 1,
+              itemCount: viewModelMenu.cartList.length + 1,
               itemBuilder: (context, index) {
-                if (index < lengthList) {
-                  return OrderItem();
+                if (index < viewModelMenu.cartList.length) {
+                  final order = viewModelMenu.cartList[index];
+                  return OrderItem(orderItem: order);
                 } else {
                   return Column(
                     children: [

@@ -1,35 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/sheet_note_page.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
-class OrderItem extends StatelessWidget {
-  const OrderItem({super.key});
+class OrderItem extends StatefulWidget {
+  final Food orderItem;
+  const OrderItem({super.key, required this.orderItem});
+
+  @override
+  State<OrderItem> createState() => _OrderItemState();
+}
+
+class _OrderItemState extends State<OrderItem> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ViewmodelMenu>();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final viewModelMenu = context.watch<ViewmodelMenu>();
     return Column(
       children: [
         Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Chicken and Chips",
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.orderItem.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                Text(
-                  "15€",
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Text(
+                      widget.orderItem.price.toEuroString(),
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 6),
             Row(
@@ -98,10 +125,10 @@ class OrderItem extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
-                        "1",
+                        widget.orderItem.count.toString(),
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                     ),
@@ -122,9 +149,23 @@ class OrderItem extends StatelessWidget {
                 ),
               ],
             ),
+
             SizedBox(height: 8),
 
-            Divider(color: Colors.black, thickness: 2.2, height: 20),
+            //             Text("""
+            // ↳ Ohne Käse, mit Schafskäse bitte, auch nicht Klingeln, sobald der Fahrer unten ist soll er mich anrufen. ich komme denn runter.
+            // """, style: GoogleFonts.inter(fontWeight: FontWeight.w400, fontSize: 13)),
+
+            //TODO: Arbeite weiter mit dem Sheet, beim Save klicken soll die notiz gespeichert werden zu den jeweiligen item!
+            Text(
+              widget.orderItem.note ?? "",
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w400,
+                fontSize: 13,
+              ),
+            ),
+
+            Divider(color: Colors.black, thickness: 2.2, height: 0),
           ],
         ),
       ],

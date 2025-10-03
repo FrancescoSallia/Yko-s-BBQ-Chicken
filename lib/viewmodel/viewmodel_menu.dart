@@ -54,6 +54,10 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners(); // damit das UI automatisch rebuildet
   }
 
+  List<Food> _cartList = [];
+  List<Food> get cartList => _cartList;
+
+  //SECTION: FUNKTION'S
   void loadFavoritedList() {
     _favoritedList =
         _menuList.where((item) => item.isFavorited == true).toList();
@@ -71,5 +75,33 @@ class ViewmodelMenu extends ChangeNotifier {
       _favoritedList.remove(item);
       notifyListeners();
     }
+  }
+
+  List<Food> loadCartList() {
+    return _cartList;
+  }
+
+  void addToCart(Food item) {
+    _cartList.add(item);
+    notifyListeners();
+  }
+
+  Food updateMeal(Food item) {
+    final updatedFood = Food(
+      artikelNr: item.artikelNr,
+      name: item.name,
+      description: item.description,
+      category: item.category,
+      imgAsset: item.imgAsset,
+      price: item.price,
+      labels: item.labels,
+      allergens: item.allergens,
+      extras: item.extras,
+      count: item.count,
+      isFavorited: item.isFavorited,
+      note: item.note,
+    );
+    notifyListeners();
+    return updatedFood;
   }
 }

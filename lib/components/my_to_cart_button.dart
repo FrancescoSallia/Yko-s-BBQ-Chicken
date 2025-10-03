@@ -5,16 +5,13 @@ import 'package:ykos_bbq_chicken/Pages/cart_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class MyToCartButton extends StatelessWidget {
-  const MyToCartButton({super.key});
+  final Function() gesture;
+  const MyToCartButton({super.key, required this.gesture});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(
-          context,
-        ).push(CupertinoPageRoute(builder: (context) => CartPage()));
-      },
+      onTap: gesture,
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 18, vertical: 13),
         decoration: BoxDecoration(
