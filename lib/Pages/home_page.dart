@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
+import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,11 +44,44 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     List _categoryList = [
-      CategoryItem(isSelected: false, img: "lib/img/category1.png"),
-      CategoryItem(isSelected: false, img: "lib/img/category2.png"),
-      CategoryItem(isSelected: false, img: "lib/img/category3.png"),
-      CategoryItem(isSelected: false, img: "lib/img/category1.png"),
+      CategoryItem(
+        isSelected: false,
+        img: "lib/img/category1.png",
+        categoryTitle: 'Main',
+      ),
+      CategoryItem(
+        isSelected: false,
+        img: "lib/img/category2.png",
+        categoryTitle: 'Menu',
+      ),
+      CategoryItem(
+        isSelected: false,
+        img: "lib/img/category3.png",
+        categoryTitle: 'Drinks',
+      ),
+      CategoryItem(
+        isSelected: false,
+        img: "lib/img/category1.png",
+        categoryTitle: 'MeatMeatMeatMeatMeatMeat',
+      ),
     ];
+
+    //TODO: Mach hier weiter ! gib es in den listbuilder aus
+    final foodRepo = FoodRepository();
+
+    var foodList = foodRepo.getFoodsOrDrinks();
+
+    List<String> getCategoriesFromFoods(final List<Food> foods) {
+      List<String> categories = [];
+
+      for (var food in foods) {
+        if (!categories.contains(food.category)) {
+          categories.add(food.category);
+        }
+      }
+      return categories;
+    }
+
     return Scaffold(
       backgroundColor: AppColors.secondary,
       appBar: AppBar(
@@ -117,12 +152,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           top: 0,
                         ),
                         child: category,
-                      ),
-                      Text(
-                        "Main",
-                        style: GoogleFonts.inter(
-                          color: AppColors.primaryButton,
-                        ),
                       ),
                     ],
                   );

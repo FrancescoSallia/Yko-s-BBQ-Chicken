@@ -170,8 +170,15 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          Text(
+                            "F,A",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                            ),
+                          ),
                           Image.asset("lib/img/peper_detail.png", height: 40),
                         ],
                       ),
@@ -193,13 +200,18 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           height: 1.5,
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Text(
-                        "Zutaten",
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 26,
-                        ),
+                      SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Zutaten",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 26,
+                            ),
+                          ),
+                        ],
                       ),
                       ListView(
                         shrinkWrap: true,
@@ -212,13 +224,18 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           AddExtraIcons(),
                         ],
                       ),
-                      const SizedBox(height: 30),
-                      Text(
-                        "Extra's",
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 26,
-                        ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Extra's",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 26,
+                            ),
+                          ),
+                        ],
                       ),
                       ListView(
                         shrinkWrap: true,
@@ -231,7 +248,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           AddExtraIcons(),
                         ],
                       ),
-                      const SizedBox(height: 30),
+                      const SizedBox(height: 10),
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [AddRemoveButton(), MyToCartButton()],

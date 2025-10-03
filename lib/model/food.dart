@@ -6,8 +6,9 @@ class Food {
   final String name;
   final String description;
   final String category;
-  final String imgAsset;
+  final String? imgAsset;
   final double price;
+  final List<String>? labels;
 
   Food({
     required this.artikelNr,
@@ -16,5 +17,6 @@ class Food {
     required this.category,
     required this.imgAsset,
     required this.price,
+    required this.labels,
   });
 }
