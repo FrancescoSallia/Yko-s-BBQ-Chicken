@@ -21,7 +21,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   late AnimationController _likedController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _likedAnimation;
-  bool _isLiked = false;
+  // bool _isLiked = false;
 
   @override
   void initState() {
@@ -86,7 +86,9 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           GestureDetector(
             onTap: () {
               setState(() {
-                _isLiked = !_isLiked;
+                // _isLiked = !_isLiked;
+                viewModelMenu.toggleFavorite(widget.item);
+
                 _likedController
                     .forward(from: 0)
                     .then((_) => _likedController.reverse());
@@ -102,7 +104,9 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
               child: ScaleTransition(
                 scale: _likedAnimation,
                 child: Image.asset(
-                  _isLiked ? "lib/img/liked.png" : "lib/img/unliked.png",
+                  widget.item.isFavorited
+                      ? "lib/img/liked.png"
+                      : "lib/img/unliked.png",
                   width: 28,
                 ),
               ),

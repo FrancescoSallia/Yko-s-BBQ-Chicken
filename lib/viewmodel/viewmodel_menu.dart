@@ -22,6 +22,10 @@ class ViewmodelMenu extends ChangeNotifier {
   List<Extra> _currentExtras = [];
   List<Extra> get currentExtras => _currentExtras;
 
+  //Favorited List
+  List<Food> _favoritedList = [];
+  List<Food> get favoritedList => _favoritedList;
+
   //Nimmt die Kategorien von den ganzen Menu raus einmalig für die Kategorie-Liste
   List<Category> getCategoriesFromFoods(final List<Food> menuList) {
     List<Category> categories = [];
@@ -41,7 +45,7 @@ class ViewmodelMenu extends ChangeNotifier {
     return categories;
   }
 
-
+  //Load Extra's in DetailPage
   void loadExtrasForItem(String itemCategory) {
     _currentExtras =
         _extraList
@@ -50,19 +54,22 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners(); // damit das UI automatisch rebuildet
   }
 
-  // List<Extra> getExtraFromRepository(String itemCategory) {
-  //   final List<Extra> newExtraList = [];
+  void loadFavoritedList() {
+    _favoritedList =
+        _menuList.where((item) => item.isFavorited == true).toList();
+    notifyListeners();
+  }
 
-  //   for (var extra in _extraList) {
-  //     if (extra.extraCategory.label == itemCategory) {
-  //       print(extra.extraCategory);
-  //       print(itemCategory);
+  void toggleFavorite(Food item) {
+    item.isFavorited = !item.isFavorited;
+    notifyListeners();
 
-  //       newExtraList.add(extra);
-  //     }
-  //   }
-
-  //   return newExtraList;
-  // }
-
+    if (item.isFavorited) {
+      _favoritedList.add(item);
+      notifyListeners();
+    } else {
+      _favoritedList.remove(item);
+      notifyListeners();
+    }
+  }
 }

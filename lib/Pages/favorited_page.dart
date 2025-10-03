@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/grid_item.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class FavoritedPage extends StatefulWidget {
   const FavoritedPage({super.key});
@@ -17,7 +21,10 @@ class _FavoritedPageState extends State<FavoritedPage>
 
   @override
   void initState() {
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModel = context.read<ViewmodelMenu>();
+      viewModel.loadFavoritedList();
+    });
     _controller = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 900),
@@ -28,6 +35,7 @@ class _FavoritedPageState extends State<FavoritedPage>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     _controller.forward();
+    super.initState();
   }
 
   @override
@@ -39,6 +47,8 @@ class _FavoritedPageState extends State<FavoritedPage>
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ViewmodelMenu>();
+
     return Scaffold(
       backgroundColor: AppColors.secondary,
       body: SingleChildScrollView(
@@ -66,7 +76,7 @@ class _FavoritedPageState extends State<FavoritedPage>
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               padding: EdgeInsets.only(top: 40, bottom: 120),
-              itemCount: 7,
+              itemCount: viewModel.favoritedList.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 1.0,
                 mainAxisSpacing: 55,
@@ -74,9 +84,22 @@ class _FavoritedPageState extends State<FavoritedPage>
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) {
-                return GridItem(
-                  rotateAnimation: _animation,
-                  scaleAnimation: _animation,
+                final favoritedItem = viewModel.favoritedList[index];
+                return GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => DetailPage(item: favoritedItem),
+                        ),
+                      ),
+                  child: GridItem(
+                    rotateAnimation: _animation,
+                    scaleAnimation: _animation,
+                    favoritedItem: favoritedItem,
+                    toggleFavoriteGesture: () {
+                      viewModel.toggleFavorite(favoritedItem);
+                    },
+                  ),
                 );
               },
             ),
