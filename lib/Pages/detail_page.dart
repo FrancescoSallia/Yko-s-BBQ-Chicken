@@ -3,10 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({super.key});
+  final Food item;
+  const DetailPage({super.key, required this.item});
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -63,7 +65,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          "Food Details",
+          widget.item.name,
           style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
         ),
         centerTitle: true,
@@ -137,7 +139,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           ),
                           // Pizza (etwas kleiner)
                           Image.asset(
-                            "lib/img/food1.png",
+                            widget.item.imgAsset ?? "lib/img/logo_ykos.png",
                             width: MediaQuery.of(context).size.width * 0.52,
 
                             fit: BoxFit.contain,
@@ -172,18 +174,67 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            "F,A",
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 12,
-                            ),
+                          Row(
+                            children:
+                                widget.item.allergens.isNotEmpty
+                                    ? widget.item.allergens.asMap().entries.map(
+                                      //zerteilen es auf einzelne Strings
+                                      (entry) {
+                                        // holen uns die positionen der jeweiligen Strings in der liste, geben den wert als String weiter und anschließend ein bool um zu überprüfen ob kein komma am ende der liste gehöhren soll.
+                                        int idx = entry.key;
+                                        String allergen = entry.value;
+                                        bool isLastString =
+                                            idx ==
+                                            widget.item.allergens.length - 1;
+
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 2.0,
+                                          ),
+                                          child: Text(
+                                            isLastString
+                                                ? allergen // falls es der letzte String von der Liste ist soll kein komma sein, ansonsten soll da ein komma hin.
+                                                : "$allergen ,",
+                                            style: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ).toList()
+                                    : [
+                                      Text(
+                                        "F,A",
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
                           ),
-                          Image.asset("lib/img/peper_detail.png", height: 40),
+
+                          Row(
+                            children:
+                                (widget.item.labels?.isNotEmpty ?? false)
+                                    ? widget.item.labels!.map((label) {
+                                      return Image.asset(label, height: 40);
+                                    }).toList()
+                                    : [
+                                      Image.asset(
+                                        "lib/img/peper_detail.png",
+                                        height: 40,
+                                      ),
+                                      Image.asset(
+                                        "lib/img/peper_detail.png",
+                                        height: 40,
+                                      ),
+                                    ],
+                          ),
                         ],
                       ),
                       Text(
-                        "Jollof Rice with 1/4 Chicken & Plantain",
+                        widget.item.name,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.bold,
                           fontSize: 26,
@@ -194,7 +245,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                         child: Image(image: AssetImage("lib/img/rating.png")),
                       ),
                       Text(
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...",
+                        widget.item.description,
                         style: GoogleFonts.inter(
                           color: const Color.fromARGB(255, 91, 91, 91),
                           height: 1.5,

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class CardItem extends StatelessWidget {
   final Animation<double> scaleAnimation;
   final Animation<double> rotationAnimation;
   final String largeTitle;
-  final Function() gesture;
+  final List<Food> menuList;
+  final Function(Food) onItemTap;
   // final List mealList;
   const CardItem({
     super.key,
     required this.scaleAnimation,
     required this.rotationAnimation,
     required this.largeTitle,
-    required this.gesture,
+    required this.onItemTap,
+    required this.menuList,
   });
 
   @override
@@ -36,44 +39,17 @@ class CardItem extends StatelessWidget {
             ],
           ),
         ),
-        GestureDetector(
-          onTap:
-              // () {
-              // Navigator.of(context).push(
-              //   PageRouteBuilder(
-              //     transitionDuration: Duration(milliseconds: 450),
-              //     reverseTransitionDuration: Duration(milliseconds: 450),
-              //     pageBuilder:
-              //         (context, animation, secondaryAnimation) =>
-              //             DetailPage(),
-              //     transitionsBuilder: (
-              //       context,
-              //       animation,
-              //       secondaryAnimation,
-              //       child,
-              //     ) {
-              //       const begin = Offset(1.0, 0.0); // von rechts rein
-              //       const end = Offset.zero;
-              //       final tween = Tween(
-              //         begin: begin,
-              //         end: end,
-              //       ).chain(CurveTween(curve: Curves.easeInOut));
-              //       return SlideTransition(
-              //         position: animation.drive(tween),
-              //         child: child,
-              //       );
-              //     },
-              //   ),
-              // );
-              gesture,
+        SizedBox(
+          height: 225,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: menuList.length,
+            itemBuilder: (context, index) {
+              final menuItem = menuList[index];
+              return GestureDetector(
+                onTap: () => onItemTap(menuItem),
 
-          child: SizedBox(
-            height: 225,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Padding(
+                child: Padding(
                   padding: const EdgeInsets.only(
                     top: 60.0,
                     left: 20,
@@ -98,7 +74,7 @@ class CardItem extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(bottom: 8.0),
                                 child: Text(
-                                  "Jollof Rice with 1/4 Chicken & Plantain",
+                                  menuItem.name,
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
@@ -110,13 +86,36 @@ class CardItem extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "15€",
+                                    "${menuItem.price}€",
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: 18,
                                     ),
                                   ),
-                                  Image.asset("lib/img/peper.png", width: 30),
+                                  Row(
+                                    children:
+                                        (menuItem.labels?.isNotEmpty ?? false)
+                                            ? menuItem.labels!
+                                                .map(
+                                                  (label) => Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                          right: 6.0,
+                                                        ),
+                                                    child: Image.asset(
+                                                      label,
+                                                      width: 30,
+                                                    ),
+                                                  ),
+                                                )
+                                                .toList()
+                                            : [
+                                              Image.asset(
+                                                "lib/img/peper.png",
+                                                width: 30,
+                                              ),
+                                            ],
+                                  ),
                                 ],
                               ),
                             ],
@@ -125,56 +124,45 @@ class CardItem extends StatelessWidget {
                       ),
                       // 🍕 Das Bild ragt nach oben heraus
                       Positioned(
-                        top: -56,
+                        top: -36,
                         left: 23,
                         child: RotationTransition(
                           turns: rotationAnimation,
                           child: ScaleTransition(
                             scale: scaleAnimation,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                // 🩶 Teller mit weichem Schatten (sieht "schwebend" aus)
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withValues(
-                                          alpha: 0.45,
-                                        ), // leichte Transparenz
-                                        blurRadius:
-                                            10, // wie weich der Schatten ist
-                                        spreadRadius:
-                                            0, // wie weit er sich ausbreitet
-                                        offset: const Offset(
-                                          10,
-                                          10,
-                                        ), // Abstand nach unten (Schattenwurf)
-                                      ),
-                                    ],
-                                  ),
-                                  child: Image.asset(
+                            child: SizedBox(
+                              width: 100, // Größe des gesamten Stack
+                              height: 100,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  // Plate bleibt immer zentriert
+                                  Image.asset(
                                     "lib/img/plate.png",
                                     width: 100,
+                                    height: 100,
                                   ),
-                                ),
 
-                                // 🍗 Das Food-Bild leicht darüber
-                                Image.asset(
-                                  "lib/img/chicken_drumsticks.png",
-                                  width: 80,
-                                ),
-                              ],
+                                  // Food-Bild wird darüber gelegt
+                                  Align(
+                                    alignment: Alignment.center, // oben mittig
+                                    child: Image.asset(
+                                      menuItem.imgAsset ??
+                                          "lib/img/logo_ykos.png",
+                                      width: 80,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ],

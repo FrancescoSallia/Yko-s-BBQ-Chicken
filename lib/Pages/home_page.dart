@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
-import 'package:ykos_bbq_chicken/model/food.dart';
-import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,6 +21,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      viewModelMenu.getCategoriesFromFoods(viewModelMenu.menuList);
+    });
+
     _animationController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: 900),
@@ -43,44 +48,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    List _categoryList = [
-      CategoryItem(
-        isSelected: false,
-        img: "lib/img/category1.png",
-        categoryTitle: 'Main',
-      ),
-      CategoryItem(
-        isSelected: false,
-        img: "lib/img/category2.png",
-        categoryTitle: 'Menu',
-      ),
-      CategoryItem(
-        isSelected: false,
-        img: "lib/img/category3.png",
-        categoryTitle: 'Drinks',
-      ),
-      CategoryItem(
-        isSelected: false,
-        img: "lib/img/category1.png",
-        categoryTitle: 'MeatMeatMeatMeatMeatMeat',
-      ),
-    ];
-
-    //TODO: Mach hier weiter ! gib es in den listbuilder aus
-    final foodRepo = FoodRepository();
-
-    var foodList = foodRepo.getFoodsOrDrinks();
-
-    List<String> getCategoriesFromFoods(final List<Food> foods) {
-      List<String> categories = [];
-
-      for (var food in foods) {
-        if (!categories.contains(food.category)) {
-          categories.add(food.category);
-        }
-      }
-      return categories;
-    }
+    final viewModelMenu = context.watch<ViewmodelMenu>();
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
@@ -140,9 +108,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               height: 100,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: _categoryList.length,
+                itemCount:
+                    viewModelMenu
+                        .getCategoriesFromFoods(viewModelMenu.menuList)
+                        .length,
                 itemBuilder: (context, index) {
-                  final category = _categoryList[index];
+                  // final category = _categoryList[index];
+                  final category =
+                      viewModelMenu.getCategoriesFromFoods(
+                        viewModelMenu.menuList,
+                      )[index];
                   return Column(
                     children: [
                       Padding(
@@ -151,7 +126,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           bottom: 4,
                           top: 0,
                         ),
-                        child: category,
+                        child: CategoryItem(
+                          isSelected: false,
+                          img: category.categoryImg,
+                          categoryTitle: category.name,
+                        ),
                       ),
                     ],
                   );
@@ -163,12 +142,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               scaleAnimation: _animation,
               rotationAnimation: _animation,
               largeTitle: 'Recommended',
-              gesture: () {
-                Navigator.of(
-                  context,
-                ).push(CupertinoPageRoute(builder: (context) => DetailPage()));
+
+              menuList: viewModelMenu.menuList,
+              onItemTap: (selectedItem) {
+                Navigator.of(context).push(
+                  CupertinoPageRoute(
+                    builder: (context) => DetailPage(item: selectedItem),
+                  ),
+                );
               },
             ),
+            SizedBox(height: 26),
 
             ListView.builder(
               itemCount: 5,
@@ -184,8 +168,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
+                      color: AppColors.secondary.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        width: 1,
+                        color: AppColors.primaryButton.withValues(alpha: 0.9),
+                      ),
                     ),
                     padding: EdgeInsets.all(20),
                     child: Row(
