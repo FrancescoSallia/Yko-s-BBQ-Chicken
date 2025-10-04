@@ -1,6 +1,7 @@
 enum CategoryEnum<String> {
   recommend,
   starters,
+  chicken,
   menu,
   main,
   drinks,
@@ -28,6 +29,8 @@ extension CategoryName on CategoryEnum {
         return "Pasta";
       case CategoryEnum.salat:
         return "Salat";
+      case CategoryEnum.chicken:
+        return "Chicken";
     }
   }
 }

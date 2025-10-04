@@ -38,7 +38,7 @@ class CategoryItem extends StatelessWidget {
           ],
         ),
         SizedBox(height: 6),
-        Container(
+        SizedBox(
           width: 74,
           child: Center(
             child: Text(

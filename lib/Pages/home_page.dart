@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
+import 'package:ykos_bbq_chicken/enum/category_enum.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
@@ -18,12 +22,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
+  int selectedCategoryIndex = 0;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModelMenu = context.read<ViewmodelMenu>();
       viewModelMenu.getCategoriesFromFoods(viewModelMenu.menuList);
+      viewModelMenu.loadMenuFromCategory(CategoryEnum.recommend.label);
     });
 
     _animationController = AnimationController(
@@ -104,6 +110,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: CupertinoSearchTextField(),
             ),
 
+            //Category-List
             SizedBox(
               height: 100,
               child: ListView.builder(
@@ -113,23 +120,32 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         .getCategoriesFromFoods(viewModelMenu.menuList)
                         .length,
                 itemBuilder: (context, index) {
-                  // final category = _categoryList[index];
                   final category =
                       viewModelMenu.getCategoriesFromFoods(
                         viewModelMenu.menuList,
                       )[index];
                   return Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 18.0,
-                          bottom: 4,
-                          top: 0,
-                        ),
-                        child: CategoryItem(
-                          isSelected: false,
-                          img: category.categoryImg,
-                          categoryTitle: category.name,
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedCategoryIndex = index;
+                          });
+
+                          // Load the selected Category !
+                          viewModelMenu.loadMenuFromCategory(category.name);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                            left: 18.0,
+                            bottom: 4,
+                            top: 0,
+                          ),
+                          child: CategoryItem(
+                            isSelected: selectedCategoryIndex == index,
+                            img: category.categoryImg,
+                            categoryTitle: category.name,
+                          ),
                         ),
                       ),
                     ],
@@ -155,13 +171,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             SizedBox(height: 26),
 
             ListView.builder(
-              itemCount: 5,
+              itemCount: viewModelMenu.filteredList.length,
               shrinkWrap:
                   true, // <- Passt die Höhe an den Inhalt an und gibt nicht den typischen ´Fehler zurück von wegen mit SingleScrollview geht es nicht !s
               physics:
                   NeverScrollableScrollPhysics(), // <- verhindert doppeltes Scrollen
               itemBuilder: (context, index) {
+                final filteredItem = viewModelMenu.filteredList[index];
                 return Padding(
+                  //TODO:  heir weiter machen um zur detailpage zu navigieren!
                   padding: const EdgeInsets.symmetric(
                     vertical: 8.0,
                     horizontal: 20,
@@ -179,13 +197,73 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Gericht ${index + 1}',
-                          style: GoogleFonts.inter(
-                            color: AppColors.primaryButton,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              height: 60,
+                              child:
+                                  filteredItem.category.name !=
+                                          CategoryEnum.drinks.label
+                                      ? Image.asset("lib/img/plate.png")
+                                      : Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.transparent,
+                                          borderRadius: BorderRadius.circular(
+                                            4,
+                                          ),
+                                          border: Border.all(
+                                            width: 1,
+                                            color: Colors.black.withValues(
+                                              alpha: 0.6,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                            ),
+                            SizedBox(
+                              width: 50,
+                              height: 50,
+                              child: Image.asset(
+                                filteredItem.imgAsset ??
+                                    "lib/img/logo_ykos.png",
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 200,
+                              child: Text(
+                                '${filteredItem.name} ',
+                                style: GoogleFonts.inter(
+                                  color: AppColors.primaryButton,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                softWrap: true,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Text(
+                                    filteredItem.price.toEuroString(),
+                                    style: GoogleFonts.inter(
+                                      color: AppColors.primaryButton,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    softWrap: true,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                         Icon(
                           Icons.arrow_forward_ios,

@@ -23,8 +23,8 @@ class FoodRepository {
         labels: [],
         allergens: ["A", "F"],
         category: Category(
-          name: CategoryEnum.recommend.label,
-          categoryImg: "lib/img/category1.png",
+          name: CategoryEnum.chicken.label,
+          categoryImg: "lib/img/chicken_category_icon.png",
         ),
         extras: [],
       ),
@@ -34,8 +34,8 @@ class FoodRepository {
         description:
             "Tender cubes of chicken breast, marinated in garlic-lime and flame-kissed.",
         category: Category(
-          name: CategoryEnum.recommend.label,
-          categoryImg: "lib/img/category1.png",
+          name: CategoryEnum.chicken.label,
+          categoryImg: "lib/img/chicken_category_icon.png",
         ),
         imgAsset: "lib/img/food2.png",
         price: 13.50,
@@ -50,8 +50,8 @@ class FoodRepository {
         description:
             "Crisp wings coated in a sticky, sweet-spicy chili glaze. Perfect for sharing.",
         category: Category(
-          name: CategoryEnum.recommend.label,
-          categoryImg: "lib/img/category1.png",
+          name: CategoryEnum.chicken.label,
+          categoryImg: "lib/img/chicken_category_icon.png",
         ),
         imgAsset: "lib/img/food1.png",
         artikelNr: null,
@@ -65,8 +65,8 @@ class FoodRepository {
         description:
             "with tomatosauce, Mozzarella, spicy Salami, Mushroom's and Onion's.",
         category: Category(
-          name: CategoryEnum.main.label,
-          categoryImg: "lib/img/category2.png",
+          name: CategoryEnum.pizza.label,
+          categoryImg: "lib/img/pizza_category_icon.png",
         ),
         imgAsset: "lib/img/pizza_angela1.png",
         artikelNr: null,
@@ -79,8 +79,8 @@ class FoodRepository {
         name: "Pizza Tonno",
         description: "with tomatosauce, Mozzarella, Tuna and Onion's.",
         category: Category(
-          name: CategoryEnum.main.label,
-          categoryImg: "lib/img/category2.png",
+          name: CategoryEnum.pizza.label,
+          categoryImg: "lib/img/pizza_category_icon.png",
         ),
         imgAsset: "lib/img/pizza_tonno1.png",
         artikelNr: null,
@@ -90,18 +90,94 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        name: "Pizza Gattopardo",
+        description:
+            "with tomatosauce, Mozzarella, spicy Salami and Stracciatella.",
+        category: Category(
+          name: CategoryEnum.pizza.label,
+          categoryImg: "lib/img/pizza_category_icon.png",
+        ),
+        imgAsset: "lib/img/pizza4.png",
+        artikelNr: null,
+        price: 16.90,
+        labels: [],
+        allergens: ["A", "F"],
+        extras: [],
+      ),
+      Food(
         name: "Pizza della Nonna",
         description:
             "with tomatosauce, Mozzarella, black Olive's, caper's, anchovies and artichokes .",
         category: Category(
-          name: CategoryEnum.main.label,
-          categoryImg: "lib/img/category2.png",
+          name: CategoryEnum.pizza.label,
+          categoryImg: "lib/img/pizza_category_icon.png",
         ),
         imgAsset: "lib/img/pizza_nonna.png",
         artikelNr: null,
         price: 15.90,
         labels: [],
         allergens: ["2", "LM", "P"],
+        extras: [],
+      ),
+
+      Food(
+        name: "Rindersteak mit Kräuterbutter",
+        description: "Grilled beef steak served with herb butter and fries.",
+        category: Category(
+          name: CategoryEnum.main.label,
+          categoryImg: "lib/img/category1.png",
+        ),
+        imgAsset: "lib/img/meat2.png",
+        artikelNr: null,
+        price: 26.50,
+        labels: [],
+        allergens: ["G"],
+        extras: [],
+      ),
+      Food(
+        name: "Hähnchenbrustfilet mit Gemüse",
+        description:
+            "Grilled chicken breast with seasonal vegetables and rice.",
+        category: Category(
+          name: CategoryEnum.main.label,
+          categoryImg: "lib/img/category1.png",
+        ),
+        imgAsset: "lib/img/meat1.png",
+        artikelNr: null,
+        price: 18.90,
+        labels: [],
+        allergens: ["A"],
+        extras: [],
+      ),
+
+      // Pasta Gerichte
+      Food(
+        name: "Spaghetti Carbonara",
+        description:
+            "Classic Italian pasta with creamy sauce, bacon and Parmesan.",
+        category: Category(
+          name: CategoryEnum.pasta.label,
+          categoryImg: "lib/img/pasta_category_icon.png",
+        ),
+        imgAsset: "lib/img/pasta1.png",
+        artikelNr: null,
+        price: 13.90,
+        labels: [],
+        allergens: ["A", "C", "G"],
+        extras: [],
+      ),
+      Food(
+        name: "Penne Arrabbiata",
+        description: "Spicy tomato sauce with garlic, chili and olive oil.",
+        category: Category(
+          name: CategoryEnum.pasta.label,
+          categoryImg: "lib/img/pasta_category_icon.png",
+        ),
+        imgAsset: "lib/img/pasta2.png",
+        artikelNr: null,
+        price: 12.50,
+        labels: [],
+        allergens: ["A"],
         extras: [],
       ),
 
