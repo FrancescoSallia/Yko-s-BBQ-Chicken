@@ -82,12 +82,28 @@ class ViewmodelMenu extends ChangeNotifier {
   }
 
   void addToCart(Food item) {
-    _cartList.add(item);
+    final cartItem = Food(
+      id: item.id, // gleiche ID, wenn du es eindeutig brauchst
+      artikelNr: item.artikelNr,
+      name: item.name,
+      description: item.description,
+      category: item.category,
+      imgAsset: item.imgAsset,
+      price: item.price,
+      labels: item.labels,
+      allergens: item.allergens,
+      extras: List<Extra>.from(item.extras ?? []),
+      count: item.count,
+      isFavorited: item.isFavorited,
+      note: item.note,
+    );
+    _cartList.add(cartItem);
     notifyListeners();
   }
 
   Food updateMeal(Food item) {
     final updatedFood = Food(
+      id: item.id,
       artikelNr: item.artikelNr,
       name: item.name,
       description: item.description,
@@ -103,5 +119,69 @@ class ViewmodelMenu extends ChangeNotifier {
     );
     notifyListeners();
     return updatedFood;
+  }
+
+  Food resetMeal(Food item) {
+    final resetFood = Food(
+      id: item.id,
+      artikelNr: item.artikelNr,
+      name: item.name,
+      description: item.description,
+      category: item.category,
+      imgAsset: item.imgAsset,
+      price: item.price,
+      labels: item.labels ?? [], // 👈 sichere Default-Liste
+      allergens: item.allergens,
+      extras: item.extras ?? [], // 👈 niemals null
+      count: 1,
+      isFavorited: item.isFavorited,
+      note: item.note ?? "", // 👈 leere Notiz statt null
+    );
+    notifyListeners();
+    return resetFood;
+  }
+
+  void countIncrease(final Extra extraItem, final Food item) {
+    // Anzahl erhöhen
+    extraItem.anzahl++;
+    // Prüfen, ob dieses Extra schon in der Liste ist
+    final existingIndex = item.extras?.indexWhere(
+      (e) => e.name == extraItem.name,
+    );
+
+    if (existingIndex != -1 && existingIndex != null) {
+      // Falls schon vorhanden, einfach die Anzahl dort erhöhen
+      item.extras?[existingIndex].anzahl = extraItem.anzahl;
+    } else {
+      // Falls nicht vorhanden, neu hinzufügen
+      item.extras?.add(
+        Extra(
+          name: extraItem.name,
+          price: extraItem.price,
+          extraCategory: extraItem.extraCategory,
+          anzahl: extraItem.anzahl,
+        ),
+      );
+    }
+  }
+
+  void countDecrease(Extra extraItem, Food item) {
+    if (extraItem.anzahl > 0) {
+      extraItem.anzahl--;
+
+      final existingIndex = item.extras?.indexWhere(
+        (e) => e.name == extraItem.name,
+      );
+
+      if (existingIndex != -1 && existingIndex != null) {
+        if (extraItem.anzahl == 0) {
+          // Wenn 0 → aus Liste entfernen
+          item.extras?.removeAt(existingIndex);
+        } else {
+          // Nur aktualisieren
+          item.extras?[existingIndex].anzahl = extraItem.anzahl;
+        }
+      }
+    }
   }
 }

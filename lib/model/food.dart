@@ -3,7 +3,7 @@ import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 
 class Food {
-  final String id = Uuid().v4();
+  final String id;
   final String? artikelNr;
   final String name;
   final String description;
@@ -15,9 +15,10 @@ class Food {
   bool isFavorited;
   final List<String>? labels;
   final List<String> allergens;
-  final List<Extra>? extras;
+  List<Extra>? extras;
 
   Food({
+    String? id, // optional, wenn beim Update übergeben werden sollte
     required this.artikelNr,
     required this.name,
     required this.description,
@@ -29,6 +30,9 @@ class Food {
     this.note = "",
     required this.labels,
     required this.allergens,
-    required this.extras,
-  });
+    List<Extra>? extras,
+  }) : id =
+           Uuid()
+               .v4(), //ID wird nur einmal erstellt zufällig und ist nichtmehr wieder änderbar ,  erzeugt neue ID, wenn keine übergeben wurde
+       extras = extras ?? [];
 }

@@ -59,6 +59,50 @@ class _OrderItemState extends State<OrderItem> {
               ),
             ),
             SizedBox(height: 6),
+
+            Visibility(
+              visible: widget.orderItem.extras!.isNotEmpty ? true : false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 2.0),
+                    child: Text(
+                      widget.orderItem.extras!.isNotEmpty ? "Extras:" : "",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListView.builder(
+              shrinkWrap: true,
+              padding: EdgeInsets.all(0),
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.orderItem.extras?.length,
+              itemBuilder: (context, index) {
+                final extra = widget.orderItem.extras?[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "- ${extra!.anzahl}x ${extra.name} ",
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w400),
+                      ),
+                      Text(
+                        "+${extra.price.toEuroString()}",
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+
+            SizedBox(height: 6),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -150,25 +194,32 @@ class _OrderItemState extends State<OrderItem> {
               ],
             ),
 
-            SizedBox(height: 8),
+            SizedBox(height: 10),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    "↳ ${widget.orderItem.note ?? ""}",
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13,
+            Visibility(
+              visible: widget.orderItem.note!.isNotEmpty ? true : false,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(
+                      widget.orderItem.note!.isNotEmpty
+                          ? "↳ ${widget.orderItem.note}"
+                          : "",
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.red,
+                      ),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap:
+                          true, // 👈 Macht automatisch ein Umbruch wenn es auf true ist ansosnten bleibt es in der Zeile und kommt zu Overflowed!
                     ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    softWrap:
-                        true, // 👈 Macht automatisch ein Umbruch wenn es auf true ist ansosnten bleibt es in der Zeile und kommt zu Overflowed!
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             SizedBox(height: 8),
 

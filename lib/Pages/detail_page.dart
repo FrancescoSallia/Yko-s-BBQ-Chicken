@@ -7,6 +7,7 @@ import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
+import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -324,7 +325,10 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                         itemCount: viewModelMenu.currentExtras.length,
                         itemBuilder: (context, index) {
                           final extra = viewModelMenu.currentExtras[index];
-                          return AddExtraIcons(extraItem: extra);
+                          return AddExtraIcons(
+                            extraItem: extra,
+                            item: widget.item,
+                          );
                         },
                       ),
                       const SizedBox(height: 10),
@@ -339,10 +343,20 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                           ),
                           MyToCartButton(
                             gesture: () {
+                              // 1️⃣ Kopie erzeugen und in den Warenkorb legen
+
+                              viewModelMenu.addToCart(widget.item);
+
+                              // 2️⃣ Original-Item zurücksetzen für DetailPage UI
                               setState(() {
-                                print(widget.item.count);
-                                viewModelMenu.addToCart(widget.item);
-                                print(widget.item.count);
+                                widget.item.count = 1;
+                                widget.item.extras = [];
+                                widget.item.note = "";
+
+                                for (var element
+                                    in viewModelMenu.currentExtras) {
+                                  element.anzahl = 0;
+                                }
                               });
                             },
                           ),

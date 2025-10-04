@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class AddExtraIcons extends StatefulWidget {
   final Extra extraItem;
-  const AddExtraIcons({super.key, required this.extraItem});
+  Food item;
+  AddExtraIcons({super.key, required this.extraItem, required this.item});
 
   @override
   State<AddExtraIcons> createState() => _AddExtraIconsState();
@@ -13,7 +18,16 @@ class AddExtraIcons extends StatefulWidget {
 
 class _AddExtraIconsState extends State<AddExtraIcons> {
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ViewmodelMenu>();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModelMenu = context.watch<ViewmodelMenu>();
     return Column(
       children: [
         Row(
@@ -27,33 +41,36 @@ class _AddExtraIconsState extends State<AddExtraIcons> {
 
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
-              child: Text(
-                widget.extraItem.price % 1 == 0
-                    ? "${widget.extraItem.price.toInt()} €" // glatte Zahl
-                    : "${widget.extraItem.price.toStringAsFixed(2).replaceAll('.', ',')} €", // 2 Nachkommastellen
-              ),
+              child: Text(widget.extraItem.price.toEuroString()),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                IconButton.filled(
-                  style: IconButton.styleFrom(
-                    iconSize: 12,
-                    backgroundColor: AppColors.primaryButton,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6),
+                // REMOVE Button
+                Visibility(
+                  visible: widget.extraItem.anzahl > 0 ? true : false,
+                  child: IconButton.filled(
+                    style: IconButton.styleFrom(
+                      iconSize: 12,
+                      backgroundColor: AppColors.primaryButton,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      minimumSize: const Size(18, 18),
                     ),
-                    minimumSize: const Size(18, 18),
+                    onPressed: () {
+                      setState(() {
+                        final extraItem = widget.extraItem;
+                        final item = widget.item;
+
+                        viewModelMenu.countDecrease(extraItem, item);
+                      });
+                    },
+                    icon: Icon(Icons.remove),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      if (widget.extraItem.anzahl > 0) {
-                        widget.extraItem.anzahl--;
-                      }
-                    });
-                  },
-                  icon: Icon(Icons.remove),
                 ),
+
+                //COUNT Text
                 SizedBox(
                   width: 15,
                   child: Center(
@@ -61,6 +78,7 @@ class _AddExtraIconsState extends State<AddExtraIcons> {
                   ),
                 ),
 
+                // ADD Button
                 IconButton.filled(
                   style: IconButton.styleFrom(
                     iconSize: 12,
@@ -73,7 +91,10 @@ class _AddExtraIconsState extends State<AddExtraIcons> {
                   ),
                   onPressed: () {
                     setState(() {
-                      widget.extraItem.anzahl++;
+                      final extraItem = widget.extraItem;
+                      final item = widget.item;
+                      //Count increasement
+                      viewModelMenu.countIncrease(extraItem, item);
                     });
                   },
                   icon: Icon(Icons.add),
