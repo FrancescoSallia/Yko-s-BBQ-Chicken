@@ -10,7 +10,7 @@ class Food {
   final Category category;
   final String? imgAsset;
   final double price;
-  final String? note;
+  String? note;
   int count;
   bool isFavorited;
   final List<String>? labels;

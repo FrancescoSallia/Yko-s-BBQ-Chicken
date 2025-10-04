@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class SheetNotePage extends StatefulWidget {
-  const SheetNotePage({super.key});
+  final Food foodItem;
+  const SheetNotePage({super.key, required this.foodItem});
 
   @override
   State<SheetNotePage> createState() => _SheetNotePageState();
@@ -13,7 +17,17 @@ class _SheetNotePageState extends State<SheetNotePage> {
   final TextEditingController _textFieldController = TextEditingController();
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ViewmodelMenu>();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModelMenu = context.watch<ViewmodelMenu>();
+
     return Padding(
       padding: const EdgeInsets.only(top: 20.0),
       child: Column(
@@ -70,10 +84,16 @@ class _SheetNotePageState extends State<SheetNotePage> {
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
-            child: Container(
+            child: SizedBox(
               width: 150,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    widget.foodItem.note = _textFieldController.text ;
+                    viewModelMenu.updateMeal(widget.foodItem);
+                    Navigator.of(context).pop();
+                  });
+                },
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),

@@ -75,7 +75,7 @@ class _OrderItemState extends State<OrderItem> {
                       builder: (context) {
                         return FractionallySizedBox(
                           heightFactor: 0.6,
-                          child: SheetNotePage(),
+                          child: SheetNotePage(foodItem: widget.orderItem),
                         );
                       },
                     );
@@ -152,18 +152,25 @@ class _OrderItemState extends State<OrderItem> {
 
             SizedBox(height: 8),
 
-            //             Text("""
-            // ↳ Ohne Käse, mit Schafskäse bitte, auch nicht Klingeln, sobald der Fahrer unten ist soll er mich anrufen. ich komme denn runter.
-            // """, style: GoogleFonts.inter(fontWeight: FontWeight.w400, fontSize: 13)),
-
-            //TODO: Arbeite weiter mit dem Sheet, beim Save klicken soll die notiz gespeichert werden zu den jeweiligen item!
-            Text(
-              widget.orderItem.note ?? "",
-              style: GoogleFonts.inter(
-                fontWeight: FontWeight.w400,
-                fontSize: 13,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Flexible(
+                  child: Text(
+                    "↳ ${widget.orderItem.note ?? ""}",
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                    ),
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap:
+                        true, // 👈 Macht automatisch ein Umbruch wenn es auf true ist ansosnten bleibt es in der Zeile und kommt zu Overflowed!
+                  ),
+                ),
+              ],
             ),
+            SizedBox(height: 8),
 
             Divider(color: Colors.black, thickness: 2.2, height: 0),
           ],
