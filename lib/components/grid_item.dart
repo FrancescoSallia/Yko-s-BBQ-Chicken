@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
-class GridItem extends StatelessWidget {
+class GridItem extends StatefulWidget {
   final Animation<double> rotateAnimation;
   final Animation<double> scaleAnimation;
   final Food favoritedItem;
@@ -19,7 +20,22 @@ class GridItem extends StatelessWidget {
   });
 
   @override
+  State<GridItem> createState() => _GridItemState();
+}
+
+class _GridItemState extends State<GridItem> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ViewmodelMenu>();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModelMenu = context.watch<ViewmodelMenu>();
+
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHight = MediaQuery.of(context).size.height;
     final itemWidth = (screenWidth / 2) - 16; // Platz für Padding etc.
@@ -48,9 +64,9 @@ class GridItem extends StatelessWidget {
                     alignment: Alignment.center,
                     children: [
                       RotationTransition(
-                        turns: rotateAnimation,
+                        turns: widget.rotateAnimation,
                         child: ScaleTransition(
-                          scale: scaleAnimation,
+                          scale: widget.scaleAnimation,
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
@@ -71,7 +87,7 @@ class GridItem extends StatelessWidget {
                                       containerHeight * 0.40, // proportional
                                 ),
                                 Image.asset(
-                                  favoritedItem.imgAsset ??
+                                  widget.favoritedItem.imgAsset ??
                                       "lib/img/logo_ykos.png",
                                   height: containerHeight * 0.32,
                                 ),
@@ -103,7 +119,7 @@ class GridItem extends StatelessWidget {
                           child: Container(
                             constraints: BoxConstraints(maxWidth: 150),
                             child: Text(
-                              favoritedItem.name,
+                              widget.favoritedItem.name,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
@@ -114,7 +130,7 @@ class GridItem extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          favoritedItem.price.toEuroString(),
+                          widget.favoritedItem.price.toEuroString(),
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
@@ -125,7 +141,7 @@ class GridItem extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             GestureDetector(
-                              onTap: toggleFavoriteGesture,
+                              onTap: widget.toggleFavoriteGesture,
                               child: Image.asset(
                                 "lib/img/liked.png",
                                 width: 32,
@@ -136,7 +152,14 @@ class GridItem extends StatelessWidget {
                               style: IconButton.styleFrom(
                                 backgroundColor: Colors.black,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  final favoritedItem = widget.favoritedItem;
+
+                                  //Bug Fixxed- immer ne neue copy vom Object erstellen und das hinufügen, entfernen oder updaten
+                                  viewModelMenu.addToCart(favoritedItem);
+                                });
+                              },
                               icon: Icon(Icons.shopping_cart, size: 20),
                             ),
                             // Image.asset("lib/img/peper.png"),

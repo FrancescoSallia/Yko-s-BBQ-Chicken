@@ -163,6 +163,7 @@ class ViewmodelMenu extends ChangeNotifier {
         ),
       );
     }
+    notifyListeners();
   }
 
   void countDecrease(Extra extraItem, Food item) {
@@ -183,5 +184,11 @@ class ViewmodelMenu extends ChangeNotifier {
         }
       }
     }
+    notifyListeners();
+  }
+
+  void removeFromList(List list, Object removeItem) {
+    list.remove(removeItem);
+    notifyListeners();
   }
 }

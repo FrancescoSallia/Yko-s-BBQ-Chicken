@@ -26,78 +26,110 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
+    final cartItems = viewModelMenu.cartList;
 
-    // final int lengthList = 5;
     return Scaffold(
       backgroundColor: AppColors.secondary,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-              itemCount: viewModelMenu.cartList.length + 1,
-              itemBuilder: (context, index) {
-                if (index < viewModelMenu.cartList.length) {
-                  final order = viewModelMenu.cartList[index];
-                  return OrderItem(orderItem: order);
-                } else {
-                  return Column(
-                    children: [
-                      SummaryBox(),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.3),
-                              blurRadius: 2,
-                              offset: Offset(0, 3),
-                            ),
-                          ],
+      body: SafeArea(
+        child:
+            cartItems.isEmpty
+                // 🛒 Wenn leer
+                ? Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(
+                      "Noch keine Bestellungen im Warenkorb 🛒",
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
+                      ),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                    ),
+                  ),
+                )
+                // ✅ Wenn nicht leer
+                : SingleChildScrollView(
+                  physics: const ClampingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 25,
+                    ),
+                    child: Column(
+                      children: [
+                        // 🔹 Alle OrderItems anzeigen
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: cartItems.length,
+                          itemBuilder: (context, index) {
+                            final order = cartItems[index];
+                            return OrderItem(orderItem: order);
+                          },
                         ),
-                        child: TextButton(
-                          onPressed: () {},
-                          style: TextButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                              255,
-                              248,
-                              186,
-                              0,
-                            ),
-                            foregroundColor: Colors.black,
-                            minimumSize: Size(double.infinity, 55),
 
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "Order Now",
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                        const SizedBox(height: 20),
+
+                        // 🔹 Danach die SummaryBox anzeigen lassen
+                        SummaryBox(),
+
+                        const SizedBox(height: 20),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.3),
+                                blurRadius: 2,
+                                offset: const Offset(0, 3),
                               ),
-                              SizedBox(width: 10),
-                              Icon(Icons.delivery_dining_outlined, size: 24),
                             ],
                           ),
+                          child: TextButton(
+                            onPressed: () {
+                              // hier Bestellung abschicken oder Warenkorb leeren
+                            },
+                            style: TextButton.styleFrom(
+                              backgroundColor: const Color.fromARGB(
+                                255,
+                                248,
+                                186,
+                                0,
+                              ),
+                              foregroundColor: Colors.black,
+                              minimumSize: const Size(double.infinity, 55),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Order Now",
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                const Icon(
+                                  Icons.delivery_dining_outlined,
+                                  size: 24,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 110),
-                    ],
-                  );
-                }
-              },
-            ),
-          ],
-        ),
+
+                        const SizedBox(height: 110),
+                      ],
+                    ),
+                  ),
+                ),
       ),
     );
   }

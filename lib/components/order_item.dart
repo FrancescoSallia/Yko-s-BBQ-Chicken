@@ -152,17 +152,41 @@ class _OrderItemState extends State<OrderItem> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     IconButton.filled(
-                      onPressed: () {},
-                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        setState(() {
+                          final updatedItem = widget.orderItem;
+
+                          updatedItem.count--;
+                          if (updatedItem.count > 0) {
+                            viewModelMenu.updateMeal(updatedItem);
+                          } else if (updatedItem.count == 0) {
+                            viewModelMenu.removeFromList(
+                              viewModelMenu.cartList,
+                              updatedItem,
+                            );
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        widget.orderItem.count == 1
+                            ? Icons.delete
+                            : Icons.remove,
+                      ),
                       iconSize: 16,
                       style: IconButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: AppColors.primaryButton.withValues(
-                          alpha: 0.2,
-                        ),
-                        foregroundColor: AppColors.primaryButton,
+                        backgroundColor:
+                            widget.orderItem.count == 1
+                                ? Colors.red.withValues(alpha: 0.2)
+                                : AppColors.primaryButton.withValues(
+                                  alpha: 0.2,
+                                ),
+                        foregroundColor:
+                            widget.orderItem.count == 1
+                                ? Colors.red
+                                : AppColors.primaryButton,
                         minimumSize: const Size(32, 32),
                       ),
                     ),
@@ -177,7 +201,13 @@ class _OrderItemState extends State<OrderItem> {
                       ),
                     ),
                     IconButton.filled(
-                      onPressed: () {},
+                      onPressed: () {
+                        setState(() {
+                          final updatedItem = widget.orderItem;
+                          updatedItem.count++;
+                          viewModelMenu.updateMeal(updatedItem);
+                        });
+                      },
                       icon: const Icon(Icons.add),
                       iconSize: 16,
                       style: IconButton.styleFrom(
@@ -210,7 +240,7 @@ class _OrderItemState extends State<OrderItem> {
                         fontWeight: FontWeight.w500,
                         fontSize: 13,
                         fontStyle: FontStyle.italic,
-                        color: Colors.red,
+                        color: Colors.black.withValues(alpha: 0.7),
                       ),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,

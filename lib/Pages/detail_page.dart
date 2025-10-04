@@ -353,9 +353,8 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                 widget.item.extras = [];
                                 widget.item.note = "";
 
-                                for (var element
-                                    in viewModelMenu.currentExtras) {
-                                  element.anzahl = 0;
+                                for (var extra in viewModelMenu.currentExtras) {
+                                  extra.anzahl = 0;
                                 }
                               });
                             },
