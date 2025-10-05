@@ -67,7 +67,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
-
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -90,7 +89,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
             onTap: () {
               setState(() {
                 viewModelMenu.toggleFavorite(widget.item);
-
                 _likedController
                     .forward(from: 0)
                     .then((_) => _likedController.reverse());
@@ -116,7 +114,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           ),
         ],
       ),
-
       body: NotificationListener<OverscrollIndicatorNotification>(
         onNotification: (overscroll) {
           overscroll.disallowIndicator();
@@ -126,241 +123,267 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           physics: const ClampingScrollPhysics(),
           child: Column(
             children: [
-              // STACK mit Pizza und Teller
-              Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  // Hintergrundfarbe
-                  Container(
-                    height: size.height * 0.45,
-                    color: AppColors.primary,
-                  ),
+              // STACK mit Food und Teller
+              SizedBox(
+                height: size.height * 0.38,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Hintergrundfarbe
+                    Container(
+                      height: size.height * 0.38,
+                      color: AppColors.primary,
+                    ),
 
-                  // Teller + Pizza
-                  RotationTransition(
-                    turns: _scaleAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          // Teller (größer)
-                          Image.asset(
-                            "lib/img/plate.png",
-                            width: MediaQuery.of(context).size.width * 0.65,
-                            fit: BoxFit.contain,
-                          ),
-                          // Pizza (etwas kleiner)
-                          Image.asset(
-                            widget.item.imgAsset ?? "lib/img/logo_ykos.png",
-                            width: MediaQuery.of(context).size.width * 0.52,
-
-                            fit: BoxFit.contain,
-                          ),
-                        ],
+                    // Teller + Food
+                    RotationTransition(
+                      turns: _scaleAnimation,
+                      child: ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            // Teller (größer)
+                            Image.asset(
+                              "lib/img/plate.png",
+                              width: size.width * 0.65,
+                              fit: BoxFit.contain,
+                            ),
+                            // Food (etwas kleiner)
+                            Image.asset(
+                              widget.item.imgAsset ?? "lib/img/logo_ykos.png",
+                              width: size.width * 0.52,
+                              fit: BoxFit.contain,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
 
-              // Weißer Sheet-Bereich (scrollt mit nach oben)
+              // Weißer Sheet-Bereich
               Container(
+                constraints: BoxConstraints(minHeight: size.height * 0.62),
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(50),
-                    topRight: Radius.circular(50),
+                    topLeft: Radius.circular(40),
+                    topRight: Radius.circular(40),
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    top: 20,
-                    right: 20,
-                    bottom: 40,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 28,
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Header: Allergens und Labels
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children:
-                                widget.item.allergens.isNotEmpty
-                                    ? widget.item.allergens.asMap().entries.map(
-                                      //zerteilen es auf einzelne Strings
-                                      (entry) {
-                                        // holen uns die positionen der jeweiligen Strings in der liste, geben den wert als String weiter und anschließend ein bool um zu überprüfen ob kein komma am ende der liste gehöhren soll.
-                                        int idx = entry.key;
-                                        String allergen = entry.value;
-                                        bool isLastString =
-                                            idx ==
-                                            widget.item.allergens.length - 1;
+                          // Allergens
+                          if (widget.item.allergens.isNotEmpty)
+                            Flexible(
+                              child: Wrap(
+                                spacing: 4,
+                                children:
+                                    widget.item.allergens.asMap().entries.map((
+                                      entry,
+                                    ) {
+                                      int idx = entry.key;
+                                      String allergen = entry.value;
+                                      bool isLastString =
+                                          idx ==
+                                          widget.item.allergens.length - 1;
 
-                                        return Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 2.0,
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 10,
+                                          vertical: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[100],
+                                          borderRadius: BorderRadius.circular(
+                                            8,
                                           ),
-                                          child: Text(
-                                            isLastString
-                                                ? allergen // falls es der letzte String von der Liste ist soll kein komma sein, ansonsten soll da ein komma hin.
-                                                : "$allergen ,",
-                                            style: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 12,
-                                            ),
+                                        ),
+                                        child: Text(
+                                          allergen,
+                                          style: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 11,
+                                            color: Colors.grey[700],
                                           ),
-                                        );
-                                      },
-                                    ).toList()
-                                    : [
-                                      // Text(
-                                      //   "F,A",
-                                      //   style: GoogleFonts.inter(
-                                      //     fontWeight: FontWeight.w700,
-                                      //     fontSize: 12,
-                                      //   ),
-                                      // ),
-                                    ],
-                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                              ),
+                            ),
 
-                          Row(
-                            children:
-                                (widget.item.labels?.isNotEmpty ?? false)
-                                    ? widget.item.labels!.map((label) {
-                                      return Image.asset(label, height: 40);
-                                    }).toList()
-                                    : [
-                                      Image.asset(
-                                        "lib/img/peper_detail.png",
-                                        height: 40,
-                                      ),
-                                      Image.asset(
-                                        "lib/img/peper_detail.png",
-                                        height: 40,
-                                      ),
-                                    ],
-                          ),
+                          // Labels
+                          if (widget.item.labels?.isNotEmpty ?? false)
+                            Row(
+                              children:
+                                  widget.item.labels!.map((label) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 6),
+                                      child: Image.asset(label, height: 36),
+                                    );
+                                  }).toList(),
+                            )
+                          else
+                            Row(
+                              children: [
+                                Image.asset(
+                                  "lib/img/peper_detail.png",
+                                  height: 36,
+                                ),
+                                const SizedBox(width: 6),
+                                Image.asset(
+                                  "lib/img/peper_detail.png",
+                                  height: 36,
+                                ),
+                              ],
+                            ),
                         ],
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          widget.item.name,
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                          ),
+
+                      const SizedBox(height: 24),
+
+                      // Name und Preis
+                      Text(
+                        widget.item.name,
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 26,
+                          height: 1.2,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 20),
-                        child: Text(
-                          widget.item.price.toEuroString(),
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
+
+                      const SizedBox(height: 8),
+
+                      Text(
+                        widget.item.price.toEuroString(),
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 22,
+                          color: AppColors.primaryButton,
                         ),
                       ),
+
+                      const SizedBox(height: 20),
+
+                      // Beschreibung
                       Text(
                         widget.item.description,
                         style: GoogleFonts.inter(
-                          color: const Color.fromARGB(255, 91, 91, 91),
-                          fontSize: 14,
+                          color: Colors.grey[700],
+                          fontSize: 15,
+                          height: 1.6,
                         ),
                       ),
-                      SizedBox(height: 30),
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.center,
-                      //   children: [
-                      //     Text(
-                      //       "Zutaten",
-                      //       style: GoogleFonts.inter(
-                      //         fontWeight: FontWeight.w600,
-                      //         fontSize: 26,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // ListView(
-                      //   shrinkWrap: true,
-                      //   physics: NeverScrollableScrollPhysics(),
-                      //   children: [
-                      //     AddExtraIcons(),
-                      //     AddExtraIcons(),
-                      //     AddExtraIcons(),
-                      //     AddExtraIcons(),
-                      //     AddExtraIcons(),
-                      //   ],
-                      // ),
-                      // const SizedBox(height: 10),
-                      Divider(color: Colors.black, height: 0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 20.0,
-                              top: 20,
+
+                      const SizedBox(height: 32),
+
+                      // Divider vor Extras
+                      if (viewModelMenu.currentExtras.isNotEmpty) ...[
+                        Divider(
+                          color: Colors.grey[300],
+                          thickness: 1,
+                          height: 1,
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // Extras Header
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.add_circle_outline,
+                              color: AppColors.primaryButton,
+                              size: 24,
                             ),
-                            child: Text(
-                              "Extra's",
+                            const SizedBox(width: 8),
+                            Text(
+                              "Extra's hinzufügen",
                               style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 22,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 20,
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
+
+                        const SizedBox(height: 16),
+
+                        // Extras Liste
+                        ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: viewModelMenu.currentExtras.length,
+                          separatorBuilder:
+                              (context, index) => const SizedBox(height: 12),
+                          itemBuilder: (context, index) {
+                            final extra = viewModelMenu.currentExtras[index];
+                            return AddExtraIcons(
+                              extraItem: extra,
+                              item: widget.item,
+                            );
+                          },
+                        ),
+
+                        const SizedBox(height: 32),
+                      ],
+
+                      // Buttons am Ende
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Row(
+                          children: [
+                            // Anzahl Button
+                            Expanded(
+                              flex: 2,
+                              child: AddRemoveButton(
+                                item: widget.item,
+                                gesture: (p0) {
+                                  viewModelMenu.updateMeal(p0);
+                                },
+                              ),
+                            ),
+
+                            const SizedBox(width: 16),
+
+                            // In den Warenkorb Button
+                            Expanded(
+                              flex: 3,
+                              child: MyToCartButton(
+                                gesture: () {
+                                  viewModelMenu.addToCart(widget.item);
+
+                                  setState(() {
+                                    widget.item.count = 1;
+                                    widget.item.extras = [];
+                                    widget.item.note = "";
+
+                                    for (var extra
+                                        in viewModelMenu.currentExtras) {
+                                      extra.anzahl = 0;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
 
-                      ListView.builder(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: viewModelMenu.currentExtras.length,
-                        itemBuilder: (context, index) {
-                          final extra = viewModelMenu.currentExtras[index];
-                          return AddExtraIcons(
-                            extraItem: extra,
-                            item: widget.item,
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          AddRemoveButton(
-                            item: widget.item,
-                            gesture: (p0) {
-                              viewModelMenu.updateMeal(p0);
-                            },
-                          ),
-                          MyToCartButton(
-                            gesture: () {
-                              // 1️⃣ Kopie erzeugen und in den Warenkorb legen
-
-                              viewModelMenu.addToCart(widget.item);
-
-                              // 2️⃣ Original-Item zurücksetzen für DetailPage UI
-                              setState(() {
-                                widget.item.count = 1;
-                                widget.item.extras = [];
-                                widget.item.note = "";
-
-                                for (var extra in viewModelMenu.currentExtras) {
-                                  extra.anzahl = 0;
-                                }
-                              });
-                            },
-                          ),
-                        ],
-                      ),
+                      // Extra Abstand am Ende für besseres Scrolling
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),

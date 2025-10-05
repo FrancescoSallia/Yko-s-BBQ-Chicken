@@ -173,6 +173,10 @@ class _MySearchFieldState extends State<MySearchField> {
                             ? const Text('Category')
                             : Text('Category: ${item['category']}'),
                     onTap: () {
+                      FocusScope.of(
+                        context,
+                      ).unfocus(); //Keyboard is'nt more focused and disappears again
+
                       controller.closeView(item['name'] as String);
                       if (isCategory) {
                         // Kategorie laden
