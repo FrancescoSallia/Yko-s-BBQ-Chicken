@@ -10,7 +10,7 @@ class ViewmodelMenu extends ChangeNotifier {
   final foodRepo = FoodRepository.instance;
 
   //Menu-Liste vom Repository
-  late List<Food> _menuList = foodRepo.getFoodsOrDrinks();
+  late final List<Food> _menuList = foodRepo.getFoodsOrDrinks();
   List<Food> get menuList => _menuList;
 
   //Extra-Liste vom Repository
@@ -193,12 +193,20 @@ class ViewmodelMenu extends ChangeNotifier {
   List<Food> _filtredList = [];
   List<Food> get filteredList => _filtredList;
 
-   //Load Menu from Selected Category in HomePage
+  //Load Menu from Selected Category in HomePage
   void loadMenuFromCategory(String itemCategory) {
     _filtredList =
         _menuList
             .where((category) => category.category.name == itemCategory)
             .toList();
     notifyListeners(); // damit das UI automatisch rebuildet
+  }
+
+  int indexOfCategory(String itemCategory) {
+    final index = getCategoriesFromFoods(_menuList).indexWhere(
+      (element) => element.name == itemCategory,
+    );
+    notifyListeners();
+    return index;
   }
 }

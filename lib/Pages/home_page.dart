@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
+import 'package:ykos_bbq_chicken/components/my_search_field.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -100,12 +101,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ],
             ),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: 18,
-              ),
-              child: CupertinoSearchTextField(),
+            //SearchTextField
+            MySearchField(
+              onCategorySelected: (int index) {
+                setState(() {
+                  selectedCategoryIndex = index;
+                });
+              },
             ),
 
             //Category-List
