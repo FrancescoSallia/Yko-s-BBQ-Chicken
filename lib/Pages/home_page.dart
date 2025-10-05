@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,7 +27,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModelMenu = context.read<ViewmodelMenu>();
       viewModelMenu.getCategoriesFromFoods(viewModelMenu.menuList);
-      viewModelMenu.loadMenuFromCategory(CategoryEnum.recommend.label);
+      viewModelMenu.loadMenuFromCategory(CategoryEnum.chicken.label);
     });
 
     _animationController = AnimationController(
@@ -159,7 +157,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               rotationAnimation: _animation,
               largeTitle: 'Recommended',
 
-              menuList: viewModelMenu.menuList,
+              menuList:
+                  viewModelMenu
+                      .menuList //filtered list by category
+                      .where(
+                        (element) =>
+                            element.category.name == CategoryEnum.chicken.label,
+                      )
+                      .toList(),
               onItemTap: (selectedItem) {
                 Navigator.of(context).push(
                   CupertinoPageRoute(
@@ -178,99 +183,106 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   NeverScrollableScrollPhysics(), // <- verhindert doppeltes Scrollen
               itemBuilder: (context, index) {
                 final filteredItem = viewModelMenu.filteredList[index];
-                return Padding(
-                  //TODO:  heir weiter machen um zur detailpage zu navigieren!
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 20,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.secondary.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(
-                        width: 1,
-                        color: AppColors.primaryButton.withValues(alpha: 0.9),
+                return GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => DetailPage(item: filteredItem),
+                        ),
                       ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 20,
                     ),
-                    padding: EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SizedBox(
-                              width: 60,
-                              height: 60,
-                              child:
-                                  filteredItem.category.name !=
-                                          CategoryEnum.drinks.label
-                                      ? Image.asset("lib/img/plate.png")
-                                      : Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.transparent,
-                                          borderRadius: BorderRadius.circular(
-                                            4,
-                                          ),
-                                          border: Border.all(
-                                            width: 1,
-                                            color: Colors.black.withValues(
-                                              alpha: 0.6,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.secondary.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          width: 1,
+                          color: AppColors.primaryButton.withValues(alpha: 0.9),
+                        ),
+                      ),
+                      padding: EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              SizedBox(
+                                width: 60,
+                                height: 60,
+                                child:
+                                    filteredItem.category.name !=
+                                            CategoryEnum.drinks.label
+                                        ? Image.asset("lib/img/plate.png")
+                                        : Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            borderRadius: BorderRadius.circular(
+                                              4,
+                                            ),
+                                            border: Border.all(
+                                              width: 1,
+                                              color: Colors.black.withValues(
+                                                alpha: 0.6,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                            ),
-                            SizedBox(
-                              width: 50,
-                              height: 50,
-                              child: Image.asset(
-                                filteredItem.imgAsset ??
-                                    "lib/img/logo_ykos.png",
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              child: Text(
-                                '${filteredItem.name} ',
-                                style: GoogleFonts.inter(
-                                  color: AppColors.primaryButton,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
+                              SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: Image.asset(
+                                  filteredItem.imgAsset ??
+                                      "lib/img/logo_ykos.png",
                                 ),
-                                softWrap: true,
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 5.0),
-                                  child: Text(
-                                    filteredItem.price.toEuroString(),
-                                    style: GoogleFonts.inter(
-                                      color: AppColors.primaryButton,
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    softWrap: true,
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: 200,
+                                child: Text(
+                                  '${filteredItem.name} ',
+                                  style: GoogleFonts.inter(
+                                    color: AppColors.primaryButton,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
                                   ),
+                                  softWrap: true,
                                 ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          color: AppColors.primaryButton,
-                          size: 16,
-                        ),
-                      ],
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Text(
+                                      filteredItem.price.toEuroString(),
+                                      style: GoogleFonts.inter(
+                                        color: AppColors.primaryButton,
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      softWrap: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            color: AppColors.primaryButton,
+                            size: 16,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );

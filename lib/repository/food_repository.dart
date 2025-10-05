@@ -228,13 +228,13 @@ class FoodRepository {
       Extra(
         name: "Salami",
         price: 2.0,
-        extraCategory: CategoryEnum.recommend,
+        extraCategory: CategoryEnum.pizza,
         anzahl: 0,
       ),
       Extra(
         name: "Schinken",
         price: 2.0,
-        extraCategory: CategoryEnum.recommend,
+        extraCategory: CategoryEnum.pizza,
         anzahl: 0,
       ),
       Extra(
