@@ -109,6 +109,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 });
               },
             ),
+            SizedBox(height: 14),
 
             //Category-List
             SizedBox(
@@ -137,8 +138,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         },
                         child: Padding(
                           padding: const EdgeInsets.only(
-                            left: 18.0,
+                            left: 10.0,
                             bottom: 4,
+                            right: 8,
                             top: 0,
                           ),
                           child: CategoryItem(
@@ -154,10 +156,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               ),
             ),
 
+            SizedBox(height: 10),
             CardItem(
               scaleAnimation: _animation,
               rotationAnimation: _animation,
-              largeTitle: 'Recommended',
+              largeTitle: 'Recommanded',
 
               menuList:
                   viewModelMenu
@@ -276,6 +279,65 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 6),
+
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Row(
+                                    children:
+                                        filteredItem.allergens.asMap().entries.map((
+                                          entry,
+                                        ) {
+                                          final index = entry.key;
+                                          final labelPath = entry.value;
+
+                                          // Prüfen, ob das letzte Element erreicht ist
+                                          final isLast =
+                                              index ==
+                                              filteredItem.allergens.length - 1;
+
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                              right: 4.0,
+                                            ),
+                                            child: Text(
+                                              isLast
+                                                  ? labelPath
+                                                  : "$labelPath,",
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                  ),
+                                  SizedBox(width: 30),
+                                  Row(
+                                    children:
+                                        filteredItem.labels!
+                                            .asMap()
+                                            .entries
+                                            .map((entry) {
+                                              final labelPath = entry.value;
+
+                                              return Padding(
+                                                padding: const EdgeInsets.only(
+                                                  right: 4.0,
+                                                ),
+                                                child: Image.asset(
+                                                  labelPath,
+                                                  width: 25,
+                                                  height: 25,
+                                                ),
+                                              );
+                                            })
+                                            .toList(),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                           Icon(
@@ -290,7 +352,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 );
               },
             ),
-            SizedBox(height: 130),
+            SizedBox(height: 120),
           ],
         ),
       ),

@@ -25,7 +25,7 @@ class CardItem extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 28, left: 18.0, bottom: 5),
+          padding: const EdgeInsets.only(top: 20, left: 18.0, bottom: 5),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -41,7 +41,7 @@ class CardItem extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 225,
+          height: 210,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: menuList.length,
@@ -52,9 +52,10 @@ class CardItem extends StatelessWidget {
 
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 60.0,
+                    top: 38.0,
                     left: 20,
                     right: 10,
+                    bottom: 8,
                   ),
                   child: Stack(
                     clipBehavior:
@@ -65,6 +66,13 @@ class CardItem extends StatelessWidget {
                         width: 145,
                         decoration: BoxDecoration(
                           color: AppColors.primary,
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 5,
+                              color: Colors.black.withValues(alpha: 0.3),
+                              offset: Offset(2, 3),
+                            ),
+                          ],
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Padding(

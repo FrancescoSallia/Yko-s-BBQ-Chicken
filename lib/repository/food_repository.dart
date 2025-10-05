@@ -85,7 +85,7 @@ class FoodRepository {
         imgAsset: "lib/img/pizza_tonno1.png",
         artikelNr: null,
         price: 14.90,
-        labels: [],
+        labels: ["lib/img/peper.png", "lib/img/peper.png"],
         allergens: ["A", "F"],
         extras: [],
       ),

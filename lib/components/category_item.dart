@@ -33,7 +33,10 @@ class CategoryItem extends StatelessWidget {
               ),
               height: 70,
               width: 70,
-              child: Center(child: Image.asset(img)),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(child: Image.asset(img)),
+              ),
             ),
           ],
         ),
