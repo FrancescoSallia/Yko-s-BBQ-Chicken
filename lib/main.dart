@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/Pages/checkout_page.dart';
 import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
@@ -19,8 +20,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: FloatingBottomNav(),
+      // home: FloatingBottomNav(),
+      home: CheckoutPage(),
       // home: LoginPage(),
       // home: DetailPage(),
     );

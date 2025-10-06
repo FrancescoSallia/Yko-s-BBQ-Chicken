@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/Pages/checkout_page.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -38,7 +39,7 @@ class _CartPageState extends State<CartPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Noch keine Bestellungen im Warenkorb 🛒",
+                      "No Orders in Cart yet 🛒",
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -91,6 +92,11 @@ class _CartPageState extends State<CartPage> {
                           child: TextButton(
                             onPressed: () {
                               // hier Bestellung abschicken oder Warenkorb leeren
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => CheckoutPage(),
+                                ),
+                              );
                             },
                             style: TextButton.styleFrom(
                               backgroundColor: const Color.fromARGB(
@@ -109,7 +115,7 @@ class _CartPageState extends State<CartPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Order Now",
+                                  "Checkout",
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
