@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
+import 'package:ykos_bbq_chicken/components/forward_box.dart';
+import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -12,44 +15,15 @@ class CheckoutPage extends StatefulWidget {
 
 class _CheckoutPageState extends State<CheckoutPage> {
   bool isDeliverySelected = true;
-  bool deliveryTimeContainerIsSelected = false;
   TimeOfDay? selectedTimeFromPicker;
   DateTime? selectedDateFromPicker;
+  int? selectedDeliveryIndex = 0;
+  final TimeRepository timeRepo = TimeRepository();
 
   final int closingHour = 22; // Betrieb schließt um 22 Uhr
   final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
 
-  List<TimeOfDay> generateAvailableTimes({
-    int openingHour = 12, // Öffnet um 12:00
-    int closingHour = 22, // Schließt um 22:30
-    int closingMinute = 30,
-    int stepMinutes = 10, // alle 10 Minuten (kannst auf 15 ändern)
-  }) {
-    List<TimeOfDay> times = [];
-    int startMinutes = openingHour * 60; // Startzeit in Minuten
-    int endMinutes = closingHour * 60 + closingMinute;
-
-    for (
-      int minutes = startMinutes;
-      minutes <= endMinutes;
-      minutes += stepMinutes
-    ) {
-      int hour = minutes ~/ 60;
-      int minute = minutes % 60;
-      times.add(TimeOfDay(hour: hour, minute: minute));
-    }
-
-    return times;
-  }
-
-  void showDateTimePicker(BuildContext context) {
-    final times = generateAvailableTimes(
-      openingHour: 12,
-      closingHour: 22,
-      closingMinute: 30,
-      stepMinutes: 10,
-    );
-
+  Future<bool> showDateTimePicker(BuildContext context) async {
     final today = DateTime.now();
     final List<DateTime> availableDates =
         List.generate(365, (index) {
@@ -59,104 +33,128 @@ class _CheckoutPageState extends State<CheckoutPage> {
     int selectedDateIndex = 0;
     int selectedTimeIndex = 0;
 
-    showModalBottomSheet(
+    timeRepo.generateAvailableTimes();
+
+    List<TimeOfDay> times = timeRepo.generateAvailableTimes(
+      date: availableDates[selectedDateIndex],
+    );
+
+    final bool? confirmed = await showModalBottomSheet(
       context: context,
       builder: (_) {
-        return SizedBox(
-          height: 300,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 10),
-                child: Text(
-                  "Datum & Zeit auswählen",
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CupertinoPicker(
-                        scrollController: FixedExtentScrollController(
-                          initialItem: selectedDateIndex,
-                        ),
-                        itemExtent: 32,
-                        onSelectedItemChanged: (index) {
-                          selectedDateIndex = index;
-                        },
-                        children:
-                            availableDates.map((date) {
-                              final weekdayNames = [
-                                'Mo',
-                                'Di',
-                                'Mi',
-                                'Do',
-                                'Fr',
-                                'Sa',
-                                'So',
-                              ];
-                              final weekday = weekdayNames[date.weekday - 1];
-                              final day = date.day.toString().padLeft(2, '0');
-                              final month = date.month.toString().padLeft(
-                                2,
-                                '0',
-                              );
-                              return Center(
-                                child: Text("$weekday, $day.$month"),
-                              );
-                            }).toList(),
-                      ),
-                    ),
-                    Expanded(
-                      child: CupertinoPicker(
-                        scrollController: FixedExtentScrollController(
-                          initialItem: selectedTimeIndex,
-                        ),
-                        itemExtent: 32,
-                        onSelectedItemChanged: (index) {
-                          selectedTimeIndex = index;
-                        },
-                        children:
-                            times.map((time) {
-                              final label =
-                                  "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
-                              return Center(child: Text(label));
-                            }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 30.0, top: 10),
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      selectedDateFromPicker =
-                          availableDates[selectedDateIndex];
-                      selectedTimeFromPicker = times[selectedTimeIndex];
-                    });
-                    Navigator.pop(context);
-                  },
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    backgroundColor: AppColors.primary,
-                    elevation: 2,
-                    shadowColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(width: 1, color: Colors.black),
-                      borderRadius: BorderRadiusGeometry.circular(6),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return SizedBox(
+              height: 300,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+                    child: Text(
+                      "Datum & Zeit auswählen",
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
                     ),
                   ),
-                  child: Text("Bestätigen"),
-                ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: CupertinoPicker(
+                            scrollController: FixedExtentScrollController(
+                              initialItem: selectedDateIndex,
+                            ),
+                            itemExtent: 32,
+                            onSelectedItemChanged: (index) {
+                              selectedDateIndex = index;
+                              // Dynamische Aktualisierung der Zeiten bei Datumsauswahl
+                              times = timeRepo.generateAvailableTimes(
+                                date: availableDates[selectedDateIndex],
+                              );
+                              selectedTimeIndex = 0;
+                              setModalState(() {});
+                            },
+                            children:
+                                availableDates.map((date) {
+                                  final weekdayNames = [
+                                    'Mo',
+                                    'Di',
+                                    'Mi',
+                                    'Do',
+                                    'Fr',
+                                    'Sa',
+                                    'So',
+                                  ];
+                                  final weekday =
+                                      weekdayNames[date.weekday - 1];
+                                  final day = date.day.toString().padLeft(
+                                    2,
+                                    '0',
+                                  );
+                                  final month = date.month.toString().padLeft(
+                                    2,
+                                    '0',
+                                  );
+                                  return Center(
+                                    child: Text("$weekday,  $day.$month"),
+                                  );
+                                }).toList(),
+                          ),
+                        ),
+                        Expanded(
+                          child: CupertinoPicker(
+                            scrollController: FixedExtentScrollController(
+                              initialItem: selectedTimeIndex,
+                            ),
+                            itemExtent: 32,
+                            onSelectedItemChanged: (index) {
+                              selectedTimeIndex = index;
+                            },
+                            children:
+                                times.map((time) {
+                                  final label =
+                                      "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+                                  return Center(child: Text(label));
+                                }).toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 30.0, top: 10),
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedDateFromPicker =
+                              availableDates[selectedDateIndex];
+                          selectedTimeFromPicker = times[selectedTimeIndex];
+                        });
+                        Navigator.pop(
+                          context,
+                          true,
+                        ); // <— returne true, wenn Nutzer bestätigt
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.black,
+                        backgroundColor: AppColors.primary,
+                        elevation: 2,
+                        shadowColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          side: BorderSide(width: 1, color: Colors.black),
+                          borderRadius: BorderRadiusGeometry.circular(6),
+                        ),
+                      ),
+                      child: Text("Bestätigen"),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
+    return confirmed ?? false;
   }
 
   @override
@@ -197,33 +195,57 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ),
               ),
               DeliveryTimeContainer(
-                title: "Standard",
-                subTitle: "50-60 Min.",
-                isSelected: deliveryTimeContainerIsSelected,
+                index: 0,
+                title: "So schnell wie möglich",
+                subTitle: "ca. 40-60 Min.",
+                isSelected: selectedDeliveryIndex == 0,
                 gesture: () {
                   setState(() {
-                    deliveryTimeContainerIsSelected =
-                        !deliveryTimeContainerIsSelected;
+                    selectedDeliveryIndex = 0;
                   });
                 },
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Text(selectedTimeFromPicker?.format(context) ?? ""),
-                  Text(selectedDateFromPicker?.day.toString() ?? ""),
-                ],
-              ),
+                  DeliveryTimeContainer(
+                    index: 1,
+                    title: "Lieferzeit wählen",
+                    subTitle:
+                        selectedDateFromPicker == null ||
+                                selectedTimeFromPicker == null
+                            ? "Keine Zeit gewählt"
+                            : selectedDateFromPicker?.day == DateTime.now().day
+                            ? "Heute ${timeRepo.timeToString(selectedTimeFromPicker, context).data}"
+                            : "${timeRepo.dateDayMonthYearToString(selectedDateFromPicker).data} um ${timeRepo.timeToString(selectedTimeFromPicker, context).data}",
+                    isSelected: selectedDeliveryIndex == 1,
+                    gesture: () async {
+                      final confirmed = await showDateTimePicker(context);
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(
-                    onPressed: () => showDateTimePicker(context),
-                    child: Text("Datum & Zeit auswählen"),
+                      setState(() {
+                        if (confirmed &&
+                            selectedDateFromPicker != null &&
+                            selectedTimeFromPicker != null) {
+                          selectedDeliveryIndex =
+                              1; // Nutzer hat bestätigt → Lieferzeit ausgewählt
+                        } else {
+                          selectedDeliveryIndex =
+                              0; // Nutzer hat Picker geschlossen → zurück zu Standard
+                        }
+                      });
+                    },
                   ),
                 ],
               ),
+
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              //   children: [
+              //     TextButton(
+              //       onPressed: () => showDateTimePicker(context),
+              //       child: Text("Datum & Zeit auswählen"),
+              //     ),
+              //   ],
+              // ),
             ],
           ),
         ],
@@ -318,123 +340,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class DeliveryTimeContainer extends StatelessWidget {
-  final String title;
-  final String subTitle;
-  final bool isSelected;
-  final Function() gesture;
-  const DeliveryTimeContainer({
-    super.key,
-    required this.title,
-    required this.subTitle,
-    required this.isSelected,
-    required this.gesture,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: gesture,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-        margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
-        decoration: BoxDecoration(
-          border: Border.all(
-            width: 3,
-            color:
-                isSelected == true
-                    ? AppColors.timerTextPrimary
-                    : AppColors.textFieldColor,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            Icon(
-              isSelected == true ? Icons.check_circle : Icons.circle_outlined,
-              size: 28,
-              color:
-                  isSelected == true
-                      ? AppColors.timerTextPrimary
-                      : AppColors.textFieldColor,
-            ),
-            SizedBox(width: 15),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                ),
-                Text(
-                  subTitle,
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.textFieldColor,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ForwardBox extends StatelessWidget {
-  final String title;
-  final String announcementText;
-  final IconData iconData;
-  const ForwardBox({
-    super.key,
-    required this.title,
-    required this.announcementText,
-    required this.iconData,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withValues(alpha: 0.3)),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(iconData, size: 30),
-              SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    announcementText,
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textFieldColor,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          Icon(Icons.arrow_forward_ios_rounded, size: 20),
-        ],
       ),
     );
   }

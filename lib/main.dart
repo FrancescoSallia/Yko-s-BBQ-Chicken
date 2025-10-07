@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/checkout_page.dart';
-import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 void main() {
