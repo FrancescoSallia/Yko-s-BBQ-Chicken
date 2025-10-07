@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
@@ -257,10 +258,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ],
                   ),
                 ),
-                ForwardBox(
-                  title: "Zahlungsmöglichkeit",
-                  announcementText: "Wähle eine Zahlungsmöglichkeit aus",
-                  iconData: Icons.circle_outlined,
+                GestureDetector(
+                  onTap:
+                      () => showModalBottomSheet(
+                        showDragHandle: true,
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (context) => SheetPay(),
+                      ),
+                  child: ForwardBox(
+                    title: "Zahlungsmöglichkeit",
+                    announcementText: "Wähle eine Zahlungsmöglichkeit aus",
+                    iconData: Icons.circle_outlined,
+                  ),
                 ),
                 SizedBox(height: 20),
                 SummaryBox(),
