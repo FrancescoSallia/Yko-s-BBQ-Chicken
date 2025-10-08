@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +5,6 @@ import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
-import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
