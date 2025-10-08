@@ -8,6 +8,7 @@ import 'package:ykos_bbq_chicken/components/category_item.dart';
 import 'package:ykos_bbq_chicken/components/my_search_field.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
+import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
@@ -22,6 +23,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
   int selectedCategoryIndex = 0;
+  Category? selectedCategory;
+  bool? isSearchFieldEmpty;
 
   @override
   void initState() {
@@ -103,9 +106,17 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
             //SearchTextField
             MySearchField(
-              onCategorySelected: (int index) {
+              onCategorySelected: (Category category) {
                 setState(() {
-                  selectedCategoryIndex = index;
+                  selectedCategory = category;
+                });
+              },
+              onCategorySelectedIndex: (int index) {
+                selectedCategoryIndex = index;
+              },
+              searchFieldTextValue: (String query) {
+                setState(() {
+                  isSearchFieldEmpty = query.isEmpty;
                 });
               },
             ),
@@ -131,6 +142,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         onTap: () {
                           setState(() {
                             selectedCategoryIndex = index;
+                            selectedCategory = category;
                           });
 
                           // Load the selected Category !
@@ -157,29 +169,69 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             ),
 
             SizedBox(height: 10),
-            CardItem(
-              scaleAnimation: _animation,
-              rotationAnimation: _animation,
-              largeTitle: 'Recommanded',
+            Visibility(
+              visible:
+                  isSearchFieldEmpty ??
+                  true, // nur sichtbar, wenn das Suchfeld leer ist
+              child: CardItem(
+                scaleAnimation: _animation,
+                rotationAnimation: _animation,
+                largeTitle: 'Recommanded',
 
-              menuList:
-                  viewModelMenu
-                      .menuList //filtered list by category
-                      .where(
-                        (element) =>
-                            element.category.name == CategoryEnum.chicken.label,
-                      )
-                      .toList(),
-              onItemTap: (selectedItem) {
-                Navigator.of(context).push(
-                  CupertinoPageRoute(
-                    builder: (context) => DetailPage(item: selectedItem),
-                  ),
-                );
-              },
+                menuList:
+                    viewModelMenu
+                        .menuList //filtered list by category
+                        .where(
+                          (element) =>
+                              element.category.name ==
+                              CategoryEnum.chicken.label,
+                        )
+                        .toList(),
+                onItemTap: (selectedItem) {
+                  Navigator.of(context).push(
+                    CupertinoPageRoute(
+                      builder: (context) => DetailPage(item: selectedItem),
+                    ),
+                  );
+                },
+              ),
             ),
             SizedBox(height: 26),
 
+            if (selectedCategory != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20.0,
+                  vertical: 8,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    children: [
+                      Text(
+                        selectedCategory!.name,
+                        style: GoogleFonts.inter(
+                          color: AppColors.primaryButton,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Container(
+                        width: 25,
+                        height: 25,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(20),
+                          child: Image.asset(selectedCategory!.categoryImg),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ListView.builder(
               itemCount: viewModelMenu.filteredList.length,
               shrinkWrap:

@@ -2,14 +2,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
+import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class MySearchField extends StatefulWidget {
-  final ValueChanged<int>
+  final ValueChanged<int> onCategorySelectedIndex;
+  final Function(Category)
   onCategorySelected; // ✅ Callback für selectedCategoryIndex
+  final ValueChanged<String>
+  searchFieldTextValue; //is Searchtext Empty, then unvisible the recommends section!
 
-  const MySearchField({super.key, required this.onCategorySelected});
+  const MySearchField({
+    super.key,
+    required this.onCategorySelected,
+    required this.onCategorySelectedIndex,
+    required this.searchFieldTextValue,
+  });
 
   @override
   State<MySearchField> createState() => _MySearchFieldState();
@@ -50,6 +59,9 @@ class _MySearchFieldState extends State<MySearchField> {
                   child: IconButton(
                     onPressed: () {
                       controller.clear();
+                      widget.searchFieldTextValue(
+                        "",
+                      ); // 🔸 Suchtext ist jetzt leer
                     },
                     icon: Icon(Icons.cancel, size: 20),
                   ),
@@ -67,11 +79,18 @@ class _MySearchFieldState extends State<MySearchField> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               onTap: () => controller.openView(),
-              onChanged: (value) => controller.openView(),
+              onChanged: (value) {
+                widget.searchFieldTextValue(
+                  value,
+                ); // ✅ Hier aktualisieren den searchtextfield
+                controller.openView();
+              },
             );
           },
           suggestionsBuilder: (context, controller) {
             final query = controller.text.toLowerCase();
+
+            widget.searchFieldTextValue(query);
 
             if (query.isEmpty) return [];
 
@@ -183,12 +202,15 @@ class _MySearchFieldState extends State<MySearchField> {
                       controller.closeView(item['name'] as String);
                       if (isCategory) {
                         // Kategorie laden
-
                         final index = viewModelMenu.indexOfCategory(
                           item["name"] ?? "",
                         );
-                        // 🔄 Statt setState -> Callback aufrufen
-                        widget.onCategorySelected(index);
+                        widget.onCategorySelectedIndex(index);
+
+                        final selectedCategory = viewModelMenu
+                            .getCategoriesFromFoods(viewModelMenu.menuList)
+                            .firstWhere((cat) => cat.name == item["name"]);
+                        widget.onCategorySelected(selectedCategory);
                         viewModelMenu.loadMenuFromCategory(
                           item['name'] as String,
                         );

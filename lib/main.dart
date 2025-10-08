@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/checkout_page.dart';
+import 'package:ykos_bbq_chicken/Pages/login/login_page.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 void main() {
@@ -22,8 +23,8 @@ class MyApp extends StatelessWidget {
       // theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       // home: FloatingBottomNav(),
-      home: CheckoutPage(),
-      // home: LoginPage(),
+      // home: CheckoutPage(),
+      home: LoginPage(),
       // home: DetailPage(),
     );
   }
