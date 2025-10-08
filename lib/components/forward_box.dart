@@ -6,11 +6,13 @@ class ForwardBox extends StatelessWidget {
   final String title;
   final String announcementText;
   final IconData iconData;
+  final String? img;
   const ForwardBox({
     super.key,
     required this.title,
     required this.announcementText,
     required this.iconData,
+    required this.img,
   });
 
   @override
@@ -19,7 +21,13 @@ class ForwardBox extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black.withValues(alpha: 0.3)),
+        border: Border.all(
+          width: 2,
+          color:
+              img != null
+                  ? AppColors.timerTextPrimary
+                  : Colors.black.withValues(alpha: 0.3),
+        ),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Row(
@@ -28,7 +36,11 @@ class ForwardBox extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Icon(iconData, size: 30),
+              Icon(
+                iconData,
+                size: 30,
+                color: img != null ? AppColors.timerTextPrimary : Colors.black,
+              ),
               SizedBox(width: 15),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,12 +49,35 @@ class ForwardBox extends StatelessWidget {
                     title,
                     style: GoogleFonts.inter(fontWeight: FontWeight.w600),
                   ),
-                  Text(
-                    announcementText,
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w400,
-                      color: AppColors.textFieldColor,
-                    ),
+                  Row(
+                    children: [
+                      if (img != null && img!.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0, top: 5),
+                          child: Container(
+                            padding: EdgeInsets.all(1),
+                            width: 40,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                width: 0.5,
+                                color: Colors.black,
+                              ),
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadiusGeometry.circular(10),
+                              child: Image.asset(img!),
+                            ),
+                          ),
+                        ),
+                      Text(
+                        announcementText,
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

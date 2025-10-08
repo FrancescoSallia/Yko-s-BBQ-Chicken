@@ -5,6 +5,7 @@ import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
+import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
@@ -21,6 +22,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   DateTime? selectedDateFromPicker;
   int? selectedDeliveryIndex = 0;
   final TimeRepository timeRepo = TimeRepository();
+  Payment? selectedPayment;
 
   final int closingHour = 22; // Betrieb schließt um 22 Uhr
   final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
@@ -183,6 +185,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               title: "Adresse hinzufügen",
               announcementText: "Zum Fortfahren hier tippen",
               iconData: Icons.location_on_outlined,
+              img: null,
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -259,17 +262,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 GestureDetector(
-                  onTap:
-                      () => showModalBottomSheet(
-                        showDragHandle: true,
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (context) => SheetPay(),
-                      ),
+                  onTap: () async {
+                    final payment = await showModalBottomSheet<Payment>(
+                      showDragHandle: true,
+                      backgroundColor: Colors.white,
+                      context: context,
+                      builder:
+                          (context) =>
+                              SheetPay(selectedPayment: selectedPayment),
+                    );
+
+                    if (payment != null) {
+                      setState(() {
+                        selectedPayment = payment;
+                      });
+                    }
+                  },
                   child: ForwardBox(
                     title: "Zahlungsmöglichkeit",
-                    announcementText: "Wähle eine Zahlungsmöglichkeit aus",
-                    iconData: Icons.circle_outlined,
+                    announcementText:
+                        selectedPayment?.name ??
+                        "Wähle eine Zahlungsmöglichkeit aus",
+                    iconData:
+                        selectedPayment != null
+                            ? Icons.check_circle
+                            : Icons.circle_outlined,
+                    img: selectedPayment?.img,
                   ),
                 ),
                 SizedBox(height: 20),
