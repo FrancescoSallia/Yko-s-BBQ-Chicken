@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
+import 'package:ykos_bbq_chicken/Pages/adress_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
@@ -181,11 +182,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
             SizedBox(height: 20),
 
             //Box to Navigato to adress or something else
-            ForwardBox(
-              title: "Adresse hinzufügen",
-              announcementText: "Zum Fortfahren hier tippen",
-              iconData: Icons.location_on_outlined,
-              img: null,
+            GestureDetector(
+              onTap:
+                  () => Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (context) => AdressPage()),
+                  ),
+              child: ForwardBox(
+                title: "Adresse hinzufügen",
+                announcementText: "Zum Fortfahren hier tippen",
+                iconData: Icons.location_on_outlined,
+                img: null,
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
