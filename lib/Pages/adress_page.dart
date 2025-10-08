@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_note_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_add_adress.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_options.dart';
-import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class AdressPage extends StatefulWidget {
@@ -32,7 +31,7 @@ class _AdressPageState extends State<AdressPage> {
                 builder: (context) {
                   return FractionallySizedBox(
                     heightFactor: 0.8, // 75% der Bildschirmhöhe
-                    child: const SheetPay(selectedPayment: null),
+                    child: const SheetAddAdress(),
                   );
                 },
               );
@@ -137,7 +136,7 @@ class _AdressPageState extends State<AdressPage> {
                             builder: (context) {
                               return FractionallySizedBox(
                                 heightFactor: 0.35,
-                                child: SheetOptions(),
+                                child: const SheetOptions(),
                               );
                             },
                           );
