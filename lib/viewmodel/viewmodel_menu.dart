@@ -52,7 +52,7 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners(); // damit das UI automatisch rebuildet
   }
 
-  List<Food> _cartList = [];
+  final List<Food> _cartList = [];
   List<Food> get cartList => _cartList;
 
   //SECTION: FUNKTION'S

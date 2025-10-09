@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/complete_button.dart';
 import 'package:ykos_bbq_chicken/components/my_adress_textfield.dart';
 import 'package:ykos_bbq_chicken/enum/adress_enum.dart';
+import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/adress_symbol.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
 
 class SheetAddAdress extends StatefulWidget {
   const SheetAddAdress({super.key});
@@ -21,10 +24,19 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
   final TextEditingController _placeController = TextEditingController();
   final TextEditingController _telefonController = TextEditingController();
   final TextEditingController _informationController = TextEditingController();
+  AdressSymbol? selectedAdressSymbol;
+
+  @override
+  void initState() {
+    context.read<ViewmodelAdress>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<AdressSymbol> _adressSymbol = [
+    final viewModelAdress = context.watch<ViewmodelAdress>();
+
+    List<AdressSymbol> adressSymbolList = [
       AdressSymbol(
         name: AdressEnum.suit.labelText,
         iconData: AdressEnum.suit.label,
@@ -42,6 +54,7 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
         iconData: AdressEnum.outdoor.label,
       ),
     ];
+
     return Form(
       key: _formKey, // 🔹 Form umschließt alle Textfelder
       child: SingleChildScrollView(
@@ -62,23 +75,37 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                itemCount: _adressSymbol.length,
+                itemCount: adressSymbolList.length,
                 itemBuilder: (context, index) {
-                  final adressSymbol = _adressSymbol[index];
-                  return Container(
-                    margin: EdgeInsets.all(6),
-                    padding: EdgeInsets.all(10),
-                    width: 90,
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1.5),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(adressSymbol.iconData),
-                        Text(adressSymbol.name),
-                      ],
+                  final symbolFromAdressList = adressSymbolList[index];
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedAdressSymbol = symbolFromAdressList;
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(6),
+                      padding: EdgeInsets.all(10),
+                      width: 90,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 1.5,
+                          color:
+                              selectedAdressSymbol?.name ==
+                                      symbolFromAdressList.name
+                                  ? Colors.deepOrange
+                                  : Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(symbolFromAdressList.iconData),
+                          Text(symbolFromAdressList.name),
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -124,7 +151,7 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
                           controller: _plzController,
                           labelText: "Postleitzahl",
                           hintText: "z.ß. 12167",
-                          textInputType: TextInputType.number,
+                          textInputType: TextInputType.phone,
                         ),
                       ),
                     ],
@@ -147,12 +174,6 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
                     maxLines: 5, // Anzahl der Zeilen, die angezeigt werden
                     minLines:
                         1, // optional, damit es bei leerem Feld klein bleibt
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Bitte ausfüllen";
-                      }
-                      return null;
-                    },
                     decoration: InputDecoration(
                       labelText: "Kurier-Information",
                       hintText:
@@ -171,7 +192,22 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
               gesture: () {
                 // 🔹 Hier wird der Validator tatsächlich ausgeführt
                 if (_formKey.currentState!.validate()) {
+                  //Erstellt die Adresse, anhand der angegebenen Daten.
+                  final newAdress = Adress(
+                    street: _adressController.text,
+                    houseNumber: _houseNumberController.text,
+                    plz: int.tryParse(_plzController.text) ?? 00000,
+                    place: _placeController.text,
+                    icon: selectedAdressSymbol,
+                    information: _informationController.text,
+                    name: _nameController.text,
+                    telefon: int.parse(_telefonController.text),
+                  );
+
+                  //Fügt die neue Adresse in die Liste.
+                  viewModelAdress.addToAdressList(newAdress);
                   // Alles korrekt ✅
+                  Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Adresse gespeichert')),
                   );

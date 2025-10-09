@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_add_adress.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_options.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
 
 class AdressPage extends StatefulWidget {
   const AdressPage({super.key});
@@ -13,7 +15,16 @@ class AdressPage extends StatefulWidget {
 
 class _AdressPageState extends State<AdressPage> {
   @override
+  void initState() {
+    final viewModelAdress = context.read<ViewmodelAdress>();
+    viewModelAdress.fetchAdressList();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModelAdress = context.watch<ViewmodelAdress>();
+
     return Scaffold(
       backgroundColor: AppColors.secondary,
       appBar: AppBar(
@@ -89,8 +100,9 @@ class _AdressPageState extends State<AdressPage> {
           Flexible(
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: 4,
+              itemCount: viewModelAdress.adressList.length,
               itemBuilder: (context, index) {
+                final adress = viewModelAdress.adressList[index];
                 return Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -107,7 +119,7 @@ class _AdressPageState extends State<AdressPage> {
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(width: 1.5, color: Colors.black),
                         ),
-                        child: Icon(Icons.home_work_outlined),
+                        child: Icon(adress.icon?.iconData ?? Icons.home_work_outlined),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,9 +130,12 @@ class _AdressPageState extends State<AdressPage> {
                           ),
                           SizedBox(
                             width: 150,
-                            child: Text("Straße, Hausnummer ", softWrap: true),
+                            child: Text(
+                              "${adress.street}, ${adress.houseNumber} ",
+                              softWrap: true,
+                            ),
                           ),
-                          Text("PLZ, ORT"),
+                          Text("${adress.plz}, ${adress.place}"),
                           Text("Telefon"),
                         ],
                       ),
