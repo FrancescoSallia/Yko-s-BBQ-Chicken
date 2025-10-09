@@ -6,11 +6,11 @@ class Adress {
   final String name;
   final String street;
   final String houseNumber;
-  final int plz;
+  final String plz;
   final String place;
   final AdressSymbol? icon;
   final String? information;
-  final int telefon;
+  final String telefon;
 
   Adress({
     String? id, // optionaler Parameter

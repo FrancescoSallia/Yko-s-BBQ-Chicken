@@ -6,48 +6,68 @@ class MyAdressTextfield extends StatelessWidget {
   final String labelText;
   final String hintText;
   final TextInputType textInputType;
+  final int? maxLength;
+
   const MyAdressTextfield({
     super.key,
     required this.controller,
     required this.labelText,
     required this.hintText,
     required this.textInputType,
+    this.maxLength,
   });
 
   @override
   Widget build(BuildContext context) {
-    final isNumberField = textInputType == TextInputType.number;
+    final isNumberField =
+        textInputType == TextInputType.number ||
+        textInputType == TextInputType.phone;
 
     return TextFormField(
       controller: controller,
       keyboardType: textInputType,
-      inputFormatters:
-          isNumberField ? [FilteringTextInputFormatter.digitsOnly] : [],
+      textCapitalization: TextCapitalization.words,
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (_) => FocusScope.of(context).unfocus(),
+      inputFormatters: [
+        if (maxLength != null)
+          LengthLimitingTextInputFormatter(maxLength), // 🔹 stoppt Eingabe
+        if (isNumberField)
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9+\-\s\(\)]')),
+      ],
       validator: (value) {
-        if (value == null || value.isEmpty) {
-          return "Pflichtfeld";
-        }
-        // ✅ Prüft, ob es sich um ein Zahlenfeld handelt
-        if (isNumberField) {
-          // Regulärer Ausdruck für internationale Telefonnummern:
-          // ^         -> Anfang des Strings
-          // \+?       -> optionales '+' am Anfang (für internationale Vorwahl)
-          // \d        -> mindestens eine Ziffer direkt nach dem '+'
-          // [0-9\s\-\(\)]{6,} -> danach mindestens 6 Zeichen, die Ziffern, Leerzeichen, Bindestriche oder Klammern sein können
-          // $         -> Ende des Strings
-          final phoneRegex = RegExp(r'^\+?\d[0-9\s\-\(\)]{6,}$');
-
-          if (!phoneRegex.hasMatch(value)) {
-            return "Ungültige Telefonnummer";
+        try {
+          // 🔹 Pflichtfeldprüfung
+          if (value == null || value.trim().isEmpty) {
+            return "Pflichtfeld";
           }
-        }
 
-        return null;
+          // 🔹 Längenprüfung
+          if (maxLength != null && value.length > maxLength!) {
+            return "Maximal $maxLength Zeichen erlaubt";
+          }
+
+          // 🔹 Nummernprüfung (Telefon, PLZ)
+          if (isNumberField) {
+            final phoneRegex = RegExp(r'^\+?[0-9\s\-\(\)]{6,}$');
+            if (!phoneRegex.hasMatch(value)) {
+              return "Bitte eine gültige Telefonnummer eingeben";
+            }
+          }
+
+          return null; // ✅ Alles ok
+        } catch (e) {
+          // 🔹 Falls etwas schiefläuft → Nutzerwarnung statt Absturz
+          debugPrint("Validator Error: $e");
+          return "Ungültige Eingabe";
+        }
       },
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
+        counterText: "",
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        errorMaxLines: 2,
       ),
     );
   }

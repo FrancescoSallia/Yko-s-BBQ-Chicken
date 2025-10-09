@@ -105,91 +105,117 @@ class _AdressPageState extends State<AdressPage> {
               itemCount: viewModelAdress.adressList.length,
               itemBuilder: (context, index) {
                 final adress = viewModelAdress.adressList[index];
-                return Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.5),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          border: Border.all(width: 1.5, color: Colors.black),
-                        ),
-                        child: Icon(
-                          adress.icon?.iconData ?? Icons.home_work_outlined,
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 150,
-                            child: Text(adress.name, softWrap: true),
-                          ),
-                          SizedBox(
-                            width: 150,
-                            child: Text(
-                              "${adress.street}, ${adress.houseNumber} ",
-                              softWrap: true,
-                            ),
-                          ),
-                          Text("${adress.plz}, ${adress.place}"),
-                          Text(adress.telefon.toString()),
-                        ],
-                      ),
-                      SizedBox(width: 15),
-                      GestureDetector(
-                        onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            barrierColor: Colors.black54,
-                            useSafeArea: true,
-                            backgroundColor: Colors.white70,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return FractionallySizedBox(
-                                heightFactor: 0.35,
-                                child: SheetOptions(
-                                  confirmDeleteDialogFunction: () {
-                                    setState(() {
-                                      viewModelAdress.removeFromAdressList(
-                                        index,
-                                      );
-                                    });
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                  },
-                                  navigateToUpdateFunction: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => UpdateAdressPage(adress: adress,),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Container(
+                return GestureDetector(
+                  onTap: () => Navigator.of(context).pop(adress),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
                           padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(100),
-                            border: Border.all(width: 1.0, color: Colors.black),
+                            border: Border.all(width: 1.5, color: Colors.black),
                           ),
-                          child: Center(
-                            child: Icon(Icons.more_horiz, size: 20),
+                          child: Icon(
+                            adress.icon?.iconData ?? Icons.home_work_outlined,
                           ),
                         ),
-                      ),
-                    ],
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              width: 150,
+                              child: Text(
+                                adress.name,
+                                softWrap: true,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 180,
+                              child: Text(
+                                "${adress.street}, ${adress.houseNumber} ",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 180,
+                              child: Text(
+                                "${adress.plz}, ${adress.place}",
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 180,
+                              child: Text(
+                                adress.telefon.toString(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 15),
+                        GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              barrierColor: Colors.black54,
+                              useSafeArea: true,
+                              backgroundColor: Colors.white70,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return FractionallySizedBox(
+                                  heightFactor: 0.35,
+                                  child: SheetOptions(
+                                    confirmDeleteDialogFunction: () {
+                                      setState(() {
+                                        viewModelAdress.removeFromAdressList(
+                                          index,
+                                        );
+                                      });
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                    navigateToUpdateFunction: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder:
+                                              (context) => UpdateAdressPage(
+                                                adress: adress,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              border: Border.all(width: 1.0, color: Colors.black),
+                            ),
+                            child: Center(
+                              child: Icon(Icons.more_horiz, size: 20),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

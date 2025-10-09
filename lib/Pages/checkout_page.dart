@@ -6,6 +6,7 @@ import 'package:ykos_bbq_chicken/Pages/adress_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
+import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -24,6 +25,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   int? selectedDeliveryIndex = 0;
   final TimeRepository timeRepo = TimeRepository();
   Payment? selectedPayment;
+  Adress? selectedAdress;
 
   final int closingHour = 22; // Betrieb schließt um 22 Uhr
   final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
@@ -183,13 +185,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
             //Box to Navigato to adress or something else
             GestureDetector(
-              onTap:
-                  () => Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (context) => AdressPage()),
-                  ),
+              onTap: () async {
+                final adress = await Navigator.of(
+                  context,
+                ).push(CupertinoPageRoute(builder: (context) => AdressPage()));
+
+                if (adress != null) {
+                  setState(() {
+                    selectedAdress = adress;
+                  });
+                }
+              },
               child: ForwardBox(
-                title: "Adresse hinzufügen",
-                announcementText: "Zum Fortfahren hier tippen",
+                title:
+                    selectedAdress != null
+                        ? selectedAdress!.name
+                        : "Lieferadresse",
+                announcementText:
+                    selectedAdress != null
+                        ? "${selectedAdress!.street} ${selectedAdress!.houseNumber}, ${selectedAdress!.plz} ${selectedAdress!.place}"
+                        : "Zum Fortfahren hier tippen",
                 iconData: Icons.location_on_outlined,
                 img: null,
               ),
