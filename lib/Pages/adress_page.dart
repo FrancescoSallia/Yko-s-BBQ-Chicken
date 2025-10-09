@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_add_adress.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_options.dart';
+import 'package:ykos_bbq_chicken/Pages/update_adress_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
 
@@ -119,14 +121,16 @@ class _AdressPageState extends State<AdressPage> {
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(width: 1.5, color: Colors.black),
                         ),
-                        child: Icon(adress.icon?.iconData ?? Icons.home_work_outlined),
+                        child: Icon(
+                          adress.icon?.iconData ?? Icons.home_work_outlined,
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
                             width: 150,
-                            child: Text("Name", softWrap: true),
+                            child: Text(adress.name, softWrap: true),
                           ),
                           SizedBox(
                             width: 150,
@@ -136,7 +140,7 @@ class _AdressPageState extends State<AdressPage> {
                             ),
                           ),
                           Text("${adress.plz}, ${adress.place}"),
-                          Text("Telefon"),
+                          Text(adress.telefon.toString()),
                         ],
                       ),
                       SizedBox(width: 15),
@@ -146,12 +150,30 @@ class _AdressPageState extends State<AdressPage> {
                             context: context,
                             barrierColor: Colors.black54,
                             useSafeArea: true,
-                            backgroundColor: Colors.white54,
+                            backgroundColor: Colors.white70,
                             isScrollControlled: true,
                             builder: (context) {
                               return FractionallySizedBox(
                                 heightFactor: 0.35,
-                                child: const SheetOptions(),
+                                child: SheetOptions(
+                                  confirmDeleteDialogFunction: () {
+                                    setState(() {
+                                      viewModelAdress.removeFromAdressList(
+                                        index,
+                                      );
+                                    });
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                  },
+                                  navigateToUpdateFunction: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => UpdateAdressPage(adress: adress,),
+                                      ),
+                                    );
+                                  },
+                                ),
                               );
                             },
                           );

@@ -21,21 +21,18 @@ class ViewmodelAdress extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateAdress(Adress adress) {
-    final list = _adressList;
-    final updatedAdress = Adress(
-      street: adress.street,
-      houseNumber: adress.houseNumber,
-      plz: adress.plz,
-      place: adress.place,
-      icon: adress.icon,
-      information: adress.information,
-      name: adress.name,
-      telefon: adress.telefon,
+  void updateAdress(Adress updatedAdress) {
+    final index = _adressList.indexWhere(
+      (adress) =>
+          adress.id == updatedAdress.id 
     );
-    list.removeWhere(
-      (currentAdress) => currentAdress.street == updatedAdress.street,
-    );
-    notifyListeners();
+
+    if (index != -1) {
+      // Update an derselben Position
+      _adressList[index] = updatedAdress;
+      notifyListeners();
+    } else {
+      print("Adresse nicht gefunden!");
+    }
   }
 }

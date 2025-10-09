@@ -3,7 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class SheetOptions extends StatelessWidget {
-  const SheetOptions({super.key});
+  final Function() confirmDeleteDialogFunction;
+  final Function() navigateToUpdateFunction;
+  
+  const SheetOptions({super.key, required this.confirmDeleteDialogFunction, required this.navigateToUpdateFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,36 @@ class SheetOptions extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
           ),
           child: TextButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      title: Text("Löschen?"),
+                      content: Text(
+                        "Möchtest du wirklich diese Adresse Löschen?",
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: confirmDeleteDialogFunction,
+                          child: Text(
+                            "Ja",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            "nein",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+              );
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -74,7 +106,7 @@ class SheetOptions extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
           ),
           child: TextButton(
-            onPressed: () {},
+            onPressed: navigateToUpdateFunction,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
