@@ -167,7 +167,7 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
                                   controller: _plzController,
                                   labelText: "Postleitzahl",
                                   hintText: "z.ß. 12167",
-                                  textInputType: TextInputType.phone,
+                                  textInputType: TextInputType.number,
                                 ),
                               ),
                             ],

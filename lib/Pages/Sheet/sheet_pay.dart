@@ -17,10 +17,10 @@ class _SheetPayState extends State<SheetPay> {
   @override
   Widget build(BuildContext context) {
     List<Payment> payments = [
+      Payment(name: "Barzahlung", img: "lib/img/cash.png"),
       Payment(name: "Apple Pay", img: "lib/img/applepay.png"),
       Payment(name: "PayPal", img: "lib/img/paypal.png"),
       Payment(name: "Klarna", img: "lib/img/klarna.png"),
-      Payment(name: "Barzahlung", img: "lib/img/cash.png"),
     ];
 
     return Column(

@@ -184,7 +184,7 @@ class _UpdateAdressPageState extends State<UpdateAdressPage> {
                                   controller: _plzController,
                                   labelText: "Postleitzahl",
                                   hintText: "z.ß. 12167",
-                                  textInputType: TextInputType.phone,
+                                  textInputType: TextInputType.number,
                                 ),
                               ),
                             ],
