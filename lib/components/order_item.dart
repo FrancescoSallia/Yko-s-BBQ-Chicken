@@ -99,18 +99,41 @@ class _OrderItemState extends State<OrderItem> {
                       ),
                       Row(
                         children: [
-                          IconButton.outlined(
-                            onPressed: () {},
+                          IconButton.filled(
+                            onPressed: () {
+                              setState(() {
+                                final updatedItem = widget.orderItem;
+                                final extraList = widget.orderItem.extras;
+
+                                if (extra != null && extraList != null) {
+                                  extra.anzahl--;
+                                  if (extra.anzahl > 0) {
+                                    viewModelMenu.updateMeal(updatedItem);
+                                  } else {
+                                    // Direkt aus der echten Liste entfernen
+                                    extraList.remove(extra);
+                                    viewModelMenu.updateMeal(updatedItem);
+                                  }
+                                }
+                              });
+                            },
                             icon: Icon(
-                              Icons.remove,
+                              extra?.anzahl == 1 ? Icons.delete : Icons.remove,
                               fontWeight: FontWeight.bold,
                             ),
                             style: IconButton.styleFrom(
-                              iconSize: 11,
+                              iconSize: 12,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100),
                               ),
-                              foregroundColor: AppColors.primaryButton,
+                              backgroundColor:
+                                  extra?.anzahl == 1
+                                      ? Colors.orange.withValues(alpha: 0.2)
+                                      : Colors.white,
+                              foregroundColor:
+                                  extra?.anzahl == 1
+                                      ? Colors.orange
+                                      : AppColors.primaryButton,
                               minimumSize: const Size(10, 10),
                             ),
                           ),
@@ -120,17 +143,25 @@ class _OrderItemState extends State<OrderItem> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          IconButton.outlined(
-                            onPressed: () {},
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                final updatedItem = widget.orderItem;
+                                if (updatedItem.extras != null) {
+                                  extra.anzahl++;
+                                  viewModelMenu.updateMeal(updatedItem);
+                                }
+                              });
+                            },
                             icon: Icon(Icons.add, fontWeight: FontWeight.bold),
                             style: IconButton.styleFrom(
-                              iconSize: 11,
+                              iconSize: 12,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(100),
                               ),
-                              foregroundColor: AppColors.secondary,
-                              backgroundColor: Colors.black,
-                              minimumSize: const Size(10, 10),
+                              foregroundColor: Colors.black,
+
+                              minimumSize: const Size(11, 11),
                             ),
                           ),
                         ],
@@ -215,18 +246,16 @@ class _OrderItemState extends State<OrderItem> {
                       iconSize: 16,
                       style: IconButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         backgroundColor:
                             widget.orderItem.count == 1
                                 ? Colors.red.withValues(alpha: 0.2)
-                                : AppColors.primaryButton.withValues(
-                                  alpha: 0.2,
-                                ),
+                                : AppColors.primaryButton,
                         foregroundColor:
                             widget.orderItem.count == 1
                                 ? Colors.red
-                                : AppColors.primaryButton,
+                                : Colors.white,
                         minimumSize: const Size(32, 32),
                       ),
                     ),
@@ -252,7 +281,7 @@ class _OrderItemState extends State<OrderItem> {
                       iconSize: 16,
                       style: IconButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(6),
                         ),
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.primaryButton,
