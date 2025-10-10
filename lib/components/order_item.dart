@@ -88,12 +88,52 @@ class _OrderItemState extends State<OrderItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "- ${extra!.anzahl}x ${extra.name} ",
-                        style: GoogleFonts.inter(fontWeight: FontWeight.w400),
+                        "- ${extra?.name}",
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w400,
+                        ), //TODO: mach mit den extras weiter mit der logik und ui!
                       ),
                       Text(
-                        "+${extra.price.toEuroString()}",
+                        "${extra?.price.toEuroString()}",
                         style: GoogleFonts.inter(fontWeight: FontWeight.w400),
+                      ),
+                      Row(
+                        children: [
+                          IconButton.outlined(
+                            onPressed: () {},
+                            icon: Icon(
+                              Icons.remove,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            style: IconButton.styleFrom(
+                              iconSize: 11,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              foregroundColor: AppColors.primaryButton,
+                              minimumSize: const Size(10, 10),
+                            ),
+                          ),
+                          Text(
+                            " ${extra!.anzahl}",
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          IconButton.outlined(
+                            onPressed: () {},
+                            icon: Icon(Icons.add, fontWeight: FontWeight.bold),
+                            style: IconButton.styleFrom(
+                              iconSize: 11,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              foregroundColor: AppColors.secondary,
+                              backgroundColor: Colors.black,
+                              minimumSize: const Size(10, 10),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
