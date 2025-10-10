@@ -253,7 +253,7 @@ class _OrderItemState extends State<OrderItem> {
             ),
             SizedBox(height: 8),
 
-            Divider(color: Colors.black, thickness: 2.2, height: 0),
+            Divider(color: Colors.black, thickness: 1.0, height: 0),
           ],
         ),
       ],
