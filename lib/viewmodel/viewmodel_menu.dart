@@ -3,6 +3,7 @@ import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
+import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 
 class ViewmodelMenu extends ChangeNotifier {
@@ -203,17 +204,27 @@ class ViewmodelMenu extends ChangeNotifier {
   }
 
   int indexOfCategory(String itemCategory) {
-    final index = getCategoriesFromFoods(_menuList).indexWhere(
-      (element) => element.name == itemCategory,
-    );
+    final index = getCategoriesFromFoods(
+      _menuList,
+    ).indexWhere((element) => element.name == itemCategory);
     notifyListeners();
     return index;
   }
-  
+
   void resetExtras() {
-  for (var extra in currentExtras) {
-    extra.anzahl = 0;
+    for (var extra in currentExtras) {
+      extra.anzahl = 0;
+    }
+    notifyListeners();
   }
-  notifyListeners();
-}
+
+  OrderSummary orderSummeryBox() {
+    final OrderSummary orderSummary = OrderSummary(
+      foods: _cartList,
+      discount: 0.10,
+      deliveryCharge: 1.50,
+      tax: 0.07,
+    );
+    return orderSummary;
+  }
 }

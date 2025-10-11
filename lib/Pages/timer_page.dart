@@ -95,7 +95,7 @@ class TimerPage extends StatelessWidget {
               },
             ),
 
-            SummaryBox(),
+            // SummaryBox(orderSummary: null,),
             SizedBox(height: 100),
           ],
         ),

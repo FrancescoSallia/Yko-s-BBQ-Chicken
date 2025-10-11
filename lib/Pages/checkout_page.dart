@@ -363,7 +363,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
 
-                SummaryBox(),
+                SummaryBox(orderSummary: viewModelMenu.orderSummeryBox()),
                 SizedBox(height: 100),
               ],
             ),

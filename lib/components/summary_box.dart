@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class SummaryBox extends StatelessWidget {
-  const SummaryBox({super.key});
+  final OrderSummary orderSummary;
+
+  const SummaryBox({super.key, required this.orderSummary});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,7 @@ class SummaryBox extends StatelessWidget {
                 child: Text(
                   "You have 30% Discount on all meals between August 1st and August 30th, 2022 ",
                   style: GoogleFonts.inter(
-                    color: Colors.black.withValues(alpha: 0.6),
+                    color: Colors.black.withOpacity(0.6),
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -33,17 +36,19 @@ class SummaryBox extends StatelessWidget {
           margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.primary.withValues(alpha: 0.3),
+            color: AppColors.primary.withOpacity(0.3),
             border: Border.all(width: 1, color: AppColors.primaryButton),
           ),
           child: Column(
-            spacing: 4,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text("Sub-Total", style: GoogleFonts.inter(fontSize: 14)),
-                  Text("16,90€", style: GoogleFonts.inter(fontSize: 14)),
+                  Text(
+                    "${orderSummary.basisPreis.toStringAsFixed(2)}€",
+                    style: GoogleFonts.inter(fontSize: 14),
+                  ),
                 ],
               ),
               Row(
@@ -53,15 +58,39 @@ class SummaryBox extends StatelessWidget {
                     "Delivery Charge",
                     style: GoogleFonts.inter(fontSize: 14),
                   ),
-                  Text("1,50€", style: GoogleFonts.inter(fontSize: 14)),
+                  Text(
+                    "${orderSummary.deliveryCharge.toStringAsFixed(2)}€",
+                    style: GoogleFonts.inter(fontSize: 14),
+                  ),
                 ],
               ),
-              SizedBox(height: 10),
+              if (orderSummary.discount != null) ...[
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Discount (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                    Text(
+                      "- ${orderSummary.rabattBetrag.toStringAsFixed(2)}€",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ],
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Discount", style: GoogleFonts.inter(fontSize: 14)),
-                  Text("3,90€", style: GoogleFonts.inter(fontSize: 14)),
+                  Text(
+                    "Tax (incl.) (${(orderSummary.tax * 100).toStringAsFixed(0)}%)",
+                    style: GoogleFonts.inter(fontSize: 14),
+                  ),
+                  Text(
+                    "${orderSummary.mwstBetrag.toStringAsFixed(2)}€",
+                    style: GoogleFonts.inter(fontSize: 14),
+                  ),
                 ],
               ),
               Row(
@@ -75,7 +104,7 @@ class SummaryBox extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "11,50€",
+                    "${orderSummary.endSummeMitMwSt.toStringAsFixed(2)}€",
                     style: GoogleFonts.inter(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

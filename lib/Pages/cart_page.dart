@@ -74,7 +74,7 @@ class _CartPageState extends State<CartPage> {
                         const SizedBox(height: 20),
 
                         // 🔹 Danach die SummaryBox anzeigen lassen
-                        SummaryBox(),
+                        SummaryBox(orderSummary: viewModelMenu.orderSummeryBox()),
 
                         const SizedBox(height: 20),
 

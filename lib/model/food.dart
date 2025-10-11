@@ -36,3 +36,12 @@ class Food {
                .v4(), //ID wird nur einmal erstellt zufällig und ist nichtmehr wieder änderbar ,  erzeugt neue ID, wenn keine übergeben wurde
        extras = extras ?? [];
 }
+
+ extension FoodPriceExtension on Food {
+  double get extrasTotal {
+    if (extras == null || extras!.isEmpty) return 0.0;
+    return extras!.fold(0.0, (sum, extra) => sum + extra.price * extra.anzahl);
+  }
+
+  double get totalWithExtras => (price + extrasTotal) * count;
+}

@@ -67,6 +67,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
     final size = MediaQuery.of(context).size;
 
     return PopScope(
+      //wenn man zurück navigiert mit wischen z.ß. darauf zugreifen.
       // Wird ausgeführt, wenn der Nutzer zurück navigiert (Button, Swipe, etc.)
       onPopInvokedWithResult: (didPop, result) {
         if (didPop) {
@@ -74,6 +75,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           viewModelMenu.resetExtras();
           widget.item.extras = [];
           widget.item.note = "";
+          widget.item.count = 1;
         }
       },
       child: Scaffold(
@@ -95,6 +97,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
               viewModelMenu.resetExtras();
               widget.item.extras = [];
               widget.item.note = "";
+              widget.item.count = 1;
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
