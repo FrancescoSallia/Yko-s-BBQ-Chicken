@@ -82,6 +82,7 @@ class _OrderItemState extends State<OrderItem> {
               itemCount: widget.orderItem.extras?.length,
               itemBuilder: (context, index) {
                 final extra = widget.orderItem.extras?[index];
+
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Row(
@@ -144,15 +145,18 @@ class _OrderItemState extends State<OrderItem> {
                             ),
                           ),
                           IconButton(
-                            onPressed: () {
-                              setState(() {
-                                final updatedItem = widget.orderItem;
-                                if (updatedItem.extras != null) {
-                                  extra.anzahl++;
-                                  viewModelMenu.updateMeal(updatedItem);
-                                }
-                              });
-                            },
+                            onPressed:
+                                extra.anzahl >= 3
+                                    ? null
+                                    : () {
+                                      setState(() {
+                                        final updatedItem = widget.orderItem;
+                                        if (updatedItem.extras != null) {
+                                          extra.anzahl++;
+                                          viewModelMenu.updateMeal(updatedItem);
+                                        }
+                                      });
+                                    },
                             icon: Icon(Icons.add, fontWeight: FontWeight.bold),
                             style: IconButton.styleFrom(
                               iconSize: 12,

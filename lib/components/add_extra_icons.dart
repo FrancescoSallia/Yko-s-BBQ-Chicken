@@ -89,14 +89,17 @@ class _AddExtraIconsState extends State<AddExtraIcons> {
                     ),
                     minimumSize: const Size(18, 18),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      final extraItem = widget.extraItem;
-                      final item = widget.item;
-                      //Count increasement
-                      viewModelMenu.countIncrease(extraItem, item);
-                    });
-                  },
+                  onPressed:
+                      widget.extraItem.anzahl >= 3
+                          ? null
+                          : () {
+                            setState(() {
+                              final extraItem = widget.extraItem;
+                              final item = widget.item;
+                              //Count increasement
+                              viewModelMenu.countIncrease(extraItem, item);
+                            });
+                          },
                   icon: Icon(Icons.add),
                 ),
               ],

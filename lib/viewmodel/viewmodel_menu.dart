@@ -209,4 +209,11 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners();
     return index;
   }
+  
+  void resetExtras() {
+  for (var extra in currentExtras) {
+    extra.anzahl = 0;
+  }
+  notifyListeners();
+}
 }

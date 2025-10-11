@@ -66,326 +66,344 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
     final viewModelMenu = context.watch<ViewmodelMenu>();
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      backgroundColor: AppColors.primary,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        title: Text(
-          widget.item.name,
-          style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
-        ),
-        centerTitle: true,
-        leading: IconButton.filled(
-          style: IconButton.styleFrom(backgroundColor: AppColors.primaryButton),
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                viewModelMenu.toggleFavorite(widget.item);
-                _likedController
-                    .forward(from: 0)
-                    .then((_) => _likedController.reverse());
-              });
+    return PopScope(
+      // Wird ausgeführt, wenn der Nutzer zurück navigiert (Button, Swipe, etc.)
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) {
+          // Zustand zurücksetzen, wenn Seite verlassen wird
+          viewModelMenu.resetExtras();
+          widget.item.extras = [];
+          widget.item.note = "";
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.primary,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          title: Text(
+            widget.item.name,
+            style: GoogleFonts.inter(fontWeight: FontWeight.bold, fontSize: 16),
+          ),
+          centerTitle: true,
+          leading: IconButton.filled(
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.primaryButton,
+            ),
+            onPressed: () {
+              // ✅ auch beim manuellen Back-Button dasselbe Verhalten
+              viewModelMenu.resetExtras();
+              widget.item.extras = [];
+              widget.item.note = "";
+              Navigator.pop(context);
             },
-            child: Container(
-              padding: const EdgeInsets.all(2),
-              margin: const EdgeInsets.only(right: 20, top: 5),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(100),
-                color: Colors.white,
-              ),
-              child: ScaleTransition(
-                scale: _likedAnimation,
-                child: Image.asset(
-                  widget.item.isFavorited
-                      ? "lib/img/liked.png"
-                      : "lib/img/unliked.png",
-                  width: 28,
+            icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          ),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  viewModelMenu.toggleFavorite(widget.item);
+                  _likedController
+                      .forward(from: 0)
+                      .then((_) => _likedController.reverse());
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                margin: const EdgeInsets.only(right: 20, top: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(100),
+                  color: Colors.white,
+                ),
+                child: ScaleTransition(
+                  scale: _likedAnimation,
+                  child: Image.asset(
+                    widget.item.isFavorited
+                        ? "lib/img/liked.png"
+                        : "lib/img/unliked.png",
+                    width: 28,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-      body: NotificationListener<OverscrollIndicatorNotification>(
-        onNotification: (overscroll) {
-          overscroll.disallowIndicator();
-          return true;
-        },
-        child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          child: Column(
-            children: [
-              // STACK mit Food und Teller
-              SizedBox(
-                height: size.height * 0.38,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    // Hintergrundfarbe
-                    Container(
-                      height: size.height * 0.38,
-                      color: AppColors.primary,
-                    ),
+          ],
+        ),
+        body: NotificationListener<OverscrollIndicatorNotification>(
+          onNotification: (overscroll) {
+            overscroll.disallowIndicator();
+            return true;
+          },
+          child: SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                // STACK mit Food und Teller
+                SizedBox(
+                  height: size.height * 0.38,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Hintergrundfarbe
+                      Container(
+                        height: size.height * 0.38,
+                        color: AppColors.primary,
+                      ),
 
-                    // Teller + Food
-                    RotationTransition(
-                      turns: _scaleAnimation,
-                      child: ScaleTransition(
-                        scale: _scaleAnimation,
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            // Teller (größer)
-                            Image.asset(
-                              "lib/img/plate.png",
-                              width: size.width * 0.65,
-                              fit: BoxFit.contain,
-                            ),
-                            // Food (etwas kleiner)
-                            Image.asset(
-                              widget.item.imgAsset ?? "lib/img/logo_ykos.png",
-                              width: size.width * 0.52,
-                              fit: BoxFit.contain,
-                            ),
-                          ],
+                      // Teller + Food
+                      RotationTransition(
+                        turns: _scaleAnimation,
+                        child: ScaleTransition(
+                          scale: _scaleAnimation,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // Teller (größer)
+                              Image.asset(
+                                "lib/img/plate.png",
+                                width: size.width * 0.65,
+                                fit: BoxFit.contain,
+                              ),
+                              // Food (etwas kleiner)
+                              Image.asset(
+                                widget.item.imgAsset ?? "lib/img/logo_ykos.png",
+                                width: size.width * 0.52,
+                                fit: BoxFit.contain,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                    ],
+                  ),
+                ),
+
+                // Weißer Sheet-Bereich
+                Container(
+                  constraints: BoxConstraints(minHeight: size.height * 0.62),
+                  width: double.infinity,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      topRight: Radius.circular(40),
                     ),
-                  ],
-                ),
-              ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 28,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Header: Allergens und Labels
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            // Allergens
+                            if (widget.item.allergens.isNotEmpty)
+                              Flexible(
+                                child: Wrap(
+                                  spacing: 4,
+                                  children:
+                                      widget.item.allergens.asMap().entries.map(
+                                        (entry) {
+                                          int idx = entry.key;
+                                          String allergen = entry.value;
+                                          bool isLastString =
+                                              idx ==
+                                              widget.item.allergens.length - 1;
 
-              // Weißer Sheet-Bereich
-              Container(
-                constraints: BoxConstraints(minHeight: size.height * 0.62),
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40),
-                    topRight: Radius.circular(40),
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 28,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Header: Allergens und Labels
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Allergens
-                          if (widget.item.allergens.isNotEmpty)
-                            Flexible(
-                              child: Wrap(
-                                spacing: 4,
+                                          return Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 6,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[100],
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Text(
+                                              allergen,
+                                              style: GoogleFonts.inter(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 11,
+                                                color: Colors.grey[700],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ).toList(),
+                                ),
+                              ),
+
+                            // Labels
+                            if (widget.item.labels?.isNotEmpty ?? false)
+                              Row(
                                 children:
-                                    widget.item.allergens.asMap().entries.map((
-                                      entry,
-                                    ) {
-                                      int idx = entry.key;
-                                      String allergen = entry.value;
-                                      bool isLastString =
-                                          idx ==
-                                          widget.item.allergens.length - 1;
-
-                                      return Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 10,
-                                          vertical: 6,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey[100],
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          allergen,
-                                          style: GoogleFonts.inter(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 11,
-                                            color: Colors.grey[700],
-                                          ),
-                                        ),
+                                    widget.item.labels!.map((label) {
+                                      return Padding(
+                                        padding: const EdgeInsets.only(left: 6),
+                                        child: Image.asset(label, height: 36),
                                       );
                                     }).toList(),
+                              )
+                            else
+                              Row(
+                                children: [
+                                  Image.asset(
+                                    "lib/img/peper_detail.png",
+                                    height: 36,
+                                  ),
+                                  const SizedBox(width: 6),
+                                  Image.asset(
+                                    "lib/img/peper_detail.png",
+                                    height: 36,
+                                  ),
+                                ],
                               ),
-                            ),
-
-                          // Labels
-                          if (widget.item.labels?.isNotEmpty ?? false)
-                            Row(
-                              children:
-                                  widget.item.labels!.map((label) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 6),
-                                      child: Image.asset(label, height: 36),
-                                    );
-                                  }).toList(),
-                            )
-                          else
-                            Row(
-                              children: [
-                                Image.asset(
-                                  "lib/img/peper_detail.png",
-                                  height: 36,
-                                ),
-                                const SizedBox(width: 6),
-                                Image.asset(
-                                  "lib/img/peper_detail.png",
-                                  height: 36,
-                                ),
-                              ],
-                            ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Name und Preis
-                      Text(
-                        widget.item.name,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26,
-                          height: 1.2,
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      Text(
-                        widget.item.price.toEuroString(),
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 22,
-                          color: AppColors.primaryButton,
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      // Beschreibung
-                      Text(
-                        widget.item.description,
-                        style: GoogleFonts.inter(
-                          color: Colors.grey[700],
-                          fontSize: 15,
-                          height: 1.6,
-                        ),
-                      ),
-
-                      const SizedBox(height: 32),
-
-                      // Divider vor Extras
-                      if (viewModelMenu.currentExtras.isNotEmpty) ...[
-                        Divider(
-                          color: Colors.grey[300],
-                          thickness: 1,
-                          height: 1,
+                          ],
                         ),
 
                         const SizedBox(height: 24),
 
-                        // Extras Header
-                        Row(
-                          children: [
-                            Icon(
-                              Icons.add_circle_outline,
-                              color: AppColors.primaryButton,
-                              size: 24,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              "Extra's hinzufügen",
-                              style: GoogleFonts.inter(
-                                fontWeight: FontWeight.w700,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
+                        // Name und Preis
+                        Text(
+                          widget.item.name,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 26,
+                            height: 1.2,
+                          ),
                         ),
 
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 8),
 
-                        // Extras Liste
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: viewModelMenu.currentExtras.length,
-                          separatorBuilder:
-                              (context, index) => const SizedBox(height: 12),
-                          itemBuilder: (context, index) {
-                            final extra = viewModelMenu.currentExtras[index];
-                            return AddExtraIcons(
-                              extraItem: extra,
-                              item: widget.item,
-                            );
-                          },
+                        Text(
+                          widget.item.price.toEuroString(),
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            fontSize: 22,
+                            color: AppColors.primaryButton,
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Beschreibung
+                        Text(
+                          widget.item.description,
+                          style: GoogleFonts.inter(
+                            color: Colors.grey[700],
+                            fontSize: 15,
+                            height: 1.6,
+                          ),
                         ),
 
                         const SizedBox(height: 32),
-                      ],
 
-                      // Buttons am Ende
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: Row(
-                          children: [
-                            // Anzahl Button
-                            Expanded(
-                              flex: 2,
-                              child: AddRemoveButton(
+                        // Divider vor Extras
+                        if (viewModelMenu.currentExtras.isNotEmpty) ...[
+                          Divider(
+                            color: Colors.grey[300],
+                            thickness: 1,
+                            height: 1,
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // Extras Header
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.add_circle_outline,
+                                color: AppColors.primaryButton,
+                                size: 24,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                "Extra's hinzufügen",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Extras Liste
+                          ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: viewModelMenu.currentExtras.length,
+                            separatorBuilder:
+                                (context, index) => const SizedBox(height: 12),
+                            itemBuilder: (context, index) {
+                              final extra = viewModelMenu.currentExtras[index];
+                              return AddExtraIcons(
+                                extraItem: extra,
                                 item: widget.item,
-                                gesture: (p0) {
-                                  viewModelMenu.updateMeal(p0);
-                                },
+                              );
+                            },
+                          ),
+
+                          const SizedBox(height: 32),
+                        ],
+
+                        // Buttons am Ende
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Row(
+                            children: [
+                              // Anzahl Button
+                              Expanded(
+                                flex: 2,
+                                child: AddRemoveButton(
+                                  item: widget.item,
+                                  gesture: (p0) {
+                                    viewModelMenu.updateMeal(p0);
+                                  },
+                                ),
                               ),
-                            ),
 
-                            const SizedBox(width: 16),
+                              const SizedBox(width: 16),
 
-                            // In den Warenkorb Button
-                            Expanded(
-                              flex: 3,
-                              child: MyToCartButton(
-                                gesture: () {
-                                  viewModelMenu.addToCart(widget.item);
+                              // In den Warenkorb Button
+                              Expanded(
+                                flex: 3,
+                                child: MyToCartButton(
+                                  gesture: () {
+                                    viewModelMenu.addToCart(widget.item);
 
-                                  setState(() {
-                                    widget.item.count = 1;
-                                    widget.item.extras = [];
-                                    widget.item.note = "";
+                                    setState(() {
+                                      widget.item.count = 1;
+                                      widget.item.extras = [];
+                                      widget.item.note = "";
 
-                                    for (var extra
-                                        in viewModelMenu.currentExtras) {
-                                      extra.anzahl = 0;
-                                    }
-                                  });
-                                },
+                                      for (var extra
+                                          in viewModelMenu.currentExtras) {
+                                        extra.anzahl = 0;
+                                      }
+                                    });
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 
-                      // Extra Abstand am Ende für besseres Scrolling
-                      const SizedBox(height: 20),
-                    ],
+                        // Extra Abstand am Ende für besseres Scrolling
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
