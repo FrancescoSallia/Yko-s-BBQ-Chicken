@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
+import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
+import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 
 class ViewmodelMenu extends ChangeNotifier {
@@ -234,5 +236,13 @@ class ViewmodelMenu extends ChangeNotifier {
       deliveryCharge: 1.50,
     );
     return orderSummary;
+  }
+
+  bool itsFilledOut(Adress? selectedAdress, Payment? selectedPayment) {
+    if (selectedAdress != null && selectedPayment != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

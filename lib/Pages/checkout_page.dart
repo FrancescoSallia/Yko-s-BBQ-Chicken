@@ -9,7 +9,6 @@ import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/my_textfield.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
-import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
@@ -58,7 +57,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setModalState) {
             return SizedBox(
-              height: 300,
+              height: 350,
               child: Column(
                 children: [
                   Padding(
@@ -76,7 +75,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             scrollController: FixedExtentScrollController(
                               initialItem: selectedDateIndex,
                             ),
-                            itemExtent: 32,
+                            itemExtent: 45,
                             onSelectedItemChanged: (index) {
                               selectedDateIndex = index;
                               // Dynamische Aktualisierung der Zeiten bei Datumsauswahl
@@ -118,7 +117,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             scrollController: FixedExtentScrollController(
                               initialItem: selectedTimeIndex,
                             ),
-                            itemExtent: 32,
+                            itemExtent: 45,
                             onSelectedItemChanged: (index) {
                               selectedTimeIndex = index;
                             },
@@ -410,11 +409,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
           width: double.infinity,
           child: ElevatedButton(
             style: ButtonStyle(
-              elevation: WidgetStatePropertyAll(3),
-              backgroundColor: WidgetStatePropertyAll(AppColors.timerPrimary2),
-              foregroundColor: WidgetStatePropertyAll(AppColors.primaryButton),
+              elevation:
+                  viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                      ? WidgetStatePropertyAll(3)
+                      : WidgetStatePropertyAll(0),
+              backgroundColor:
+                  viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                      ? WidgetStatePropertyAll(AppColors.timerPrimary2)
+                      : WidgetStatePropertyAll(
+                        Colors.black.withValues(alpha: 0.2),
+                      ),
+              foregroundColor:
+                  viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                      ? WidgetStatePropertyAll(AppColors.primaryButton)
+                      : WidgetStatePropertyAll(Colors.white),
             ),
-            onPressed: () {},
+            onPressed:
+                viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                    ? () {}
+                    : null,
             child: Text("Kostenpflichtig Bestellen"),
           ),
         ),
