@@ -238,11 +238,27 @@ class ViewmodelMenu extends ChangeNotifier {
     return orderSummary;
   }
 
-  bool itsFilledOut(Adress? selectedAdress, Payment? selectedPayment) {
-    if (selectedAdress != null && selectedPayment != null) {
-      return true;
+  bool itsFilledOut(
+    Adress? selectedAdress,
+    Payment? selectedPayment,
+    bool isDeliverySelected,
+    TimeOfDay? selectedTimeFromPicker,
+    DateTime? selectedDateFromPicker,
+  ) {
+    if (isDeliverySelected) {
+      if (selectedAdress != null && selectedPayment != null) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      if (selectedTimeFromPicker != null &&
+          selectedDateFromPicker != null &&
+          selectedPayment != null) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 }

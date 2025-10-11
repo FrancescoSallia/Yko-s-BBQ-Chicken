@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class ForwardBox extends StatelessWidget {
   final String title;
@@ -23,10 +22,7 @@ class ForwardBox extends StatelessWidget {
       decoration: BoxDecoration(
         border: Border.all(
           width: 2,
-          color:
-              img != null
-                  ? AppColors.timerTextPrimary
-                  : Colors.black.withValues(alpha: 0.3),
+          color: Colors.black.withValues(alpha: 0.3),
         ),
         borderRadius: BorderRadius.circular(4),
       ),
@@ -37,12 +33,7 @@ class ForwardBox extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(
-                  iconData,
-                  size: 30,
-                  color:
-                      img != null ? AppColors.timerTextPrimary : Colors.black,
-                ),
+                Icon(iconData, size: 30, color: Colors.black),
                 SizedBox(width: 15),
                 Expanded(
                   child: Column(

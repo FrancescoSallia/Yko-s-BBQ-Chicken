@@ -45,7 +45,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     int selectedDateIndex = 0;
     int selectedTimeIndex = 0;
 
-    timeRepo.generateAvailableTimes();
+    // timeRepo.generateAvailableTimes();
 
     List<TimeOfDay> times = timeRepo.generateAvailableTimes(
       date: availableDates[selectedDateIndex],
@@ -198,34 +198,39 @@ class _CheckoutPageState extends State<CheckoutPage> {
             SizedBox(height: 20),
 
             //Box to Navigato to adress or something else
-            GestureDetector(
-              onTap: () async {
-                final adress = await Navigator.of(
-                  context,
-                ).push(CupertinoPageRoute(builder: (context) => AdressPage()));
+            Visibility(
+              visible: isDeliverySelected,
+              child: GestureDetector(
+                onTap: () async {
+                  final adress = await Navigator.of(context).push(
+                    CupertinoPageRoute(builder: (context) => AdressPage()),
+                  );
 
-                if (adress != null) {
-                  setState(() {
-                    selectedAdress = adress;
-                  });
-                }
-              },
-              child: ForwardBox(
-                title:
-                    selectedAdress != null
-                        ? selectedAdress!.name
-                        : "Lieferadresse",
-                announcementText:
-                    selectedAdress != null
-                        ? "${selectedAdress!.street} ${selectedAdress!.houseNumber}, ${selectedAdress!.plz} ${selectedAdress!.place}"
-                        : "Zum Fortfahren hier tippen",
-                iconData: Icons.location_on_outlined,
-                img: null,
+                  if (adress != null) {
+                    setState(() {
+                      selectedAdress = adress;
+                    });
+                  }
+                },
+                child: ForwardBox(
+                  title:
+                      selectedAdress != null
+                          ? selectedAdress!.name
+                          : "Lieferadresse",
+                  announcementText:
+                      selectedAdress != null
+                          ? "${selectedAdress!.street} ${selectedAdress!.houseNumber}, ${selectedAdress!.plz} ${selectedAdress!.place}"
+                          : "Zum Fortfahren hier tippen",
+                  iconData:
+                      selectedAdress != null
+                          ? Icons.check_circle_rounded
+                          : Icons.location_on_outlined,
+                  img: null,
+                ),
               ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
                 Padding(
@@ -234,7 +239,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        "Lieferzeit",
+                        isDeliverySelected ? "Lieferzeit" : "Abholzeit",
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: 18,
@@ -243,20 +248,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ],
                   ),
                 ),
-                DeliveryTimeContainer(
-                  index: 0,
-                  title: "So schnell wie möglich",
-                  subTitle: "ca. 40-60 Min.",
-                  isSelected: selectedDeliveryIndex == 0,
-                  gesture: () {
-                    setState(() {
-                      selectedDeliveryIndex = 0;
-                    });
-                  },
+                Visibility(
+                  visible: isDeliverySelected,
+                  child: DeliveryTimeContainer(
+                    index: 0,
+                    title: "So schnell wie möglich",
+                    subTitle: "ca. 40-60 Min.",
+                    isSelected: selectedDeliveryIndex == 0,
+                    gesture: () {
+                      setState(() {
+                        selectedDeliveryIndex = 0;
+                        selectedDateFromPicker = null;
+                        selectedTimeFromPicker = null;
+                      });
+                    },
+                  ),
                 ),
                 DeliveryTimeContainer(
                   index: 1,
-                  title: "Lieferzeit wählen",
+                  title:
+                      isDeliverySelected
+                          ? "Lieferzeit wählen"
+                          : "Abholzeit wählen",
                   subTitle:
                       selectedDateFromPicker == null ||
                               selectedTimeFromPicker == null
@@ -410,22 +423,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
           child: ElevatedButton(
             style: ButtonStyle(
               elevation:
-                  viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                  viewModelMenu.itsFilledOut(
+                        selectedAdress,
+                        selectedPayment,
+                        isDeliverySelected,
+                        selectedTimeFromPicker,
+                        selectedDateFromPicker,
+                      )
                       ? WidgetStatePropertyAll(3)
                       : WidgetStatePropertyAll(0),
               backgroundColor:
-                  viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                  viewModelMenu.itsFilledOut(
+                        selectedAdress,
+                        selectedPayment,
+                        isDeliverySelected,
+                        selectedTimeFromPicker,
+                        selectedDateFromPicker,
+                      )
                       ? WidgetStatePropertyAll(AppColors.timerPrimary2)
                       : WidgetStatePropertyAll(
                         Colors.black.withValues(alpha: 0.2),
                       ),
               foregroundColor:
-                  viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                  viewModelMenu.itsFilledOut(
+                        selectedAdress,
+                        selectedPayment,
+                        isDeliverySelected,
+                        selectedTimeFromPicker,
+                        selectedDateFromPicker,
+                      )
                       ? WidgetStatePropertyAll(AppColors.primaryButton)
                       : WidgetStatePropertyAll(Colors.white),
             ),
             onPressed:
-                viewModelMenu.itsFilledOut(selectedAdress, selectedPayment)
+                viewModelMenu.itsFilledOut(
+                      selectedAdress,
+                      selectedPayment,
+                      isDeliverySelected,
+                      selectedTimeFromPicker,
+                      selectedDateFromPicker,
+                    )
                     ? () {}
                     : null,
             child: Text("Kostenpflichtig Bestellen"),
