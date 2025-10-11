@@ -84,11 +84,24 @@ class SummaryBox extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Tax (incl.) (${(orderSummary.tax * 100).toStringAsFixed(0)}%)",
+                    "Speisen MwSt. (7%)",
                     style: GoogleFonts.inter(fontSize: 14),
                   ),
                   Text(
-                    "${orderSummary.mwstBetrag.toStringAsFixed(2)}€",
+                    "${orderSummary.essenMwst.toStringAsFixed(2)}€",
+                    style: GoogleFonts.inter(fontSize: 14),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Getränke MwSt. (19%)",
+                    style: GoogleFonts.inter(fontSize: 14),
+                  ),
+                  Text(
+                    "${orderSummary.getraenkeMwst.toStringAsFixed(2)}€",
                     style: GoogleFonts.inter(fontSize: 14),
                   ),
                 ],

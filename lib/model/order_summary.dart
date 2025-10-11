@@ -1,17 +1,12 @@
+import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 
 class OrderSummary {
   final List<Food> foods; // Alle Gerichte
   final double? discount; // optionaler Rabatt, z. B. 0.10 für 10%
   final double deliveryCharge; // z. B. 2.50
-  final double tax; // z. B. 0.19 für 19%
 
-  OrderSummary({
-    required this.foods,
-    this.discount, // nullable
-    this.deliveryCharge = 0.0,
-    this.tax = 0.19,
-  });
+  OrderSummary({required this.foods, this.discount, this.deliveryCharge = 0.0});
 
   /// 1️⃣ Basispreis: alle Gerichte inkl. Extras ohne Rabatt oder Lieferkosten
   double get basisPreis =>
@@ -26,9 +21,30 @@ class OrderSummary {
   /// 4️⃣ Endsumme inklusive Lieferkosten
   double get endSumme => nettoPreis + deliveryCharge;
 
-  /// 5️⃣ MwSt. Betrag (auf Endsumme)
-  double get mwstBetrag => endSumme * tax;
+  /// 5️⃣ Berechnet 7% MwSt nur auf Speisen (nach Rabatt)
+  double get essenMwst {
+    final rabattFaktor = 1 - (discount ?? 0.0);
+    return foods
+        .where(
+          (f) =>
+              !f.category.name.toLowerCase().contains(
+                CategoryEnum.drinks.label,
+              ),
+        )
+        .fold(0.0, (sum, f) => sum + (f.totalWithExtras * rabattFaktor) * 0.07);
+  }
 
-  /// 6️⃣ Preis inkl. MwSt
+  /// 6️⃣ Berechnet 19% MwSt nur auf Getränke (nach Rabatt)
+  double get getraenkeMwst {
+    final rabattFaktor = 1 - (discount ?? 0.0);
+    return foods
+        .where((f) => f.category.name.contains(CategoryEnum.drinks.label))
+        .fold(0.0, (sum, f) => sum + (f.totalWithExtras * rabattFaktor) * 0.19);
+  }
+
+  /// 7️⃣ Gesamtbetrag der MwSt (nur Info)
+  double get gesamtMwst => essenMwst + getraenkeMwst;
+
+  /// 8️⃣ Endsumme (MwSt wird **nicht** addiert, nur informativ)
   double get endSummeMitMwSt => endSumme;
 }

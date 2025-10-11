@@ -218,12 +218,20 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners();
   }
 
+  double _currentDiscount = 0;
+  double get currentDiscount => _currentDiscount;
+
+  // ✅ Setter hinzufügen
+  set currentDiscount(double? value) {
+    _currentDiscount = value ?? 0.0; // Falls null übergeben wird
+    notifyListeners(); // UI aktualisieren
+  }
+
   OrderSummary orderSummeryBox() {
     final OrderSummary orderSummary = OrderSummary(
       foods: _cartList,
-      discount: 0.10,
+      discount: _currentDiscount,
       deliveryCharge: 1.50,
-      tax: 0.07,
     );
     return orderSummary;
   }

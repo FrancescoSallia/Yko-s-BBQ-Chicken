@@ -6,6 +6,7 @@ import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/Pages/adress_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
+import 'package:ykos_bbq_chicken/components/my_textfield.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
@@ -30,6 +31,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final TimeRepository timeRepo = TimeRepository();
   Payment? selectedPayment;
   Adress? selectedAdress;
+  final TextEditingController _discountController = TextEditingController();
 
   final int closingHour = 22; // Betrieb schließt um 22 Uhr
   final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
@@ -325,7 +327,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     img: selectedPayment?.img,
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 25),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -361,6 +363,37 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       },
                     ),
                   ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10.0,
+                    vertical: 10,
+                  ),
+                  child: MyTextfield(
+                    controller: _discountController,
+                    hintText: "GUTSCHEIN CODE HIER:",
+                    obscure: false,
+                    icon: Icons.card_giftcard,
+                  ),
+                ),
+                TextButton(
+                  //TODO: Gutschein generator erstellen, um Gutscheine zu erstellen die man hier eingeben kann!
+                  onPressed: () {
+                    setState(() {
+                      // Erlaubt die Eingabe von Prozentzahlen wie 20 und wandelt sie in 0.20 um
+                      final input = _discountController.text.replaceAll(
+                        ',',
+                        '.',
+                      );
+                      final value = double.tryParse(input);
+                      if (value != null) {
+                        viewModelMenu.currentDiscount = value / 100.0;
+                      } else {
+                        viewModelMenu.currentDiscount = null;
+                      }
+                    });
+                  },
+                  child: Text("Gutschein Einlösen"),
                 ),
 
                 SummaryBox(orderSummary: viewModelMenu.orderSummeryBox()),
