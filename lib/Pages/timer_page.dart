@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/components/timer.dart';
+import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class TimerPage extends StatelessWidget {
-  const TimerPage({super.key});
+  final Order order;
+  const TimerPage({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
@@ -43,14 +44,15 @@ class TimerPage extends StatelessWidget {
                   ),
                   SizedBox(width: 10),
                   Text(
-                    "#245444",
+                    "#${order.orderId.substring(0, 10)}",
                     style: GoogleFonts.inter(color: Colors.black, fontSize: 24),
                   ),
                 ],
               ),
             ),
-            Timer(),
-
+            Timer(
+              statusIndex: 3,
+            ), //TODO: hier muss je nachdem welchen status die bestellung hat der index gewechselt werden!
             //Ankunft Zeit Text
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),

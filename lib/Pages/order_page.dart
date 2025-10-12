@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/Pages/timer_page.dart';
 import 'package:ykos_bbq_chicken/enum/order_status.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -44,53 +46,59 @@ class _OrderPageState extends State<OrderPage> {
             itemCount: viewModelMenu.orderList.length,
             itemBuilder: (context, index) {
               final order = viewModelMenu.orderList[index];
-              return Container(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: Colors.black),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          order.isDelivery
-                              ? order.deliveryAdress!.name
-                              : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            timeRepo.dateDayMonthYearToString(
-                              order.currentDate,
-                            ),
-                            SizedBox(width: 10),
-                            timeRepo.timeToString(order.currentTime, context),
-                          ],
-                        ),
-                        Text(
-                          order.orderStatus?.labelText ?? "",
-                          style: GoogleFonts.inter(
-                            color: Colors.green,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          order.isDelivery ? "Lieferung" : "Abholung",
-                          style: GoogleFonts.inter(
-                            color: Colors.orange,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(order.orderId),
-                      ],
+              return GestureDetector(
+                onTap:
+                    () => Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (context) => TimerPage(order: order,)),
                     ),
-                    Icon(Icons.arrow_forward_ios_rounded, size: 20),
-                  ],
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            order.isDelivery
+                                ? order.deliveryAdress!.name
+                                : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              timeRepo.dateDayMonthYearToString(
+                                order.currentDate,
+                              ),
+                              SizedBox(width: 10),
+                              timeRepo.timeToString(order.currentTime, context),
+                            ],
+                          ),
+                          Text(
+                            order.orderStatus?.labelText ?? "",
+                            style: GoogleFonts.inter(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            order.isDelivery ? "Lieferung" : "Abholung",
+                            style: GoogleFonts.inter(
+                              color: Colors.orange,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(order.orderId),
+                        ],
+                      ),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 20),
+                    ],
+                  ),
                 ),
               );
             },

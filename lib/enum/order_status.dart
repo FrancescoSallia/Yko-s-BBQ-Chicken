@@ -1,15 +1,15 @@
-enum OrderStatus { recieved, inProgress, onWay, delivered }
+enum OrderStatusEnum { recieved, inProgress, onWay, delivered }
 
-extension OrderLabelText on OrderStatus {
+extension OrderLabelText on OrderStatusEnum {
   String get labelText {
     switch (this) {
-      case OrderStatus.recieved:
+      case OrderStatusEnum.recieved:
         return "Bestellung eingegangen";
-      case OrderStatus.inProgress:
+      case OrderStatusEnum.inProgress:
         return "Wird Zubereitet";
-      case OrderStatus.onWay:
+      case OrderStatusEnum.onWay:
         return "Unterwegs zu dir";
-      case OrderStatus.delivered:
+      case OrderStatusEnum.delivered:
         return "Geliefert";
     }
   }

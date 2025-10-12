@@ -17,14 +17,14 @@ class Order {
   final DateTime? selectedDate;
   final Payment payment;
   final OrderSummary orderSummary;
-  final OrderStatus? orderStatus;
+  final OrderStatusEnum? orderStatus;
 
   Order({
     required this.pickUpUser,
     String? orderId,
     TimeOfDay? currentTime,
     DateTime? currentDate,
-    OrderStatus? orderStatus,
+    OrderStatusEnum? orderStatus,
     required this.isDelivery,
     required this.deliveryAdress,
     required this.selectedTime,
@@ -35,5 +35,6 @@ class Order {
        currentTime = TimeOfDay.now(),
        currentDate = DateTime.now(),
        orderStatus =
-           OrderStatus.recieved; // wenn keine orderId oder aktuelle zeit eingegeben wird, denn wird eins generiert!
+           OrderStatusEnum
+               .recieved; // wenn keine orderId oder aktuelle zeit eingegeben wird, denn wird eins generiert!
 }

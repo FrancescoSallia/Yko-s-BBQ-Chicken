@@ -4,7 +4,8 @@ import 'package:lottie/lottie.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class Timer extends StatelessWidget {
-  const Timer({super.key});
+  final int statusIndex;
+  const Timer({super.key, required this.statusIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,10 @@ class Timer extends StatelessWidget {
                       width: 1,
                       color: Colors.black.withValues(alpha: 0.4),
                     ),
-                    color: AppColors.timerPrimary,
+                    color:
+                        statusIndex == 0
+                            ? AppColors.timerPrimary
+                            : Colors.white,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(600),
                     ),
@@ -46,7 +50,10 @@ class Timer extends StatelessWidget {
                           child: Text(
                             "Bestellung ist bei uns Eingegangen disubfisubdfiudsbi",
                             style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w700,
+                              fontWeight:
+                                  statusIndex == 0
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                               fontSize: 14,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -63,7 +70,7 @@ class Timer extends StatelessWidget {
                     width: 120,
                     height: 120,
                     child: Lottie.asset(
-                      animate: true,
+                      animate: statusIndex == 0 ? true : false,
                       'assets/animations/entry_order.json',
                       repeat: true,
                     ),
@@ -85,7 +92,10 @@ class Timer extends StatelessWidget {
                       width: 1,
                       color: Colors.black.withValues(alpha: 0.4),
                     ),
-                    color: Colors.white,
+                    color:
+                        statusIndex == 1
+                            ? AppColors.timerPrimary
+                            : Colors.white,
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(600),
                     ),
@@ -104,7 +114,10 @@ class Timer extends StatelessWidget {
                           child: Text(
                             "Wird Zubereitet",
                             style: GoogleFonts.inter(
-                              // fontWeight: FontWeight.bold,
+                              fontWeight:
+                                  statusIndex == 1
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                               fontSize: 15,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -121,7 +134,7 @@ class Timer extends StatelessWidget {
                     width: 110,
                     height: 110,
                     child: Lottie.asset(
-                      animate: true,
+                      animate: statusIndex == 1 ? true : false,
                       'assets/animations/prepare_food.json',
                       repeat: true,
                     ),
@@ -149,7 +162,10 @@ class Timer extends StatelessWidget {
                       width: 1,
                       color: Colors.black.withValues(alpha: 0.4),
                     ),
-                    color: Colors.white,
+                    color:
+                        statusIndex == 3
+                            ? AppColors.timerPrimary
+                            : Colors.white,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(600),
                     ),
@@ -167,7 +183,13 @@ class Timer extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Text(
                             "Geliefert",
-                            style: GoogleFonts.inter(fontSize: 15),
+                            style: GoogleFonts.inter(
+                              fontSize: 15,
+                              fontWeight:
+                                  statusIndex == 3
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
+                            ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 2,
                           ),
@@ -183,7 +205,7 @@ class Timer extends StatelessWidget {
                     width: 100,
                     height: 100,
                     child: Lottie.asset(
-                      animate: true,
+                      animate: statusIndex == 3 ? true : false,
                       'assets/animations/delivered.json',
                       repeat: true,
                     ),
@@ -205,7 +227,10 @@ class Timer extends StatelessWidget {
                       width: 1,
                       color: Colors.black.withValues(alpha: 0.4),
                     ),
-                    color: Colors.white,
+                    color:
+                        statusIndex == 2
+                            ? AppColors.timerPrimary
+                            : Colors.white,
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(600),
                     ),
@@ -224,7 +249,10 @@ class Timer extends StatelessWidget {
                           child: Text(
                             "Auf dem Weg",
                             style: GoogleFonts.inter(
-                              // fontWeight: FontWeight.bold,
+                              fontWeight:
+                                  statusIndex == 2
+                                      ? FontWeight.w700
+                                      : FontWeight.w400,
                               fontSize: 15,
                             ),
                             overflow: TextOverflow.ellipsis,
@@ -242,7 +270,7 @@ class Timer extends StatelessWidget {
                     width: 110,
                     height: 110,
                     child: Lottie.asset(
-                      animate: true,
+                      animate: statusIndex == 2 ? true : false,
                       'assets/animations/delivery_riding.json',
                       repeat: true,
                     ),

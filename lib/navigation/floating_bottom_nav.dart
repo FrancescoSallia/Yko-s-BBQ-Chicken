@@ -3,6 +3,7 @@ import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:ykos_bbq_chicken/Pages/cart_page.dart';
 import 'package:ykos_bbq_chicken/Pages/home_page.dart';
 import 'package:ykos_bbq_chicken/Pages/favorited_page.dart';
+import 'package:ykos_bbq_chicken/Pages/order_page.dart';
 import 'package:ykos_bbq_chicken/Pages/timer_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
@@ -20,7 +21,7 @@ class _FloatingBottomNavState extends State<FloatingBottomNav> {
     HomePage(),
     FavoritedPage(),
     CartPage(),
-    TimerPage(),
+    OrderPage(),
   ];
 
   @override
