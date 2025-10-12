@@ -7,6 +7,7 @@ import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
+import 'package:ykos_bbq_chicken/model/user.dart';
 import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 
 class ViewmodelMenu extends ChangeNotifier {
@@ -245,6 +246,7 @@ class ViewmodelMenu extends ChangeNotifier {
     bool isDeliverySelected,
     TimeOfDay? selectedTimeFromPicker,
     DateTime? selectedDateFromPicker,
+    User? user,
   ) {
     if (isDeliverySelected) {
       if (selectedAdress != null && selectedPayment != null) {
@@ -255,7 +257,8 @@ class ViewmodelMenu extends ChangeNotifier {
     } else {
       if (selectedTimeFromPicker != null &&
           selectedDateFromPicker != null &&
-          selectedPayment != null) {
+          selectedPayment != null &&
+          user != null) {
         return true;
       } else {
         return false;
@@ -268,6 +271,7 @@ class ViewmodelMenu extends ChangeNotifier {
 
   void addToOrderList(Order order) {
     final newOrder = Order(
+      pickUpUser: order.pickUpUser,
       isDelivery: order.isDelivery,
       deliveryAdress: order.deliveryAdress,
       selectedTime: order.selectedTime,

@@ -465,6 +465,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         isDeliverySelected,
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
+                        viewModelAuth.pickUpUser,
                       )
                       ? WidgetStatePropertyAll(3)
                       : WidgetStatePropertyAll(0),
@@ -475,6 +476,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         isDeliverySelected,
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
+                        viewModelAuth.pickUpUser,
                       )
                       ? WidgetStatePropertyAll(AppColors.timerPrimary2)
                       : WidgetStatePropertyAll(
@@ -487,6 +489,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         isDeliverySelected,
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
+                        viewModelAuth.pickUpUser,
                       )
                       ? WidgetStatePropertyAll(AppColors.primaryButton)
                       : WidgetStatePropertyAll(Colors.white),
@@ -498,9 +501,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       isDeliverySelected,
                       selectedTimeFromPicker,
                       selectedDateFromPicker,
+                      viewModelAuth.pickUpUser,
                     )
                     ? () {
                       final newOrder = Order(
+                        pickUpUser: viewModelAuth.pickUpUser,
                         isDelivery: isDeliverySelected,
                         deliveryAdress: selectedAdress,
                         selectedTime: selectedTimeFromPicker,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/enum/order_status.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -56,7 +57,11 @@ class _OrderPageState extends State<OrderPage> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(order.deliveryAdress?.name ?? ""),
+                        Text(
+                          order.isDelivery
+                              ? order.deliveryAdress!.name
+                              : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -68,7 +73,7 @@ class _OrderPageState extends State<OrderPage> {
                           ],
                         ),
                         Text(
-                          "Bestellungsstatus: z.ß In Arbeit",
+                          order.orderStatus?.labelText ?? "",
                           style: GoogleFonts.inter(
                             color: Colors.green,
                             fontWeight: FontWeight.w500,

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:ykos_bbq_chicken/enum/order_status.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
+import 'package:ykos_bbq_chicken/model/user.dart';
 
 class Order {
-  // final User currentUser;
+  final User? pickUpUser;
   final String orderId;
   final TimeOfDay currentTime;
   final DateTime currentDate;
@@ -15,11 +17,14 @@ class Order {
   final DateTime? selectedDate;
   final Payment payment;
   final OrderSummary orderSummary;
+  final OrderStatus? orderStatus;
 
   Order({
+    required this.pickUpUser,
     String? orderId,
     TimeOfDay? currentTime,
     DateTime? currentDate,
+    OrderStatus? orderStatus,
     required this.isDelivery,
     required this.deliveryAdress,
     required this.selectedTime,
@@ -28,6 +33,7 @@ class Order {
     required this.orderSummary,
   }) : orderId = Uuid().v4(),
        currentTime = TimeOfDay.now(),
-       currentDate =
-           DateTime.now(); // wenn keine orderId oder aktuelle zeit eingegeben wird, denn wird eins generiert!
+       currentDate = DateTime.now(),
+       orderStatus =
+           OrderStatus.recieved; // wenn keine orderId oder aktuelle zeit eingegeben wird, denn wird eins generiert!
 }
