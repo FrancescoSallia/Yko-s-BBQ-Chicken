@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_auth.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 void main() {
@@ -10,6 +11,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ViewmodelMenu()),
         ChangeNotifierProvider(create: (_) => ViewmodelAdress()),
+        ChangeNotifierProvider(create: (_) => ViewmodelAuth()),
       ],
       child: const MyApp(),
     ),

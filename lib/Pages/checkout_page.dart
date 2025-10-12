@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
+import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pick_up.dart';
 import 'package:ykos_bbq_chicken/Pages/adress_page.dart';
 import 'package:ykos_bbq_chicken/Pages/order_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
@@ -15,6 +16,7 @@ import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_auth.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -174,6 +176,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void initState() {
     final viewModelMenu = context.read<ViewmodelMenu>();
+    // final viewModelAuth = context.read<ViewmodelAuth>();
+    // viewModelAuth.pickUpUser;
     viewModelMenu.loadCartList();
     super.initState();
   }
@@ -181,8 +185,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
+    final viewModelAuth = context.watch<ViewmodelAuth>();
+
     final cartItems = viewModelMenu.cartList;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.secondary,
       appBar: AppBar(
         backgroundColor: AppColors.secondary,
@@ -200,37 +207,64 @@ class _CheckoutPageState extends State<CheckoutPage> {
             SizedBox(height: 20),
 
             //Box to Navigato to adress or something else
-            Visibility(
-              visible: isDeliverySelected,
-              child: GestureDetector(
-                onTap: () async {
-                  final adress = await Navigator.of(context).push(
-                    CupertinoPageRoute(builder: (context) => AdressPage()),
-                  );
+            GestureDetector(
+              onTap:
+                  isDeliverySelected
+                      ? () async {
+                        final adress = await Navigator.of(context).push(
+                          CupertinoPageRoute(
+                            builder: (context) => AdressPage(),
+                          ),
+                        );
 
-                  if (adress != null) {
-                    setState(() {
-                      selectedAdress = adress;
-                    });
-                  }
-                },
-                child: ForwardBox(
-                  title:
-                      selectedAdress != null
-                          ? selectedAdress!.name
-                          : "Lieferadresse",
-                  announcementText:
-                      selectedAdress != null
-                          ? "${selectedAdress!.street} ${selectedAdress!.houseNumber}, ${selectedAdress!.plz} ${selectedAdress!.place}"
-                          : "Zum Fortfahren hier tippen",
-                  iconData:
-                      selectedAdress != null
-                          ? Icons.check_circle_rounded
-                          : Icons.location_on_outlined,
-                  img: null,
-                ),
+                        if (adress != null) {
+                          setState(() {
+                            selectedAdress = adress;
+                          });
+                        }
+                      }
+                      : () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          backgroundColor: AppColors.secondary,
+                          isDismissible: true,
+                          showDragHandle: true,
+                          builder: (context) {
+                            return SheetPickUp();
+                          },
+                        );
+                      },
+              child: ForwardBox(
+                title:
+                    isDeliverySelected
+                        ? selectedAdress != null
+                            ? selectedAdress!.name
+                            : "Lieferadresse"
+                        : viewModelAuth.pickUpUser != null
+                        ? "${viewModelAuth.pickUpUser!.name} ${viewModelAuth.pickUpUser!.lastName}"
+                        : "Abholer/in",
+                announcementText:
+                    isDeliverySelected
+                        ? selectedAdress != null
+                            ? "${selectedAdress!.street} ${selectedAdress!.houseNumber}, ${selectedAdress!.plz} ${selectedAdress!.place}"
+                            : "Zum Fortfahren hier tippen"
+                        : viewModelAuth.pickUpUser != null
+                        ? viewModelAuth.pickUpUser!.telefon
+                        : "zu Personenbezogenen Daten",
+                iconData:
+                    isDeliverySelected
+                        ? selectedAdress != null
+                            ? Icons.check_circle_rounded
+                            : Icons.location_on_outlined
+                        : viewModelAuth.pickUpUser != null
+                        ? Icons.shopping_bag
+                        : Icons.shopping_bag_outlined,
+                img: null,
               ),
             ),
+
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
