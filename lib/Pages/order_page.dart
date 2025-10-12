@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/timer_page.dart';
-import 'package:ykos_bbq_chicken/enum/order_status.dart';
+import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -80,7 +80,7 @@ class _OrderPageState extends State<OrderPage> {
                             ],
                           ),
                           Text(
-                            order.orderStatus?.labelText ?? "",
+                            order.orderStatus.labelText,
                             style: GoogleFonts.inter(
                               color: Colors.green,
                               fontWeight: FontWeight.w500,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class Timer extends StatelessWidget {
@@ -48,7 +49,7 @@ class Timer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Text(
-                            "Bestellung ist bei uns Eingegangen disubfisubdfiudsbi",
+                            OrderStatusEnum.recieved.labelText,
                             style: GoogleFonts.inter(
                               fontWeight:
                                   statusIndex == 0
@@ -112,7 +113,7 @@ class Timer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Text(
-                            "Wird Zubereitet",
+                            OrderStatusEnum.inProgress.labelText,
                             style: GoogleFonts.inter(
                               fontWeight:
                                   statusIndex == 1
@@ -182,7 +183,7 @@ class Timer extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Text(
-                            "Geliefert",
+                            OrderStatusEnum.delivered.labelText,
                             style: GoogleFonts.inter(
                               fontSize: 15,
                               fontWeight:
@@ -238,16 +239,18 @@ class Timer extends StatelessWidget {
                 ),
                 //Status Text
                 Positioned(
-                  right: 16,
-                  bottom: 40,
+                  right: 42,
+                  bottom: 28,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 150,
+                        width: 120,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
                           child: Text(
-                            "Auf dem Weg",
+                            OrderStatusEnum.onWay.labelText,
                             style: GoogleFonts.inter(
                               fontWeight:
                                   statusIndex == 2
@@ -256,7 +259,8 @@ class Timer extends StatelessWidget {
                               fontSize: 15,
                             ),
                             overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
+                            softWrap: true,
+                            maxLines: 2,
                           ),
                         ),
                       ),

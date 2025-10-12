@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-import 'package:ykos_bbq_chicken/enum/order_status.dart';
+import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
@@ -17,7 +17,7 @@ class Order {
   final DateTime? selectedDate;
   final Payment payment;
   final OrderSummary orderSummary;
-  final OrderStatusEnum? orderStatus;
+  final OrderStatusEnum orderStatus;
 
   Order({
     required this.pickUpUser,

@@ -89,7 +89,7 @@ class _OrderItemState extends State<OrderItem> {
                           "+ ${extra?.name}",
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.w400,
-                          ), //TODO: mach mit den extras weiter mit der logik und ui!
+                          ), 
                         ),
                       ),
                       Expanded(

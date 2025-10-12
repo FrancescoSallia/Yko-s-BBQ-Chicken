@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ykos_bbq_chicken/components/timer.dart';
+import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/order.dart';
+import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class TimerPage extends StatelessWidget {
@@ -23,6 +26,8 @@ class TimerPage extends StatelessWidget {
       {"Pizza Funghi": "10,90€"},
       {"Pizza Funghi": "10,90€"},
     ];
+
+    final timeRepo = TimeRepository();
     return Scaffold(
       backgroundColor: AppColors.secondary,
       body: SingleChildScrollView(
@@ -50,9 +55,7 @@ class TimerPage extends StatelessWidget {
                 ],
               ),
             ),
-            Timer(
-              statusIndex: 3,
-            ), //TODO: hier muss je nachdem welchen status die bestellung hat der index gewechselt werden!
+            Timer(statusIndex: order.orderStatus.statusIndex),
             //Ankunft Zeit Text
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -60,12 +63,18 @@ class TimerPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Ankunft:",
+                    order.isDelivery ? "Ankunft:" : "Abholung:",
                     style: GoogleFonts.inter(color: Colors.black, fontSize: 18),
                   ),
                   SizedBox(width: 10),
+
                   Text(
-                    "ca. 20:45 - 21:10 Uhr",
+                    order.isDelivery
+                        ? order.selectedTime != null ||
+                                order.selectedDate != null
+                            ? "${timeRepo.dateDayMonthYearToString(order.selectedDate).data} - ca. ${timeRepo.timeToString(order.selectedTime, context).data}"
+                            : "ca 40- 50 min"
+                        : "${timeRepo.dateDayMonthYearToString(order.selectedDate).data} - ca. ${timeRepo.timeToString(order.selectedTime, context).data}",
                     style: GoogleFonts.inter(
                       color: AppColors.timerTextPrimary,
                       fontSize: 18,
@@ -78,19 +87,61 @@ class TimerPage extends StatelessWidget {
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: _orderedList.length,
+              itemCount: order.orderSummary.foods.length,
               itemBuilder: (context, index) {
-                final orderedItem = _orderedList[index];
+                final orderedItem = order.orderSummary.foods[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(
                     vertical: 6.0,
                     horizontal: 20,
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(orderedItem.keys.toString()),
-                      Text(orderedItem.values.toString()),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Text("${orderedItem.count.toString()}x"),
+                              Text(orderedItem.name),
+                            ],
+                          ),
+                          Text(orderedItem.price.toEuroString()),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Text("Extra's"),
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: orderedItem.extras?.length ?? 0,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          final extra = orderedItem.extras?[index];
+                          if (extra == null) return null;
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0,
+                                ),
+                                child: Row(
+                                  spacing: 10,
+                                  children: [
+                                    Text(
+                                      "+ ${extra.name}",
+                                    ), //TODO: Hier weiter machen !!
+                                    Text("${extra.anzahl.toString()}x"),
+                                  ],
+                                ),
+                              ),
+                              Text(extra.price.toEuroString()),
+                            ],
+                          );
+                        },
+                      ),
                     ],
                   ),
                 );
