@@ -5,6 +5,7 @@ import 'package:ykos_bbq_chicken/components/add_extra_icons.dart';
 import 'package:ykos_bbq_chicken/components/add_remove_button.dart';
 import 'package:ykos_bbq_chicken/components/my_to_cart_button.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
+import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -380,13 +381,34 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                 flex: 3,
                                 child: MyToCartButton(
                                   gesture: () {
-                                    viewModelMenu.addToCart(widget.item);
+                                    final existingIndex = viewModelMenu.cartList
+                                        .indexWhere((cartItem) {
+                                          final sameName =
+                                              cartItem.name == widget.item.name;
+                                          final sameExtras = _compareExtras(
+                                            cartItem.extras,
+                                            widget.item.extras,
+                                          );
+                                          return sameName && sameExtras;
+                                        });
 
+                                    if (existingIndex != -1) {
+                                      // 🔄 Wenn gleiches Item mit gleichen Extras existiert → Menge aktualisieren
+                                      setState(() {
+                                        viewModelMenu
+                                            .cartList[existingIndex]
+                                            .count += widget.item.count;
+                                      });
+                                    } else {
+                                      // ➕ Neues Item in den Warenkorb
+                                      viewModelMenu.addToCart(widget.item);
+                                    }
+
+                                    // 🧹 Zustand zurücksetzen
                                     setState(() {
                                       widget.item.count = 1;
                                       widget.item.extras = [];
                                       widget.item.note = "";
-
                                       for (var extra
                                           in viewModelMenu.currentExtras) {
                                         extra.anzahl = 0;
@@ -412,4 +434,20 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
       ),
     );
   }
+}
+
+bool _compareExtras(List<Extra>? extras1, List<Extra>? extras2) {
+  if (extras1 != null && extras2 != null) {
+    if (extras1.length != extras2.length) return false;
+    for (final extra in extras1) {
+      final match = extras2.any(
+        (e) =>
+            e.name == extra.name &&
+            e.price == extra.price &&
+            e.anzahl == extra.anzahl,
+      );
+      if (!match) return false;
+    }
+  }
+  return true;
 }

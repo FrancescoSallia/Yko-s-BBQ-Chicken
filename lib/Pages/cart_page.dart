@@ -31,6 +31,18 @@ class _CartPageState extends State<CartPage> {
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
+      appBar: AppBar(
+        backgroundColor: AppColors.secondary,
+        surfaceTintColor: Colors.transparent,
+        bottom: PreferredSize(
+          preferredSize: Size(0, 0),
+          child: Divider(thickness: 2),
+        ),
+        title: Text(
+          "Cart 🛒",
+          style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+        ),
+      ),
       body: SafeArea(
         child:
             cartItems.isEmpty
@@ -74,7 +86,9 @@ class _CartPageState extends State<CartPage> {
                         const SizedBox(height: 20),
 
                         // 🔹 Danach die SummaryBox anzeigen lassen
-                        SummaryBox(orderSummary: viewModelMenu.orderSummeryBox()),
+                        SummaryBox(
+                          orderSummary: viewModelMenu.orderSummeryBox(),
+                        ),
 
                         const SizedBox(height: 20),
 
