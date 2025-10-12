@@ -4,6 +4,7 @@ import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
+import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/food_repository.dart';
@@ -260,5 +261,25 @@ class ViewmodelMenu extends ChangeNotifier {
         return false;
       }
     }
+  }
+
+  List<Order> _orderList = [];
+  List<Order> get orderList => _orderList;
+
+  void addToOrderList(Order order) {
+    final newOrder = Order(
+      isDelivery: order.isDelivery,
+      deliveryAdress: order.deliveryAdress,
+      selectedTime: order.selectedTime,
+      selectedDate: order.selectedDate,
+      payment: order.payment,
+      orderSummary: order.orderSummary,
+    );
+    _orderList.add(newOrder);
+    notifyListeners();
+  }
+
+  List<Order> loadOrdersList() {
+    return _orderList;
   }
 }

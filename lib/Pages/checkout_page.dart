@@ -4,12 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/Pages/adress_page.dart';
+import 'package:ykos_bbq_chicken/Pages/order_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/my_textfield.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
+import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
@@ -463,7 +465,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       selectedTimeFromPicker,
                       selectedDateFromPicker,
                     )
-                    ? () {}
+                    ? () {
+                      final newOrder = Order(
+                        isDelivery: isDeliverySelected,
+                        deliveryAdress: selectedAdress,
+                        selectedTime: selectedTimeFromPicker,
+                        selectedDate: selectedDateFromPicker,
+                        payment: selectedPayment!,
+                        orderSummary: viewModelMenu.orderSummeryBox(),
+                      );
+                      viewModelMenu.addToOrderList(newOrder);
+                      Navigator.of(context).pushReplacement(
+                        CupertinoPageRoute(builder: (context) => OrderPage()),
+                      );
+                    }
                     : null,
             child: Text("Kostenpflichtig Bestellen"),
           ),
