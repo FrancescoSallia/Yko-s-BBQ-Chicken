@@ -42,7 +42,7 @@ class _OrderItemState extends State<OrderItem> {
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                   Padding(
@@ -51,7 +51,7 @@ class _OrderItemState extends State<OrderItem> {
                       widget.orderItem.price.toEuroString(),
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -65,38 +65,38 @@ class _OrderItemState extends State<OrderItem> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 2.0),
-                    child: Text(
-                      widget.orderItem.extras!.isNotEmpty ? "Extras:" : "",
-                      style: GoogleFonts.inter(fontWeight: FontWeight.w500),
-                    ),
-                  ),
+                  // Text(
+                  //   widget.orderItem.extras!.isNotEmpty ? "Extras:" : "",
+                  //   style: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                  // ),
                 ],
               ),
             ),
             ListView.builder(
               shrinkWrap: true,
-              padding: EdgeInsets.all(0),
               physics: NeverScrollableScrollPhysics(),
               itemCount: widget.orderItem.extras?.length,
               itemBuilder: (context, index) {
                 final extra = widget.orderItem.extras?[index];
 
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        "- ${extra?.name}",
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w400,
-                        ), //TODO: mach mit den extras weiter mit der logik und ui!
+                      Expanded(
+                        child: Text(
+                          "+ ${extra?.name}",
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w400,
+                          ), //TODO: mach mit den extras weiter mit der logik und ui!
+                        ),
                       ),
-                      Text(
-                        "${extra?.price.toEuroString()}",
-                        style: GoogleFonts.inter(fontWeight: FontWeight.w400),
+                      Expanded(
+                        child: Text(
+                          "${extra?.price.toEuroString()}",
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w400),
+                        ),
                       ),
                       Row(
                         children: [
@@ -138,10 +138,15 @@ class _OrderItemState extends State<OrderItem> {
                               minimumSize: const Size(10, 10),
                             ),
                           ),
-                          Text(
-                            " ${extra!.anzahl}",
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.w400,
+                          SizedBox(
+                            child: Center(
+                              child: Text(
+                                " ${extra!.anzahl}",
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                ),
+                              ),
                             ),
                           ),
                           IconButton(
@@ -175,8 +180,6 @@ class _OrderItemState extends State<OrderItem> {
                 );
               },
             ),
-
-            SizedBox(height: 6),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -215,10 +218,10 @@ class _OrderItemState extends State<OrderItem> {
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Icon(Icons.edit_note_rounded, size: 18),
+                    children: [
+                      Icon(Icons.edit_note_rounded, size: 14),
                       SizedBox(width: 5),
-                      Text("Notiz"),
+                      Text("Notiz", style: GoogleFonts.inter(fontSize: 12)),
                     ],
                   ),
                 ),
@@ -247,7 +250,7 @@ class _OrderItemState extends State<OrderItem> {
                             ? Icons.delete
                             : Icons.remove,
                       ),
-                      iconSize: 16,
+                      iconSize: 12,
                       style: IconButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),
@@ -260,19 +263,22 @@ class _OrderItemState extends State<OrderItem> {
                             widget.orderItem.count == 1
                                 ? Colors.red
                                 : Colors.white,
-                        minimumSize: const Size(32, 32),
+                        minimumSize: const Size(12, 12),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        widget.orderItem.count.toString(),
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                    SizedBox(
+                      width: 15,
+                      child: Center(
+                        child: Text(
+                          widget.orderItem.count.toString(),
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                     ),
+
                     IconButton.filled(
                       onPressed: () {
                         setState(() {
@@ -282,14 +288,14 @@ class _OrderItemState extends State<OrderItem> {
                         });
                       },
                       icon: const Icon(Icons.add),
-                      iconSize: 16,
+                      iconSize: 12,
                       style: IconButton.styleFrom(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(6),
                         ),
                         backgroundColor: AppColors.primary,
                         foregroundColor: AppColors.primaryButton,
-                        minimumSize: const Size(32, 32),
+                        minimumSize: const Size(12, 12),
                       ),
                     ),
                   ],
@@ -311,7 +317,7 @@ class _OrderItemState extends State<OrderItem> {
                           : "",
                       style: GoogleFonts.inter(
                         fontWeight: FontWeight.w500,
-                        fontSize: 13,
+                        fontSize: 12,
                         fontStyle: FontStyle.italic,
                         color: Colors.black.withValues(alpha: 0.7),
                       ),

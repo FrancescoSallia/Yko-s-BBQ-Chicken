@@ -38,10 +38,15 @@ class _CartPageState extends State<CartPage> {
           preferredSize: Size(0, 0),
           child: Divider(thickness: 2),
         ),
-        title: Text(
-          "Cart 🛒",
-          style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Cart", style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+            Icon(Icons.shopping_bag, color: AppColors.timerPrimary2),
+          ],
         ),
+        centerTitle: true,
       ),
       body: SafeArea(
         child:
@@ -66,10 +71,7 @@ class _CartPageState extends State<CartPage> {
                 : SingleChildScrollView(
                   physics: const ClampingScrollPhysics(),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 25,
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
                       children: [
                         // 🔹 Alle OrderItems anzeigen

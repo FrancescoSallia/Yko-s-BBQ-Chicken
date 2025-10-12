@@ -22,7 +22,7 @@ class SummaryBox extends StatelessWidget {
                 child: Text(
                   "You have 30% Discount on all meals between August 1st and August 30th, 2022 ",
                   style: GoogleFonts.inter(
-                    color: Colors.black.withOpacity(0.6),
+                    color: Colors.black.withValues(alpha: 0.6),
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -36,7 +36,7 @@ class SummaryBox extends StatelessWidget {
           margin: EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color: AppColors.primary.withOpacity(0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             border: Border.all(width: 1, color: AppColors.primaryButton),
           ),
           child: Column(
@@ -66,18 +66,25 @@ class SummaryBox extends StatelessWidget {
               ),
               if (orderSummary.discount != null) ...[
                 SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Discount (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
-                      style: GoogleFonts.inter(fontSize: 14),
-                    ),
-                    Text(
-                      "- ${orderSummary.rabattBetrag.toStringAsFixed(2)}€",
-                      style: GoogleFonts.inter(fontSize: 14),
-                    ),
-                  ],
+                Visibility(
+                  visible:
+                      orderSummary.discount != null ||
+                              orderSummary.discount! > 0.0
+                          ? true
+                          : false,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Discount (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
+                        style: GoogleFonts.inter(fontSize: 14),
+                      ),
+                      Text(
+                        "- ${orderSummary.rabattBetrag.toStringAsFixed(2)}€",
+                        style: GoogleFonts.inter(fontSize: 14),
+                      ),
+                    ],
+                  ),
                 ),
               ],
               Row(
