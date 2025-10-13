@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
 import 'package:ykos_bbq_chicken/components/my_search_field.dart';

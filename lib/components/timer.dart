@@ -6,7 +6,8 @@ import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class Timer extends StatelessWidget {
   final int statusIndex;
-  const Timer({super.key, required this.statusIndex});
+  final bool isDelivery;
+  const Timer({super.key, required this.statusIndex, required this.isDelivery});
 
   @override
   Widget build(BuildContext context) {
@@ -188,8 +189,8 @@ class Timer extends StatelessWidget {
                         width: 150,
                         child: Padding(
                           padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Text(
-                            OrderStatusEnum.delivered.labelText,
+                          child: Text( isDelivery ?
+                            OrderStatusEnum.delivered.labelText : OrderStatusEnum.ready.labelText ,
                             style: GoogleFonts.inter(
                               fontSize: 15,
                               fontWeight:

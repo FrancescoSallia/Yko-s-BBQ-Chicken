@@ -1,4 +1,4 @@
-enum OrderStatusEnum { recieved, inProgress, onWay, delivered }
+enum OrderStatusEnum { recieved, inProgress, onWay, delivered, ready }
 
 extension OrderLabelText on OrderStatusEnum {
   String get labelText {
@@ -11,6 +11,8 @@ extension OrderLabelText on OrderStatusEnum {
         return "Unterwegs zu dir";
       case OrderStatusEnum.delivered:
         return "Geliefert";
+      case OrderStatusEnum.ready:
+        return "Abholbereit";
     }
   }
 
@@ -24,6 +26,8 @@ extension OrderLabelText on OrderStatusEnum {
         return 2;
       case OrderStatusEnum.delivered:
         return 3;
+      case OrderStatusEnum.ready:
+        return 4;
     }
   }
 
@@ -36,6 +40,8 @@ extension OrderLabelText on OrderStatusEnum {
       case OrderStatusEnum.onWay:
         return "assets/animations/delivery_riding.json";
       case OrderStatusEnum.delivered:
+        return "assets/animations/delivered.json";
+      case OrderStatusEnum.ready:
         return "assets/animations/delivered.json";
     }
   }

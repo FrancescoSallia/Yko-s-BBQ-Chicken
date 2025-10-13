@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:ykos_bbq_chicken/Pages/detail_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';

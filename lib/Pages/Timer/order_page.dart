@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-import 'package:ykos_bbq_chicken/Pages/timer_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Timer/timer_page.dart';
 import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';

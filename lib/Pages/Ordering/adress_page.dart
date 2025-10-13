@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_add_adress.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_options.dart';
-import 'package:ykos_bbq_chicken/Pages/update_adress_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Ordering/update_adress_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
 

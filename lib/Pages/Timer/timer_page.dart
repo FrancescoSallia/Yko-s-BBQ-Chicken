@@ -52,7 +52,10 @@ class TimerPage extends StatelessWidget {
                 ],
               ),
             ),
-            Timer(statusIndex: order.orderStatus.statusIndex),
+            Timer(
+              statusIndex: order.orderStatus.statusIndex,
+              isDelivery: order.isDelivery,
+            ),
             //Ankunft Zeit Text
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20.0),
