@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
+import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
@@ -153,11 +154,46 @@ class _GridItemState extends State<GridItem> {
                                 backgroundColor: Colors.black,
                               ),
                               onPressed: () {
-                                setState(() {
-                                  final favoritedItem = widget.favoritedItem;
+                                // setState(() {
+                                //   final favoritedItem = widget.favoritedItem;
 
-                                  //Bug Fixxed- immer ne neue copy vom Object erstellen und das hinufügen, entfernen oder updaten
-                                  viewModelMenu.addToCart(favoritedItem);
+                                //   //Bug Fixxed- immer ne neue copy vom Object erstellen und das hinufügen, entfernen oder updaten
+                                //   viewModelMenu.addToCart(favoritedItem);
+                                // });
+
+                                final existingIndex = viewModelMenu.cartList
+                                    .indexWhere((cartItem) {
+                                      final sameName =
+                                          cartItem.name ==
+                                          widget.favoritedItem.name;
+                                      final sameExtras = _compareExtras(
+                                        cartItem.extras,
+                                        widget.favoritedItem.extras,
+                                      );
+                                      return sameName && sameExtras;
+                                    });
+
+                                if (existingIndex != -1) {
+                                  // 🔄 Wenn gleiches Item mit gleichen Extras existiert → Menge aktualisieren
+                                  setState(() {
+                                    viewModelMenu
+                                        .cartList[existingIndex]
+                                        .count += widget.favoritedItem.count;
+                                  });
+                                } else {
+                                  // ➕ Neues Item in den Warenkorb
+                                  viewModelMenu.addToCart(widget.favoritedItem);
+                                }
+
+                                // 🧹 Zustand zurücksetzen
+                                setState(() {
+                                  widget.favoritedItem.count = 1;
+                                  widget.favoritedItem.extras = [];
+                                  widget.favoritedItem.note = "";
+                                  for (var extra
+                                      in viewModelMenu.currentExtras) {
+                                    extra.anzahl = 0;
+                                  }
                                 });
                               },
                               icon: Icon(Icons.shopping_cart, size: 20),
@@ -176,4 +212,20 @@ class _GridItemState extends State<GridItem> {
       ),
     );
   }
+}
+
+bool _compareExtras(List<Extra>? extras1, List<Extra>? extras2) {
+  if (extras1 != null && extras2 != null) {
+    if (extras1.length != extras2.length) return false;
+    for (final extra in extras1) {
+      final match = extras2.any(
+        (e) =>
+            e.name == extra.name &&
+            e.price == extra.price &&
+            e.anzahl == extra.anzahl,
+      );
+      if (!match) return false;
+    }
+  }
+  return true;
 }

@@ -36,7 +36,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Adress? selectedAdress;
   final TextEditingController _discountController = TextEditingController();
 
-  final int closingHour = 22; // Betrieb schließt um 22 Uhr
   final List<int> closedDays = [
     DateTime.monday,
     DateTime.friday,
@@ -180,8 +179,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void initState() {
     final viewModelMenu = context.read<ViewmodelMenu>();
-    // final viewModelAuth = context.read<ViewmodelAuth>();
-    // viewModelAuth.pickUpUser;
     if (closedDays.contains(DateTime.now().weekday)) {
       selectedDeliveryIndex = null;
     } else {
@@ -294,24 +291,31 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 Visibility(
-                  visible: closedDays.contains(DateTime.now().weekday),
+                  visible:
+                      closedDays.contains(DateTime.now().weekday) ||
+                      TimeOfDay.now().hour < timeRepo.openingHour ||
+                      TimeOfDay.now().hour >= timeRepo.closingHour,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Das Restaurant ist Heute geschlossen",
+                      "Das Restaurant ist zu jetzigem Zeitpunkt geschlossen",
                       style: GoogleFonts.inter(
                         color: Colors.red,
                         fontWeight: FontWeight.bold,
+                        fontSize: 18,
                       ),
+                      softWrap: true,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ),
                 Visibility(
                   visible:
                       isDeliverySelected &&
-                              !closedDays.contains(DateTime.now().weekday)
-                          ? true
-                          : false,
+                      !closedDays.contains(DateTime.now().weekday) &&
+                      TimeOfDay.now().hour >= timeRepo.openingHour &&
+                      TimeOfDay.now().hour < timeRepo.closingHour,
                   child: DeliveryTimeContainer(
                     index: 0,
                     title: "So schnell wie möglich",

@@ -9,8 +9,8 @@ class TimeRepository {
 
   TimeRepository({
     this.openingHour = 12, //öffnungszeiten
-    this.closingHour = 22,
-    this.closingMinute = 30,
+    this.closingHour = 22, // Betrieb schließt um 22 Uhr
+    this.closingMinute = 30, // schließt z.ß 22:30 Uhr
     this.stepMinutes = 10, //10 schritte
     this.minLeadMinutes = 40, // 🔹 z. B. 40 Minuten Vorlaufzeit
   });

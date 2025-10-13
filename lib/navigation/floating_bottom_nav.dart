@@ -4,7 +4,6 @@ import 'package:ykos_bbq_chicken/Pages/Ordering/cart_page.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/home_page.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/favorited_page.dart';
 import 'package:ykos_bbq_chicken/Pages/Timer/order_page.dart';
-import 'package:ykos_bbq_chicken/Pages/Timer/timer_page.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
 class FloatingBottomNav extends StatefulWidget {
