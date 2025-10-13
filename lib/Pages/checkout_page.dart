@@ -30,14 +30,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
   bool isDeliverySelected = true;
   TimeOfDay? selectedTimeFromPicker;
   DateTime? selectedDateFromPicker;
-  int? selectedDeliveryIndex = 0;
+  int? selectedDeliveryIndex;
   final TimeRepository timeRepo = TimeRepository();
   Payment? selectedPayment;
   Adress? selectedAdress;
   final TextEditingController _discountController = TextEditingController();
 
   final int closingHour = 22; // Betrieb schließt um 22 Uhr
-  final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
+  final List<int> closedDays = [
+    DateTime.monday,
+    DateTime.friday,
+    DateTime.saturday,
+  ]; // Montag geschlossen
 
   Future<bool> showDateTimePicker(BuildContext context) async {
     final today = DateTime.now();
@@ -178,6 +182,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final viewModelMenu = context.read<ViewmodelMenu>();
     // final viewModelAuth = context.read<ViewmodelAuth>();
     // viewModelAuth.pickUpUser;
+    if (closedDays.contains(DateTime.now().weekday)) {
+      selectedDeliveryIndex = null;
+    } else {
+      selectedDeliveryIndex = 0;
+    }
     viewModelMenu.loadCartList();
     super.initState();
   }
@@ -285,7 +294,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ),
                 Visibility(
-                  visible: isDeliverySelected,
+                  visible: closedDays.contains(DateTime.now().weekday),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Das Restaurant ist Heute geschlossen",
+                      style: GoogleFonts.inter(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible:
+                      isDeliverySelected &&
+                              !closedDays.contains(DateTime.now().weekday)
+                          ? true
+                          : false,
                   child: DeliveryTimeContainer(
                     index: 0,
                     title: "So schnell wie möglich",
@@ -323,9 +349,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           selectedTimeFromPicker != null) {
                         selectedDeliveryIndex =
                             1; // Nutzer hat bestätigt → Lieferzeit ausgewählt
-                      } else {
-                        selectedDeliveryIndex =
-                            0; // Nutzer hat Picker geschlossen → zurück zu Standard
                       }
                     });
                   },
@@ -470,6 +493,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
                         viewModelAuth.pickUpUser,
+                        selectedDeliveryIndex,
                       )
                       ? WidgetStatePropertyAll(3)
                       : WidgetStatePropertyAll(0),
@@ -481,6 +505,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
                         viewModelAuth.pickUpUser,
+                        selectedDeliveryIndex,
                       )
                       ? WidgetStatePropertyAll(AppColors.timerPrimary2)
                       : WidgetStatePropertyAll(
@@ -494,6 +519,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
                         viewModelAuth.pickUpUser,
+                        selectedDeliveryIndex,
                       )
                       ? WidgetStatePropertyAll(AppColors.primaryButton)
                       : WidgetStatePropertyAll(Colors.white),
@@ -506,6 +532,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       selectedTimeFromPicker,
                       selectedDateFromPicker,
                       viewModelAuth.pickUpUser,
+                      selectedDeliveryIndex,
                     )
                     ? () {
                       final newOrder = Order(

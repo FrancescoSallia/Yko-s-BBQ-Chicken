@@ -75,19 +75,20 @@ class CompleteOrders extends StatelessWidget {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20.0, right: 20, top: 5),
-                child: Text(
-                  orderedItem.note!.isNotEmpty
-                      ? "↳ ${orderedItem.note}"
-                      : "(leer)",
-                  style: GoogleFonts.inter(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.red,
+              Visibility(
+                visible: orderedItem.note!.isNotEmpty,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20.0, right: 20, top: 5),
+                  child: Text(
+                    orderedItem.note!.isNotEmpty ? "↳ ${orderedItem.note}" : "",
+                    style: GoogleFonts.inter(
+                      fontStyle: FontStyle.italic,
+                      color: Colors.red,
+                    ),
+                    maxLines: 2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               SizedBox(height: 15),

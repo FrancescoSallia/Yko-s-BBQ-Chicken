@@ -87,9 +87,7 @@ class _OrderItemState extends State<OrderItem> {
                       Expanded(
                         child: Text(
                           "+ ${extra?.name}",
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w400,
-                          ), 
+                          style: GoogleFonts.inter(fontWeight: FontWeight.w400),
                         ),
                       ),
                       Expanded(
@@ -267,7 +265,7 @@ class _OrderItemState extends State<OrderItem> {
                       ),
                     ),
                     SizedBox(
-                      width: 15,
+                      width: 18,
                       child: Center(
                         child: Text(
                           widget.orderItem.count.toString(),

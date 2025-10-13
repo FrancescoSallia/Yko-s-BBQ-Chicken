@@ -126,7 +126,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                     widget.item.isFavorited
                         ? "lib/img/liked.png"
                         : "lib/img/unliked.png",
-                    width: 28,
+                    width: 30,
                   ),
                 ),
               ),
@@ -415,6 +415,9 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                       }
                                     });
                                   },
+                                  totalPriceWithExtraAndAmount:
+                                      widget.item.totalWithExtras
+                                          .toEuroString(),
                                 ),
                               ),
                             ],

@@ -24,7 +24,7 @@ class SummaryBox extends StatelessWidget {
                 child: SizedBox(
                   width: 300,
                   child: Text(
-                    "Du hast ein Gutschein in wert von ${orderSummary.discount?.toEuroString()} benutzt",
+                    "Du hast ein Gutschein in wert von ${orderSummary.discount?.toEuroString()}(in porzent) benutzt",
                     style: GoogleFonts.inter(
                       color: Colors.black.withValues(alpha: 0.6),
                     ),

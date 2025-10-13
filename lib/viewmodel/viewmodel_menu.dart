@@ -254,9 +254,10 @@ class ViewmodelMenu extends ChangeNotifier {
     TimeOfDay? selectedTimeFromPicker,
     DateTime? selectedDateFromPicker,
     User? user,
+    int? selectedDeliveryIndex
   ) {
     if (isDeliverySelected) {
-      if (selectedAdress != null && selectedPayment != null) {
+      if (selectedAdress != null && selectedPayment != null && selectedDeliveryIndex != null) {
         return true;
       } else {
         return false;

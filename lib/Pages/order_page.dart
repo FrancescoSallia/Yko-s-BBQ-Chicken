@@ -111,6 +111,7 @@ class _OrderPageState extends State<OrderPage> {
                 );
               },
             ),
+            SizedBox(height: 80),
           ],
         ),
       ),
