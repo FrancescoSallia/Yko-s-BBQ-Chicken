@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:ykos_bbq_chicken/enum/category_enum.dart';
+import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 
@@ -17,15 +19,18 @@ class SummaryBox extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 300,
-                child: Text(
-                  "You have 30% Discount on all meals between August 1st and August 30th, 2022 ",
-                  style: GoogleFonts.inter(
-                    color: Colors.black.withValues(alpha: 0.6),
+              Visibility(
+                visible: orderSummary.discount! > 0 ? true : false,
+                child: SizedBox(
+                  width: 300,
+                  child: Text(
+                    "Du hast ein Gutschein in wert von ${orderSummary.discount?.toEuroString()} benutzt",
+                    style: GoogleFonts.inter(
+                      color: Colors.black.withValues(alpha: 0.6),
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -51,42 +56,40 @@ class SummaryBox extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Delivery Charge",
-                    style: GoogleFonts.inter(fontSize: 14),
-                  ),
-                  Text(
-                    "${orderSummary.deliveryCharge.toStringAsFixed(2)}€",
-                    style: GoogleFonts.inter(fontSize: 14),
-                  ),
-                ],
-              ),
-              if (orderSummary.discount != null) ...[
-                SizedBox(height: 10),
-                Visibility(
-                  visible:
-                      orderSummary.discount != null ||
-                              orderSummary.discount! > 0.0
-                          ? true
-                          : false,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Discount (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
-                        style: GoogleFonts.inter(fontSize: 14),
-                      ),
-                      Text(
-                        "- ${orderSummary.rabattBetrag.toStringAsFixed(2)}€",
-                        style: GoogleFonts.inter(fontSize: 14),
-                      ),
-                    ],
-                  ),
+              Visibility(
+                visible: orderSummary.deliveryCharge == 0 ? false : true,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Delivery Charge",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                    Text(
+                      "${orderSummary.deliveryCharge.toStringAsFixed(2)}€",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                  ],
                 ),
-              ],
+              ),
+
+              Visibility(
+                visible: orderSummary.discount! > 0 ? true : false,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Discount (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                    Text(
+                      "- ${orderSummary.rabattBetrag.toStringAsFixed(2)}€",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                  ],
+                ),
+              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -100,18 +103,24 @@ class SummaryBox extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Getränke MwSt. (19%)",
-                    style: GoogleFonts.inter(fontSize: 14),
-                  ),
-                  Text(
-                    "${orderSummary.getraenkeMwst.toStringAsFixed(2)}€",
-                    style: GoogleFonts.inter(fontSize: 14),
-                  ),
-                ],
+              Visibility(
+                visible: orderSummary.foods.any(
+                  (element) =>
+                      element.category.name == CategoryEnum.drinks.label,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Getränke MwSt. (19%)",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                    Text(
+                      "${orderSummary.getraenkeMwst.toStringAsFixed(2)}€",
+                      style: GoogleFonts.inter(fontSize: 14),
+                    ),
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

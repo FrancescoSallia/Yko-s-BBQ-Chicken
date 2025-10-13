@@ -444,7 +444,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: Text("Gutschein Einlösen"),
                 ),
 
-                SummaryBox(orderSummary: viewModelMenu.orderSummeryBox()),
+                SummaryBox(
+                  orderSummary: viewModelMenu.orderSummeryBox(
+                    isDeliverySelected,
+                  ),
+                ),
                 SizedBox(height: 100),
               ],
             ),
@@ -511,9 +515,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         selectedTime: selectedTimeFromPicker,
                         selectedDate: selectedDateFromPicker,
                         payment: selectedPayment!,
-                        orderSummary: viewModelMenu.orderSummeryBox(),
+                        orderSummary: viewModelMenu.orderSummeryBox(
+                          isDeliverySelected,
+                        ),
                       );
                       viewModelMenu.addToOrderList(newOrder);
+                      viewModelMenu.clearAnyList(viewModelMenu.cartList);
                       Navigator.of(context).pushReplacement(
                         CupertinoPageRoute(builder: (context) => OrderPage()),
                       );

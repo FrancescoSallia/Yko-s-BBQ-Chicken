@@ -68,11 +68,6 @@ class _OrderPageState extends State<OrderPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              order.isDelivery
-                                  ? order.deliveryAdress!.name
-                                  : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
-                            ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
@@ -86,6 +81,12 @@ class _OrderPageState extends State<OrderPage> {
                                 ),
                               ],
                             ),
+                            Text(
+                              order.isDelivery
+                                  ? order.deliveryAdress!.name
+                                  : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
+                            ),
+
                             Text(
                               order.orderStatus.labelText,
                               style: GoogleFonts.inter(

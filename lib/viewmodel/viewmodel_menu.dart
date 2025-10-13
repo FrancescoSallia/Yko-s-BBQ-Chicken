@@ -104,6 +104,11 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearAnyList(List list) {
+    list.clear();
+    notifyListeners();
+  }
+
   Food updateMeal(Food item) {
     final updatedFood = Food(
       id: item.id,
@@ -222,7 +227,7 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners();
   }
 
-  double _currentDiscount = 0;
+  double _currentDiscount = 0.0;
   double get currentDiscount => _currentDiscount;
 
   // ✅ Setter hinzufügen
@@ -231,11 +236,13 @@ class ViewmodelMenu extends ChangeNotifier {
     notifyListeners(); // UI aktualisieren
   }
 
-  OrderSummary orderSummeryBox() {
+  OrderSummary orderSummeryBox(bool isDelivery) {
     final OrderSummary orderSummary = OrderSummary(
-      foods: _cartList,
+      foods: List<Food>.from(
+        _cartList,
+      ), //erstellt. kopie damit nicht beim leeren des warenkorbs auch die bestellte ware gelöscht wird,
       discount: _currentDiscount,
-      deliveryCharge: 1.50,
+      deliveryCharge: isDelivery ? 1.50 : 0.0,
     );
     return orderSummary;
   }
@@ -266,7 +273,7 @@ class ViewmodelMenu extends ChangeNotifier {
     }
   }
 
-  List<Order> _orderList = [];
+  final List<Order> _orderList = [];
   List<Order> get orderList => _orderList;
 
   void addToOrderList(Order order) {
