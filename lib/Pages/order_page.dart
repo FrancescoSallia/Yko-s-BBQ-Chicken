@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/timer_page.dart';
 import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
@@ -63,8 +64,24 @@ class _OrderPageState extends State<OrderPage> {
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        SizedBox(
+                          height: 70,
+                          width: 70,
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 1, color: Colors.black),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Lottie.asset(
+                              animate: true,
+                              order.orderStatus.lottieAnimation,
+                              repeat: true,
+                            ),
+                          ),
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -101,10 +118,9 @@ class _OrderPageState extends State<OrderPage> {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(order.orderId),
                           ],
                         ),
-                        Icon(Icons.arrow_forward_ios_rounded, size: 20),
+                        // Icon(Icons.arrow_forward_ios_rounded, size: 20),
                       ],
                     ),
                   ),

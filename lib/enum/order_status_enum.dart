@@ -26,4 +26,17 @@ extension OrderLabelText on OrderStatusEnum {
         return 3;
     }
   }
+
+  String get lottieAnimation {
+    switch (this) {
+      case OrderStatusEnum.recieved:
+        return "assets/animations/entry_order.json";
+      case OrderStatusEnum.inProgress:
+        return "assets/animations/prepare_food.json";
+      case OrderStatusEnum.onWay:
+        return "assets/animations/delivery_riding.json";
+      case OrderStatusEnum.delivered:
+        return "assets/animations/delivered.json";
+    }
+  }
 }
