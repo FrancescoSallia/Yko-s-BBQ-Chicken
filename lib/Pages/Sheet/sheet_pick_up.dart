@@ -51,7 +51,7 @@ class _SheetPickUpState extends State<SheetPickUp> {
                 child: TextFormField(
                   controller: _nameController,
                   textCapitalization: TextCapitalization.sentences,
-                  keyboardType: TextInputType.name, // wichtig!
+                  keyboardType: TextInputType.text, // wichtig!
                   decoration: InputDecoration(
                     labelText: "Vorname",
                     hintText: "z.ß. Max",
@@ -69,7 +69,7 @@ class _SheetPickUpState extends State<SheetPickUp> {
                 child: TextFormField(
                   controller: _lastNameController,
                   textCapitalization: TextCapitalization.sentences,
-                  keyboardType: TextInputType.name, // wichtig!
+                  keyboardType: TextInputType.text, // wichtig!
                   decoration: InputDecoration(
                     labelText: "Nachname",
                     hintText: "z.ß. Mustermann",

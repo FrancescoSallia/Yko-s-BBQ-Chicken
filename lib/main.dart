@@ -25,6 +25,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // builder: (context, child) {
+      //   return Center(
+      //     child: ConstrainedBox(
+      //       constraints: BoxConstraints(maxWidth: 450),
+      //       child: child,
+      //     ),
+      //   );
+      // },
       // theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
       home: FloatingBottomNav(),
