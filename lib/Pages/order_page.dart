@@ -38,72 +38,80 @@ class _OrderPageState extends State<OrderPage> {
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
       ),
-      body: Column(
-        children: [
-          ListView.builder(
-            shrinkWrap: true,
-            reverse: true,
-            itemCount: viewModelMenu.orderList.length,
-            itemBuilder: (context, index) {
-              final order = viewModelMenu.orderList[index];
-              return GestureDetector(
-                onTap:
-                    () => Navigator.of(context).push(
-                      CupertinoPageRoute(builder: (context) => TimerPage(order: order,)),
-                    ),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.black),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            order.isDelivery
-                                ? order.deliveryAdress!.name
-                                : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              timeRepo.dateDayMonthYearToString(
-                                order.currentDate,
-                              ),
-                              SizedBox(width: 10),
-                              timeRepo.timeToString(order.currentTime, context),
-                            ],
-                          ),
-                          Text(
-                            order.orderStatus.labelText,
-                            style: GoogleFonts.inter(
-                              color: Colors.green,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(
-                            order.isDelivery ? "Lieferung" : "Abholung",
-                            style: GoogleFonts.inter(
-                              color: Colors.orange,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          Text(order.orderId),
-                        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
+              reverse: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: viewModelMenu.orderList.length,
+              itemBuilder: (context, index) {
+                final order = viewModelMenu.orderList[index];
+                return GestureDetector(
+                  onTap:
+                      () => Navigator.of(context).push(
+                        CupertinoPageRoute(
+                          builder: (context) => TimerPage(order: order),
+                        ),
                       ),
-                      Icon(Icons.arrow_forward_ios_rounded, size: 20),
-                    ],
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.black),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              order.isDelivery
+                                  ? order.deliveryAdress!.name
+                                  : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                timeRepo.dateDayMonthYearToString(
+                                  order.currentDate,
+                                ),
+                                SizedBox(width: 10),
+                                timeRepo.timeToString(
+                                  order.currentTime,
+                                  context,
+                                ),
+                              ],
+                            ),
+                            Text(
+                              order.orderStatus.labelText,
+                              style: GoogleFonts.inter(
+                                color: Colors.green,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(
+                              order.isDelivery ? "Lieferung" : "Abholung",
+                              style: GoogleFonts.inter(
+                                color: Colors.orange,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Text(order.orderId),
+                          ],
+                        ),
+                        Icon(Icons.arrow_forward_ios_rounded, size: 20),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
-          ),
-        ],
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

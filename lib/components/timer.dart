@@ -70,10 +70,13 @@ class Timer extends StatelessWidget {
                   child: SizedBox(
                     width: 120,
                     height: 120,
-                    child: Lottie.asset(
-                      animate: statusIndex == 0 ? true : false,
-                      'assets/animations/entry_order.json',
-                      repeat: true,
+                    child: Opacity(
+                      opacity: statusIndex == 0 ? 1.0 : 0.3,
+                      child: Lottie.asset(
+                        animate: statusIndex == 0 ? true : false,
+                        'assets/animations/entry_order.json',
+                        repeat: true,
+                      ),
                     ),
                   ),
                 ),
@@ -134,10 +137,13 @@ class Timer extends StatelessWidget {
                   child: SizedBox(
                     width: 110,
                     height: 110,
-                    child: Lottie.asset(
-                      animate: statusIndex == 1 ? true : false,
-                      'assets/animations/prepare_food.json',
-                      repeat: true,
+                    child: Opacity(
+                      opacity: statusIndex == 1 ? 1.0 : 0.3,
+                      child: Lottie.asset(
+                        animate: statusIndex == 1 ? true : false,
+                        'assets/animations/prepare_food.json',
+                        repeat: true,
+                      ),
                     ),
                   ),
                 ),
@@ -205,10 +211,13 @@ class Timer extends StatelessWidget {
                   child: SizedBox(
                     width: 100,
                     height: 100,
-                    child: Lottie.asset(
-                      animate: statusIndex == 3 ? true : false,
-                      'assets/animations/delivered.json',
-                      repeat: true,
+                    child: Opacity(
+                      opacity: statusIndex == 3 ? 1.0 : 0.3,
+                      child: Lottie.asset(
+                        animate: statusIndex == 3 ? true : false,
+                        'assets/animations/delivered.json',
+                        repeat: true,
+                      ),
                     ),
                   ),
                 ),
@@ -273,10 +282,13 @@ class Timer extends StatelessWidget {
                   child: SizedBox(
                     width: 110,
                     height: 110,
-                    child: Lottie.asset(
-                      animate: statusIndex == 2 ? true : false,
-                      'assets/animations/delivery_riding.json',
-                      repeat: true,
+                    child: Opacity(
+                      opacity: statusIndex == 2 ? 1.0 : 0.3,
+                      child: Lottie.asset(
+                        animate: statusIndex == 2 ? true : false,
+                        'assets/animations/delivery_riding.json',
+                        repeat: true,
+                      ),
                     ),
                   ),
                 ),
