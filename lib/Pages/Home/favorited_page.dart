@@ -72,8 +72,8 @@ class _FavoritedPageState extends State<FavoritedPage>
         ),
         centerTitle: true,
         bottom: PreferredSize(
-          preferredSize: Size(0, 5),
-          child: Divider(color: Colors.black),
+          preferredSize: Size(0, 0),
+          child: Divider(thickness: 2),
         ),
       ),
       body:
