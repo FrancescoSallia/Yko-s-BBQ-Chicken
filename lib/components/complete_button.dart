@@ -8,21 +8,18 @@ class CompleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: gesture,
-      child: Container(
-        padding: EdgeInsets.only(left: 90, right: 90, top: 15, bottom: 15),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(30),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primaryButton.withValues(alpha: 0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
+    return TextButton(
+      onPressed: gesture,
+      style: TextButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(100),
         ),
+        elevation: 3,
+        shadowColor: Colors.black,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 80.0, vertical: 4),
         child: Text(
           text,
           style: TextStyle(
@@ -34,3 +31,27 @@ class CompleteButton extends StatelessWidget {
     );
   }
 }
+// GestureDetector(
+//       onTap: gesture,
+//       child: Container(
+//         padding: EdgeInsets.only(left: 90, right: 90, top: 15, bottom: 15),
+//         decoration: BoxDecoration(
+//           color: AppColors.primary,
+//           borderRadius: BorderRadius.circular(30),
+//           boxShadow: [
+//             BoxShadow(
+//               color: AppColors.primaryButton.withValues(alpha: 0.1),
+//               blurRadius: 8,
+//               offset: const Offset(0, 2),
+//             ),
+//           ],
+//         ),
+//         child: Text(
+//           text,
+//           style: TextStyle(
+//             fontWeight: FontWeight.bold,
+//             color: AppColors.primaryButton,
+//           ),
+//         ),
+//       ),
+//     );

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:ykos_bbq_chicken/Error/app_error_handler.dart';
 import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
@@ -9,20 +8,27 @@ class ViewmodelFireAuth extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String? _error;
-  String? get error => _error;
+  String? loginError;
+  String? registrationError;
+  String? successMessage;
+  String? resetPasswortSuccessMessage;
+  String? errorMessage;
 
   //Login
   Future<void> logIn(String email, String password) async {
     _isLoading = true;
-    _error = null;
+    successMessage = null;
+    loginError = null;
     notifyListeners();
     try {
       await auth.logIn(email, password);
+      successMessage = "Succesfully logged in";
       notifyListeners();
     } on Exception catch (e) {
-      final errorMessage = AppErrorHandler.getMessageFromException(e);
-      _error = errorMessage;
+      final errorMessageFromHandler = AppErrorHandler.getMessageFromException(
+        e,
+      );
+      loginError = errorMessageFromHandler;
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -33,14 +39,18 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //Register
   Future<void> register(String email, String password) async {
     _isLoading = true;
-    _error = null;
+    registrationError = null;
+    successMessage = null;
     notifyListeners();
     try {
       await auth.register(email, password);
+      successMessage = "Registation Successful";
       notifyListeners();
     } on Exception catch (e) {
-      final errorMessage = AppErrorHandler.getMessageFromException(e);
-      _error = errorMessage;
+      final errorMessageFromHandler = AppErrorHandler.getMessageFromException(
+        e,
+      );
+      registrationError = errorMessageFromHandler;
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -51,13 +61,19 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //resetPassword
   Future<void> resetPassword(String email) async {
     _isLoading = true;
-    _error = null;
+    errorMessage = null;
+    resetPasswortSuccessMessage = null;
     notifyListeners();
     try {
       await auth.resetPasswort(email);
+      resetPasswortSuccessMessage = "if email exist, it will be send";
       notifyListeners();
-    } catch (e) {
-      _error = e.toString();
+    } on Exception catch (e) {
+      final errorMessageFromHandler = AppErrorHandler.getMessageFromException(
+        e,
+      );
+      errorMessage = errorMessageFromHandler;
+
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -68,13 +84,15 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //Re-Authentification
   Future<void> reAuth(String email, String password) async {
     _isLoading = true;
-    _error = null;
+    errorMessage = null;
+    successMessage = null;
     notifyListeners();
     try {
       await auth.reAuth(email, password);
+      successMessage = "Re-Authentification send";
       notifyListeners();
     } catch (e) {
-      _error = e.toString();
+      errorMessage = e.toString();
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -85,13 +103,13 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //Delete User
   Future<void> deleteUser() async {
     _isLoading = true;
-    _error = null;
+    errorMessage = null;
     notifyListeners();
     try {
       await auth.deleteUser();
       notifyListeners();
     } catch (e) {
-      _error = e.toString();
+      errorMessage = e.toString();
       notifyListeners();
     } finally {
       _isLoading = false;

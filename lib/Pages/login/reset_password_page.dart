@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/complete_button.dart';
 import 'package:ykos_bbq_chicken/components/my_logo.dart';
 import 'package:ykos_bbq_chicken/components/my_textfield.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire_auth.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   ResetPasswordPage({super.key});
@@ -14,8 +17,37 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  String? emailError;
+
+  @override
+  void initState() {
+    final viewmodelAuth = context.read<ViewmodelFireAuth>();
+    viewmodelAuth.resetPasswortSuccessMessage = null;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final viewModelAuth = context.watch<ViewmodelFireAuth>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelAuth.errorMessage != null) {
+        emailError = viewModelAuth.errorMessage;
+        IconSnackBar.show(
+          context,
+          label: viewModelAuth.errorMessage!,
+          snackBarType: SnackBarType.fail,
+        );
+      }
+      if (viewModelAuth.resetPasswortSuccessMessage != null) {
+        IconSnackBar.show(
+          context,
+          label: viewModelAuth.resetPasswortSuccessMessage!,
+          snackBarType: SnackBarType.success,
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.secondary,
@@ -37,9 +69,23 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             hintText: "E-mail",
             obscure: false,
             icon: Icons.email_outlined,
+            errorText: emailError,
           ),
           SizedBox(height: 50),
-          CompleteButton(text: "Send E-mail", gesture: () {}),
+          CompleteButton(
+            text: "Send E-mail",
+            gesture: () async {
+              final email = widget._resetPasswordController.text;
+
+              if (email.isNotEmpty) {
+                await viewModelAuth.resetPassword(email);
+              } else {
+                setState(() {
+                  emailError = "Überprüfe deine eingabe";
+                });
+              }
+            },
+          ),
           SizedBox(height: 100),
         ],
       ),

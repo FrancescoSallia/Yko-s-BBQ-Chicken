@@ -35,7 +35,40 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModelAuth = context.read<ViewmodelFireAuth>();
+    final viewModelAuth = context.watch<ViewmodelFireAuth>();
+
+    // Snackbar anzeigen, wenn ein Fehler oder Erfolg vorhanden ist
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelAuth.loginError != null) {
+        IconSnackBar.show(
+          context,
+          label: viewModelAuth.loginError!,
+          snackBarType: SnackBarType.fail,
+        );
+        viewModelAuth.loginError = null;
+      }
+      if (viewModelAuth.registrationError != null) {
+        IconSnackBar.show(
+          context,
+          label: viewModelAuth.registrationError!,
+          snackBarType: SnackBarType.fail,
+        );
+        viewModelAuth.registrationError = null;
+      }
+      if (viewModelAuth.successMessage != null) {
+        IconSnackBar.show(
+          context,
+          label: viewModelAuth.successMessage!,
+          snackBarType: SnackBarType.success,
+        );
+        viewModelAuth.successMessage = null;
+
+        // Navigation nach Erfolg
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => FloatingBottomNav()),
+        );
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
@@ -161,11 +194,10 @@ class _LoginPageState extends State<LoginPage> {
             CompleteButton(
               text: isLoginSelected ? "Log In" : "Sign Up",
               gesture: () async {
-                final email = _controllerEmail.text;
+                final email = _controllerEmail.text.trim();
                 final password = _controllerPassword.text;
                 final confirmPassword = _controllerConfirmPassword.text;
 
-                //Throw Error-Message at Textfields, when are empty
                 setState(() {
                   emailError = email.isEmpty ? "Bitte E-Mail eingeben" : null;
                   passwordError =
@@ -179,108 +211,14 @@ class _LoginPageState extends State<LoginPage> {
                 if (emailError != null ||
                     passwordError != null ||
                     confirmPasswordError != null) {
-                  return; // Fehler vorhanden → keine API-Aufrufe
+                  return;
                 }
 
                 if (isLoginSelected) {
-                  if (email.isNotEmpty && password.isNotEmpty) {
-                    await viewModelAuth.logIn(email, password);
-                    // Check for errors from ViewModel
-                    if (viewModelAuth.error != null) {
-                      setState(() {
-                        // Assign error to passwordError to show below TextField
-                        passwordError = viewModelAuth.error;
-                      });
-                      IconSnackBar.show(
-                        context,
-                        label: viewModelAuth.error!,
-                        snackBarType: SnackBarType.fail,
-                        maxLines: 2,
-                      );
-                    } else {
-                      setState(() {
-                        passwordError = null;
-                      });
-                      IconSnackBar.show(
-                        context,
-                        label: "Successfully logged in",
-                        snackBarType: SnackBarType.success,
-                        maxLines: 2,
-                      );
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => FloatingBottomNav(),
-                        ),
-                      );
-                    }
-                  } else {
-                    IconSnackBar.show(
-                      context,
-                      label: "Please fill in all fields",
-                      snackBarType: SnackBarType.alert,
-                      maxLines: 2,
-                    );
-                  }
+                  await viewModelAuth.logIn(email, password);
                 } else {
-                  // Sign Up flow
-                  if (email.isNotEmpty &&
-                      password.isNotEmpty &&
-                      confirmPassword.isNotEmpty) {
-                    if (password != confirmPassword) {
-                      setState(() {
-                        confirmPasswordError = "Passwords do not match";
-                      });
-                      IconSnackBar.show(
-                        context,
-                        label: "Passwords do not match",
-                        snackBarType: SnackBarType.fail,
-                        maxLines: 2,
-                      );
-                      return;
-                    }
-
-                    await viewModelAuth.register(email, password);
-
-                    if (viewModelAuth.error != null) {
-                      setState(() {
-                        passwordError = viewModelAuth.error;
-                      });
-                      IconSnackBar.show(
-                        context,
-                        label: viewModelAuth.error!,
-                        snackBarType: SnackBarType.fail,
-                        maxLines: 2,
-                      );
-                    } else {
-                      setState(() {
-                        passwordError = null;
-                        confirmPasswordError = null;
-                      });
-                      IconSnackBar.show(
-                        context,
-                        label: "Registration successful",
-                        snackBarType: SnackBarType.success,
-                        maxLines: 2,
-                      );
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => FloatingBottomNav(),
-                        ),
-                      );
-                    }
-                  } else {
-                    IconSnackBar.show(
-                      context,
-                      label: "Please fill in all fields",
-                      snackBarType: SnackBarType.alert,
-                      maxLines: 2,
-                    );
-                  }
+                  await viewModelAuth.register(email, password);
                 }
-
-                // Navigator.of(context).pushReplacement(
-                //   MaterialPageRoute(builder: (context) => FloatingBottomNav()),
-                // );
               },
             ),
           ],

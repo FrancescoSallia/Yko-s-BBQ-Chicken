@@ -52,4 +52,12 @@ class FireAuth {
       rethrow;
     }
   }
+
+    Future<void> logOut() async {
+    try {
+      await auth.signOut();
+    } on FirebaseAuthException {
+      rethrow;
+    }
+  }
 }
