@@ -296,7 +296,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       TimeOfDay.now().hour < timeRepo.openingHour ||
                       TimeOfDay.now().hour >= timeRepo.closingHour,
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10.0,
+                      vertical: 10,
+                    ),
                     child: Text(
                       "Das Restaurant ist zu jetzigem Zeitpunkt geschlossen",
                       style: GoogleFonts.inter(
