@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ykos_bbq_chicken/Pages/login/login_page.dart';
+import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 import 'package:ykos_bbq_chicken/firebase_options.dart';
 import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_auth.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire_auth.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 import "package:firebase_core/firebase_core.dart";
 
@@ -17,6 +21,8 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ViewmodelMenu()),
         ChangeNotifierProvider(create: (_) => ViewmodelAdress()),
         ChangeNotifierProvider(create: (_) => ViewmodelAuth()),
+        ChangeNotifierProvider(create: (_) => ViewmodelFireAuth()),
+        ChangeNotifierProvider(create: (_) => ViewmodelFire()),
       ],
       child: const MyApp(),
     ),
@@ -40,10 +46,24 @@ class MyApp extends StatelessWidget {
       // },
       // theme: ThemeData.dark(),
       debugShowCheckedModeBanner: false,
-      home: FloatingBottomNav(),
-      // home: CheckoutPage(),
-      // home: LoginPage(),
-      // home: DetailPage(),
+      // home: FloatingBottomNav(),
+      home: StreamBuilder(
+        stream: FireAuth.auth.authStateChanges(),
+        builder: (context, snapshot) {
+          //Loading
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(child: CircularProgressIndicator()),
+            );
+          }
+          //User logged in
+          if (snapshot.hasData && snapshot.data != null) {
+            return const FloatingBottomNav();
+          }
+          //No user -> show login
+          return const LoginPage();
+        },
+      ),
     );
   }
 }

@@ -34,4 +34,13 @@ class FireFirestore {
       rethrow;
     }
   }
+
+  Future<List<Food>> fetchFavorites() async {
+    try {
+      final snapshot = await userRef.collection("favorites").get();
+      return snapshot.docs.map((doc) => Food.fromJson(doc.data())).toList();
+    } on FirebaseException {
+      rethrow;
+    }
+  }
 }

@@ -442,18 +442,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0,
-                    vertical: 10,
-                  ),
-                  child: MyTextfield(
-                    controller: _discountController,
-                    hintText: "GUTSCHEIN CODE HIER:",
-                    obscure: false,
-                    icon: Icons.card_giftcard,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 10.0,
+                //     vertical: 10,
+                //   ),
+                //   child: MyTextfield(
+                //     controller: _discountController,
+                //     hintText: "GUTSCHEIN CODE HIER:",
+                //     obscure: false,
+                //     icon: Icons.card_giftcard,
+                //   ),
+                // ),
                 TextButton(
                   //TODO: Gutschein generator erstellen, um Gutscheine zu erstellen die man hier eingeben kann!
                   onPressed: () {

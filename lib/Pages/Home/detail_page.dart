@@ -8,6 +8,7 @@ import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class DetailPage extends StatefulWidget {
@@ -28,6 +29,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModelMenu = context.read<ViewmodelMenu>();
+      final viewModelFirestore = context.read<ViewmodelFire>();
       viewModelMenu.loadExtrasForItem(widget.item.category.name);
     });
     super.initState();
@@ -65,6 +67,8 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
+    final viewModelFirestore = context.watch<ViewmodelFire>();
+
     final size = MediaQuery.of(context).size;
 
     return PopScope(
@@ -107,7 +111,8 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  viewModelMenu.toggleFavorite(widget.item);
+                  // viewModelMenu.toggleFavorite(widget.item);
+                  viewModelFirestore.toggleFavorite(widget.item);
                   _likedController
                       .forward(from: 0)
                       .then((_) => _likedController.reverse());

@@ -1,4 +1,3 @@
-import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 
 class Category {
   final String name;
@@ -6,7 +5,16 @@ class Category {
 
   Category({required this.name, required this.categoryImg});
 
+  // ✅ toJson (zum Speichern in Firestore)
+  Map<String, dynamic> toJson() {
+    return {'name': name, 'categoryImg': categoryImg};
+  }
 
-
-  
+  // ✅ fromJson (zum Lesen aus Firestore)
+  factory Category.fromJson(Map<String, dynamic> json) {
+    return Category(
+      name: json['name'] ?? '',
+      categoryImg: json['categoryImg'] ?? '',
+    );
+  }
 }

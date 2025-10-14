@@ -6,6 +6,7 @@ class MyTextfield extends StatefulWidget {
   final String hintText;
   final bool obscure;
   final IconData? icon;
+  final String? errorText;
   final Function()? iconOnPress; // Callback-Funktion von außen
 
   const MyTextfield({
@@ -15,6 +16,7 @@ class MyTextfield extends StatefulWidget {
     required this.obscure,
     required this.icon,
     this.iconOnPress,
+    this.errorText,
   });
 
   @override
@@ -39,7 +41,8 @@ class _MyTextfieldState extends State<MyTextfield> {
             maxLines: 1,
             style: TextStyle(overflow: TextOverflow.ellipsis),
             decoration: InputDecoration(
-              // errorText: widget.errorText,
+              errorText: widget.errorText,
+              errorStyle: TextStyle(color: Colors.red),
               border: UnderlineInputBorder(),
               suffixIcon: IconButton(
                 icon: Icon(

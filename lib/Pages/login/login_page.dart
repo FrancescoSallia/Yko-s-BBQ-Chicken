@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/login/reset_password_page.dart';
 import 'package:ykos_bbq_chicken/components/complete_button.dart';
 import 'package:ykos_bbq_chicken/components/my_logo.dart';
 import 'package:ykos_bbq_chicken/components/my_textfield.dart';
 import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire_auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,10 +20,23 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoginSelected = true;
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
-  bool _showPasswort = false;
+  final TextEditingController _controllerConfirmPassword =
+      TextEditingController();
+  bool _showPasswort = true;
+  String? emailError;
+  String? passwordError;
+  String? confirmPasswordError;
+
+  @override
+  void initState() {
+    context.read<ViewmodelFireAuth>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final viewModelAuth = context.read<ViewmodelFireAuth>();
+
     return Scaffold(
       backgroundColor: AppColors.secondary,
       body: Center(
@@ -83,6 +99,7 @@ class _LoginPageState extends State<LoginPage> {
               hintText: "E-mail",
               obscure: false,
               icon: Icons.email,
+              errorText: emailError,
             ),
             SizedBox(height: 10),
             MyTextfield(
@@ -90,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
               hintText: "Password",
               obscure: _showPasswort,
               icon: _showPasswort ? Icons.visibility : Icons.visibility_off,
+              errorText: passwordError,
               iconOnPress: () {
                 setState(() {
                   _showPasswort = !_showPasswort;
@@ -100,9 +118,10 @@ class _LoginPageState extends State<LoginPage> {
             Visibility(
               visible: isLoginSelected == false ? true : false,
               child: MyTextfield(
-                controller: _controllerPassword,
+                controller: _controllerConfirmPassword,
                 hintText: "Confirm Password",
                 obscure: _showPasswort,
+                errorText: confirmPasswordError,
                 icon: _showPasswort ? Icons.visibility : Icons.visibility_off,
                 iconOnPress: () {
                   setState(() {
@@ -141,10 +160,127 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 30),
             CompleteButton(
               text: isLoginSelected ? "Log In" : "Sign Up",
-              gesture: () {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => FloatingBottomNav()),
-                );
+              gesture: () async {
+                final email = _controllerEmail.text;
+                final password = _controllerPassword.text;
+                final confirmPassword = _controllerConfirmPassword.text;
+
+                //Throw Error-Message at Textfields, when are empty
+                setState(() {
+                  emailError = email.isEmpty ? "Bitte E-Mail eingeben" : null;
+                  passwordError =
+                      password.isEmpty ? "Bitte Passwort eingeben" : null;
+                  confirmPasswordError =
+                      (!isLoginSelected && confirmPassword != password)
+                          ? "Passwörter stimmen nicht überein"
+                          : null;
+                });
+
+                if (emailError != null ||
+                    passwordError != null ||
+                    confirmPasswordError != null) {
+                  return; // Fehler vorhanden → keine API-Aufrufe
+                }
+
+                if (isLoginSelected) {
+                  if (email.isNotEmpty && password.isNotEmpty) {
+                    await viewModelAuth.logIn(email, password);
+                    // Check for errors from ViewModel
+                    if (viewModelAuth.error != null) {
+                      setState(() {
+                        // Assign error to passwordError to show below TextField
+                        passwordError = viewModelAuth.error;
+                      });
+                      IconSnackBar.show(
+                        context,
+                        label: viewModelAuth.error!,
+                        snackBarType: SnackBarType.fail,
+                        maxLines: 2,
+                      );
+                    } else {
+                      setState(() {
+                        passwordError = null;
+                      });
+                      IconSnackBar.show(
+                        context,
+                        label: "Successfully logged in",
+                        snackBarType: SnackBarType.success,
+                        maxLines: 2,
+                      );
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => FloatingBottomNav(),
+                        ),
+                      );
+                    }
+                  } else {
+                    IconSnackBar.show(
+                      context,
+                      label: "Please fill in all fields",
+                      snackBarType: SnackBarType.alert,
+                      maxLines: 2,
+                    );
+                  }
+                } else {
+                  // Sign Up flow
+                  if (email.isNotEmpty &&
+                      password.isNotEmpty &&
+                      confirmPassword.isNotEmpty) {
+                    if (password != confirmPassword) {
+                      setState(() {
+                        confirmPasswordError = "Passwords do not match";
+                      });
+                      IconSnackBar.show(
+                        context,
+                        label: "Passwords do not match",
+                        snackBarType: SnackBarType.fail,
+                        maxLines: 2,
+                      );
+                      return;
+                    }
+
+                    await viewModelAuth.register(email, password);
+
+                    if (viewModelAuth.error != null) {
+                      setState(() {
+                        passwordError = viewModelAuth.error;
+                      });
+                      IconSnackBar.show(
+                        context,
+                        label: viewModelAuth.error!,
+                        snackBarType: SnackBarType.fail,
+                        maxLines: 2,
+                      );
+                    } else {
+                      setState(() {
+                        passwordError = null;
+                        confirmPasswordError = null;
+                      });
+                      IconSnackBar.show(
+                        context,
+                        label: "Registration successful",
+                        snackBarType: SnackBarType.success,
+                        maxLines: 2,
+                      );
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => FloatingBottomNav(),
+                        ),
+                      );
+                    }
+                  } else {
+                    IconSnackBar.show(
+                      context,
+                      label: "Please fill in all fields",
+                      snackBarType: SnackBarType.alert,
+                      maxLines: 2,
+                    );
+                  }
+                }
+
+                // Navigator.of(context).pushReplacement(
+                //   MaterialPageRoute(builder: (context) => FloatingBottomNav()),
+                // );
               },
             ),
           ],
@@ -176,5 +312,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+}
+
+extension LoginError on int {
+  String get errorText {
+    switch (this) {
+      case 0:
+        return "Check you Email";
+      case 1:
+        return "Check you Password";
+      case 2:
+        return "Confirm you Password correctly";
+      default:
+        return "Check this Textfield";
+    }
   }
 }
