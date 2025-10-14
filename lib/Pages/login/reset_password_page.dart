@@ -22,7 +22,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   void initState() {
     final viewmodelAuth = context.read<ViewmodelFireAuth>();
-    viewmodelAuth.resetPasswortSuccessMessage = null;
+    viewmodelAuth.resetPasswordSuccess = null;
     super.initState();
   }
 
@@ -31,18 +31,18 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     final viewModelAuth = context.watch<ViewmodelFireAuth>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewModelAuth.errorMessage != null) {
-        emailError = viewModelAuth.errorMessage;
+      if (viewModelAuth.resetPasswordError != null) {
+        emailError = viewModelAuth.resetPasswordError;
         IconSnackBar.show(
           context,
-          label: viewModelAuth.errorMessage!,
+          label: viewModelAuth.resetPasswordError!,
           snackBarType: SnackBarType.fail,
         );
       }
-      if (viewModelAuth.resetPasswortSuccessMessage != null) {
+      if (viewModelAuth.resetPasswordSuccess != null) {
         IconSnackBar.show(
           context,
-          label: viewModelAuth.resetPasswortSuccessMessage!,
+          label: viewModelAuth.resetPasswordSuccess!,
           snackBarType: SnackBarType.success,
         );
       }

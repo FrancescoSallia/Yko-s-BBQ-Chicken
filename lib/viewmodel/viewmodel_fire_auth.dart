@@ -8,21 +8,27 @@ class ViewmodelFireAuth extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  String? loginSuccess;
+  String? registerSuccess;
+  String? resetPasswordSuccess;
   String? loginError;
-  String? registrationError;
-  String? successMessage;
-  String? resetPasswortSuccessMessage;
-  String? errorMessage;
+  String? registerError;
+  String? resetPasswordError;
+  String? logoutError;
+  String? reAuthError;
+  String? reAuthSuccess;
+  String? deleteUserError;
+  String? logoutSuccess;
 
   //Login
   Future<void> logIn(String email, String password) async {
     _isLoading = true;
-    successMessage = null;
+    loginSuccess = null;
     loginError = null;
     notifyListeners();
     try {
       await auth.logIn(email, password);
-      successMessage = "Succesfully logged in";
+      loginSuccess = "Succesfully logged in";
       notifyListeners();
     } on Exception catch (e) {
       final errorMessageFromHandler = AppErrorHandler.getMessageFromException(
@@ -39,18 +45,18 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //Register
   Future<void> register(String email, String password) async {
     _isLoading = true;
-    registrationError = null;
-    successMessage = null;
+    registerSuccess = null;
+    registerError = null;
     notifyListeners();
     try {
       await auth.register(email, password);
-      successMessage = "Registation Successful";
+      registerSuccess = "Registation Successful";
       notifyListeners();
     } on Exception catch (e) {
       final errorMessageFromHandler = AppErrorHandler.getMessageFromException(
         e,
       );
-      registrationError = errorMessageFromHandler;
+      registerError = errorMessageFromHandler;
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -61,18 +67,18 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //resetPassword
   Future<void> resetPassword(String email) async {
     _isLoading = true;
-    errorMessage = null;
-    resetPasswortSuccessMessage = null;
+    resetPasswordError = null;
+    resetPasswordSuccess = null;
     notifyListeners();
     try {
       await auth.resetPasswort(email);
-      resetPasswortSuccessMessage = "if email exist, it will be send";
+      resetPasswordSuccess = "if email exist, it will be send";
       notifyListeners();
     } on Exception catch (e) {
       final errorMessageFromHandler = AppErrorHandler.getMessageFromException(
         e,
       );
-      errorMessage = errorMessageFromHandler;
+      resetPasswordError = errorMessageFromHandler;
 
       notifyListeners();
     } finally {
@@ -84,15 +90,15 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //Re-Authentification
   Future<void> reAuth(String email, String password) async {
     _isLoading = true;
-    errorMessage = null;
-    successMessage = null;
+    reAuthError = null;
+    reAuthSuccess = null;
     notifyListeners();
     try {
       await auth.reAuth(email, password);
-      successMessage = "Re-Authentification send";
+      reAuthSuccess = "Re-Authentification send";
       notifyListeners();
     } catch (e) {
-      errorMessage = e.toString();
+      reAuthError = e.toString();
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -103,17 +109,34 @@ class ViewmodelFireAuth extends ChangeNotifier {
   //Delete User
   Future<void> deleteUser() async {
     _isLoading = true;
-    errorMessage = null;
+    deleteUserError = null;
     notifyListeners();
     try {
       await auth.deleteUser();
       notifyListeners();
     } catch (e) {
-      errorMessage = e.toString();
+      deleteUserError = e.toString();
       notifyListeners();
     } finally {
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  Future<void> logOut() async {
+    logoutError = null;
+    logoutSuccess = null;
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await auth.logOut();
+      logoutSuccess = "Success logout";
+    } on Exception catch (e) {
+      final message = AppErrorHandler.getMessageFromException(e);
+      logoutError = message;
+      notifyListeners();
+    } finally {
+      _isLoading = false;
     }
   }
 }

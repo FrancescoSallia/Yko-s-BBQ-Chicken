@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Home/settings_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
 import 'package:ykos_bbq_chicken/components/my_search_field.dart';
@@ -70,7 +71,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ],
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        backgroundColor: AppColors.secondary,
+        child: SafeArea(
+          child: Column(
+            children: [
+              ListTile(
+                title: Text("Settings"),
+                onTap:
+                    () => Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (context) => SettingsPage()),
+                    ),
+              ),
+            ],
+          ),
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,

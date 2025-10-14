@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:provider/provider.dart';
@@ -40,188 +41,177 @@ class _LoginPageState extends State<LoginPage> {
     // Snackbar anzeigen, wenn ein Fehler oder Erfolg vorhanden ist
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (viewModelAuth.loginError != null) {
-        IconSnackBar.show(
-          context,
-          label: viewModelAuth.loginError!,
-          snackBarType: SnackBarType.fail,
-        );
+        AnimatedSnackBar.material(
+          viewModelAuth.loginError!,
+          type: AnimatedSnackBarType.error,
+        ).show(context);
         viewModelAuth.loginError = null;
       }
-      if (viewModelAuth.registrationError != null) {
-        IconSnackBar.show(
-          context,
-          label: viewModelAuth.registrationError!,
-          snackBarType: SnackBarType.fail,
-        );
-        viewModelAuth.registrationError = null;
-      }
-      if (viewModelAuth.successMessage != null) {
-        IconSnackBar.show(
-          context,
-          label: viewModelAuth.successMessage!,
-          snackBarType: SnackBarType.success,
-        );
-        viewModelAuth.successMessage = null;
+      if (viewModelAuth.registerError != null) {
+        AnimatedSnackBar.material(
+          viewModelAuth.registerError!,
+          type: AnimatedSnackBarType.error,
+        ).show(context);
 
-        // Navigation nach Erfolg
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => FloatingBottomNav()),
-        );
+        viewModelAuth.registerError = null;
       }
     });
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: AppColors.secondary,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            //Logo Image
-            MyLogo(),
-            const SizedBox(height: 50),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //Logo Image
+              MyLogo(),
+              const SizedBox(height: 50),
 
-            // Toggle container
-            Container(
-              width: 300,
-              height: 50,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 4,
-                    color: Colors.black.withValues(alpha: 0.1),
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  // Animated highlight background
-                  AnimatedAlign(
-                    duration: const Duration(milliseconds: 250),
-                    curve: Curves.easeInOut,
-                    alignment:
-                        isLoginSelected
-                            ? Alignment.centerLeft
-                            : Alignment.centerRight,
-                    child: Container(
-                      width: 150,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(10),
+              // Toggle container
+              Container(
+                width: 300,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      blurRadius: 4,
+                      color: Colors.black.withValues(alpha: 0.1),
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    // Animated highlight background
+                    AnimatedAlign(
+                      duration: const Duration(milliseconds: 250),
+                      curve: Curves.easeInOut,
+                      alignment:
+                          isLoginSelected
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
+                      child: Container(
+                        width: 150,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
                     ),
-                  ),
 
-                  // Buttons
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildToggleButton("Log In", true),
-                      _buildToggleButton("Sign Up", false),
-                    ],
-                  ),
-                ],
+                    // Buttons
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildToggleButton("Log In", true),
+                        _buildToggleButton("Sign Up", false),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            MyTextfield(
-              controller: _controllerEmail,
-              hintText: "E-mail",
-              obscure: false,
-              icon: Icons.email,
-              errorText: emailError,
-            ),
-            SizedBox(height: 10),
-            MyTextfield(
-              controller: _controllerPassword,
-              hintText: "Password",
-              obscure: _showPasswort,
-              icon: _showPasswort ? Icons.visibility : Icons.visibility_off,
-              errorText: passwordError,
-              iconOnPress: () {
-                setState(() {
-                  _showPasswort = !_showPasswort;
-                });
-              },
-            ),
-            SizedBox(height: 10),
-            Visibility(
-              visible: isLoginSelected == false ? true : false,
-              child: MyTextfield(
-                controller: _controllerConfirmPassword,
-                hintText: "Confirm Password",
+              SizedBox(height: 20),
+              MyTextfield(
+                controller: _controllerEmail,
+                hintText: "E-mail",
+                obscure: false,
+                icon: Icons.email,
+                errorText: emailError,
+              ),
+              SizedBox(height: 10),
+              MyTextfield(
+                controller: _controllerPassword,
+                hintText: "Password",
                 obscure: _showPasswort,
-                errorText: confirmPasswordError,
                 icon: _showPasswort ? Icons.visibility : Icons.visibility_off,
+                errorText: passwordError,
                 iconOnPress: () {
                   setState(() {
                     _showPasswort = !_showPasswort;
                   });
                 },
               ),
-            ),
-            Visibility(
-              visible: isLoginSelected ? true : false,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ResetPasswordPage(),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        "Forgor Password?",
-                        style: TextStyle(
-                          color: AppColors.textFieldColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+              SizedBox(height: 10),
+              Visibility(
+                visible: isLoginSelected == false ? true : false,
+                child: MyTextfield(
+                  controller: _controllerConfirmPassword,
+                  hintText: "Confirm Password",
+                  obscure: _showPasswort,
+                  errorText: confirmPasswordError,
+                  icon: _showPasswort ? Icons.visibility : Icons.visibility_off,
+                  iconOnPress: () {
+                    setState(() {
+                      _showPasswort = !_showPasswort;
+                    });
+                  },
                 ),
               ),
-            ),
-            SizedBox(height: 30),
-            CompleteButton(
-              text: isLoginSelected ? "Log In" : "Sign Up",
-              gesture: () async {
-                final email = _controllerEmail.text.trim();
-                final password = _controllerPassword.text;
-                final confirmPassword = _controllerConfirmPassword.text;
+              Visibility(
+                visible: isLoginSelected ? true : false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ResetPasswordPage(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          "Forgor Password?",
+                          style: TextStyle(
+                            color: AppColors.textFieldColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              CompleteButton(
+                text: isLoginSelected ? "Log In" : "Sign Up",
+                gesture: () async {
+                  final email = _controllerEmail.text.trim();
+                  final password = _controllerPassword.text;
+                  final confirmPassword = _controllerConfirmPassword.text;
 
-                setState(() {
-                  emailError = email.isEmpty ? "Bitte E-Mail eingeben" : null;
-                  passwordError =
-                      password.isEmpty ? "Bitte Passwort eingeben" : null;
-                  confirmPasswordError =
-                      (!isLoginSelected && confirmPassword != password)
-                          ? "Passwörter stimmen nicht überein"
-                          : null;
-                });
+                  setState(() {
+                    emailError = email.isEmpty ? "Bitte E-Mail eingeben" : null;
+                    passwordError =
+                        password.isEmpty ? "Bitte Passwort eingeben" : null;
+                    confirmPasswordError =
+                        (!isLoginSelected && confirmPassword != password)
+                            ? "Passwörter stimmen nicht überein"
+                            : null;
+                  });
 
-                if (emailError != null ||
-                    passwordError != null ||
-                    confirmPasswordError != null) {
-                  return;
-                }
+                  if (emailError != null ||
+                      passwordError != null ||
+                      confirmPasswordError != null) {
+                    return;
+                  }
 
-                if (isLoginSelected) {
-                  await viewModelAuth.logIn(email, password);
-                } else {
-                  await viewModelAuth.register(email, password);
-                }
-              },
-            ),
-          ],
+                  if (isLoginSelected) {
+                    await viewModelAuth.logIn(email, password);
+                  } else {
+                    await viewModelAuth.register(email, password);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

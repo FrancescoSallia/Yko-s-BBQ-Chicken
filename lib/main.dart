@@ -15,21 +15,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Checked user if the user is deleted from server, befor the app starts!
-  final user = FireAuth.auth.currentUser;
-  if (user != null) {
-    try {
-      await user.reload(); // aktualisiert den Status vom Server
-      if (FireAuth.auth.currentUser == null) {
-        // User existiert nicht mehr auf Firebase
-        await FireAuth.auth.signOut();
-      }
-    } catch (e) {
-      // Falls reload fehlschlägt (z. B. weil gelöscht)
-      await FireAuth.auth.signOut();
-    }
-  }
-
   runApp(
     MultiProvider(
       providers: [
@@ -64,21 +49,10 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder(
         stream: FireAuth.auth.authStateChanges(),
         builder: (context, snapshot) {
-          // Warten, bis Firebase den aktuellen Status bestimmt hat
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              backgroundColor: Colors.white,
-              body: Center(child: CircularProgressIndicator()),
-            );
-          }
-
-          // Wenn Firebase kurzzeitig null sendet (z. B. beim Reload),
-          // vermeiden wir das Flackern, indem wir den letzten Zustand behalten.
-          final user = snapshot.data;
-          if (user != null) {
-            return const FloatingBottomNav();
+          if (snapshot.hasData && snapshot.data != null) {
+            return FloatingBottomNav();
           } else {
-            return const LoginPage();
+            return LoginPage();
           }
         },
       ),
