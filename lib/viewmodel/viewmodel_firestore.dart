@@ -11,31 +11,31 @@ class ViewmodelFirestore extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-Future<void> toggleFavorite(Food item) async {
-  try {
-    _isLoading = true;
-    _error = null;
-    notifyListeners();
+  Future<void> toggleFavorite(Food item) async {
+    try {
+      _isLoading = true;
+      _error = null;
+      notifyListeners();
 
-    final isCurrentlyFavorited = _favoriteList.any((f) => f.id == item.id);
+      final isCurrentlyFavorited = _favoriteList.any((f) => f.id == item.id);
 
-    if (isCurrentlyFavorited) {
-      await firestore.removeFromFavorite(item);
-      _favoriteList.removeWhere((f) => f.id == item.id);
-    } else {
-      await firestore.addFavorite(item);
-      _favoriteList.add(item);
+      if (isCurrentlyFavorited) {
+        await firestore.removeFromFavorite(item);
+        _favoriteList.removeWhere((f) => f.id == item.id);
+      } else {
+        await firestore.addFavorite(item);
+        _favoriteList.add(item);
+      }
+
+      notifyListeners();
+    } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
-
-    notifyListeners();
-  } catch (e) {
-    _error = e.toString();
-    notifyListeners();
-  } finally {
-    _isLoading = false;
-    notifyListeners();
   }
-}
 
   //Add Favorite Item
   Future<void> addFavorite(Food item) async {
@@ -82,7 +82,6 @@ Future<void> toggleFavorite(Food item) async {
     notifyListeners();
     try {
       final list = await firestore.fetchFavorites();
-      print(list.toString());
       _favoriteList = list;
       notifyListeners();
     } catch (e) {
@@ -96,7 +95,7 @@ Future<void> toggleFavorite(Food item) async {
     }
   }
 
- bool isLiked(Food item) {
-  return _favoriteList.any((f) => f.id == item.id);
-}
+  bool isLiked(Food item) {
+    return _favoriteList.any((f) => f.id == item.id);
+  }
 }

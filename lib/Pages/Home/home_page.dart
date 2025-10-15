@@ -67,15 +67,22 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         backgroundColor: AppColors.secondary,
         surfaceTintColor: Colors.transparent,
         actions: [
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 3),
+          //   child: Image.asset("lib/img/user.png"),
+          // ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 3),
-            child: Image.asset("lib/img/user.png"),
+            child: IconButton.outlined(
+              onPressed: () {},
+              icon: Icon(Icons.person_4),
+            ),
           ),
         ],
       ),
       drawer: Drawer(
         width: 200,
-        backgroundColor: AppColors.secondary,
+        backgroundColor: AppColors.primary,
         child: SafeArea(
           child: Column(
             children: [

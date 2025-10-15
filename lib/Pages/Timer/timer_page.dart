@@ -112,6 +112,37 @@ class TimerPage extends StatelessWidget {
             ),
             SizedBox(height: 10),
             CompleteOrders(order: order),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 15),
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(width: 2, color: Colors.green),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Zahlungsmethode:",
+                    style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: Image.asset(order.payment.img),
+                      ),
+                      Text(
+                        order.payment.name,
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
             SummaryBox(orderSummary: order.orderSummary),
             SizedBox(height: 80),
           ],
