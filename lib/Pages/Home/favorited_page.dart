@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
 import 'package:ykos_bbq_chicken/components/grid_item.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
-import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_firestore.dart';
 
 class FavoritedPage extends StatefulWidget {
   const FavoritedPage({super.key});
@@ -22,8 +22,10 @@ class _FavoritedPageState extends State<FavoritedPage>
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final viewModel = context.read<ViewmodelMenu>();
-      viewModel.loadFavoritedList();
+      // final viewModel = context.read<ViewmodelMenu>();
+      // viewModel.loadFavoritedList();
+      final viewModelFirestore = context.read<ViewmodelFirestore>();
+      viewModelFirestore.fetchFavorites();
     });
     _controller = AnimationController(
       vsync: this,
@@ -47,7 +49,8 @@ class _FavoritedPageState extends State<FavoritedPage>
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<ViewmodelMenu>();
+    // final viewModelMenu = context.watch<ViewmodelMenu>();
+    final viewModelFirestore = context.watch<ViewmodelFirestore>();
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
@@ -77,7 +80,7 @@ class _FavoritedPageState extends State<FavoritedPage>
         ),
       ),
       body:
-          viewModel.favoritedList.isNotEmpty
+          viewModelFirestore.favoriteList.isNotEmpty
               ? SingleChildScrollView(
                 child: Column(
                   children: [
@@ -85,7 +88,7 @@ class _FavoritedPageState extends State<FavoritedPage>
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.only(top: 40, bottom: 120),
-                      itemCount: viewModel.favoritedList.length,
+                      itemCount: viewModelFirestore.favoriteList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         childAspectRatio: 1.0,
                         mainAxisSpacing: 55,
@@ -93,7 +96,8 @@ class _FavoritedPageState extends State<FavoritedPage>
                         crossAxisCount: 2,
                       ),
                       itemBuilder: (context, index) {
-                        final favoritedItem = viewModel.favoritedList[index];
+                        final favoritedItem =
+                            viewModelFirestore.favoriteList[index];
                         return GestureDetector(
                           onTap:
                               () => Navigator.of(context).push(
@@ -107,8 +111,10 @@ class _FavoritedPageState extends State<FavoritedPage>
                             rotateAnimation: _animation,
                             scaleAnimation: _animation,
                             favoritedItem: favoritedItem,
-                            toggleFavoriteGesture: () {
-                              viewModel.toggleFavorite(favoritedItem);
+                            toggleFavoriteGesture: () async {
+                              await viewModelFirestore.toggleFavorite(
+                                favoritedItem,
+                              );
                             },
                           ),
                         );

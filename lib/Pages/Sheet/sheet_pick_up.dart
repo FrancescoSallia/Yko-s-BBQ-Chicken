@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
-import 'package:ykos_bbq_chicken/viewmodel/viewmodel_auth.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_user.dart';
 
 class SheetPickUp extends StatefulWidget {
   const SheetPickUp({super.key});
@@ -18,7 +18,7 @@ class _SheetPickUpState extends State<SheetPickUp> {
 
   @override
   void initState() {
-    final viewModelAuth = context.read<ViewmodelAuth>();
+    final viewModelAuth = context.read<ViewmodelUser>();
     if (viewModelAuth.pickUpUser == null) return;
     _nameController.text = viewModelAuth.pickUpUser!.name;
     _lastNameController.text = viewModelAuth.pickUpUser!.lastName;
@@ -29,7 +29,7 @@ class _SheetPickUpState extends State<SheetPickUp> {
 
   @override
   Widget build(BuildContext context) {
-    final viewModelAuth = context.watch<ViewmodelAuth>();
+    final viewModelAuth = context.watch<ViewmodelUser>();
 
     return StatefulBuilder(
       // ist für die echtzeit aktualisierung wie setState nur mit setModalState in einem Sheet.

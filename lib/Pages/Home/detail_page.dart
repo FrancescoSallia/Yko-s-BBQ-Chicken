@@ -8,7 +8,7 @@ import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
-import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_firestore.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class DetailPage extends StatefulWidget {
@@ -27,9 +27,12 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModelMenu = context.read<ViewmodelMenu>();
-      final viewModelFirestore = context.read<ViewmodelFire>();
+      final viewModelFirestore = context.read<ViewmodelFirestore>();
+      await viewModelFirestore
+          .fetchFavorites(); // 🔥 Favoriten aus Firestore laden
+      viewModelFirestore.isLiked(widget.item);
       viewModelMenu.loadExtrasForItem(widget.item.category.name);
     });
     super.initState();
@@ -67,7 +70,7 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
-    final viewModelFirestore = context.watch<ViewmodelFire>();
+    final viewModelFirestore = context.watch<ViewmodelFirestore>();
 
     final size = MediaQuery.of(context).size;
 
@@ -109,10 +112,10 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           ),
           actions: [
             GestureDetector(
-              onTap: () {
+              onTap: () async {
+                await viewModelFirestore.toggleFavorite(widget.item);
                 setState(() {
                   // viewModelMenu.toggleFavorite(widget.item);
-                  viewModelFirestore.toggleFavorite(widget.item);
                   _likedController
                       .forward(from: 0)
                       .then((_) => _likedController.reverse());
@@ -128,7 +131,8 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                 child: ScaleTransition(
                   scale: _likedAnimation,
                   child: Image.asset(
-                    widget.item.isFavorited
+                    // widget.item.isFavorited?
+                    viewModelFirestore.isLiked(widget.item)
                         ? "lib/img/liked.png"
                         : "lib/img/unliked.png",
                     width: 30,

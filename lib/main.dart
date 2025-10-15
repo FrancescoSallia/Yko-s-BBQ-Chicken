@@ -5,8 +5,8 @@ import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 import 'package:ykos_bbq_chicken/firebase_options.dart';
 import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_adress.dart';
-import 'package:ykos_bbq_chicken/viewmodel/viewmodel_auth.dart';
-import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_user.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_firestore.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire_auth.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 import "package:firebase_core/firebase_core.dart";
@@ -20,9 +20,9 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ViewmodelMenu()),
         ChangeNotifierProvider(create: (_) => ViewmodelAdress()),
-        ChangeNotifierProvider(create: (_) => ViewmodelAuth()),
+        ChangeNotifierProvider(create: (_) => ViewmodelUser()),
         ChangeNotifierProvider(create: (_) => ViewmodelFireAuth()),
-        ChangeNotifierProvider(create: (_) => ViewmodelFire()),
+        ChangeNotifierProvider(create: (_) => ViewmodelFirestore()),
       ],
       child: const MyApp(),
     ),

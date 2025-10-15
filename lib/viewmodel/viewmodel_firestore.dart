@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:ykos_bbq_chicken/Service/fire_firestore.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 
-class ViewmodelFire extends ChangeNotifier {
+class ViewmodelFirestore extends ChangeNotifier {
   final firestore = FireFirestore();
 
   bool _isLoading = false;
@@ -11,19 +11,31 @@ class ViewmodelFire extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
-
- void toggleFavorite(Food item) {
-    item.isFavorited = !item.isFavorited;
+Future<void> toggleFavorite(Food item) async {
+  try {
+    _isLoading = true;
+    _error = null;
     notifyListeners();
 
-    if (item.isFavorited) {
-      addFavorite(item);
-      notifyListeners();
+    final isCurrentlyFavorited = _favoriteList.any((f) => f.id == item.id);
+
+    if (isCurrentlyFavorited) {
+      await firestore.removeFromFavorite(item);
+      _favoriteList.removeWhere((f) => f.id == item.id);
     } else {
-      removeFromFavorite(item);
-      notifyListeners();
+      await firestore.addFavorite(item);
+      _favoriteList.add(item);
     }
+
+    notifyListeners();
+  } catch (e) {
+    _error = e.toString();
+    notifyListeners();
+  } finally {
+    _isLoading = false;
+    notifyListeners();
   }
+}
 
   //Add Favorite Item
   Future<void> addFavorite(Food item) async {
@@ -52,6 +64,7 @@ class ViewmodelFire extends ChangeNotifier {
       // notifyListeners();
     } catch (e) {
       _error = e.toString();
+      // print(e.toString());
       // notifyListeners();
     } finally {
       _isLoading = false;
@@ -62,21 +75,28 @@ class ViewmodelFire extends ChangeNotifier {
   List<Food> _favoriteList = [];
   List<Food> get favoriteList => _favoriteList;
 
-    //fetch Favorites
+  //fetch Favorites
   Future<void> fetchFavorites() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
       final list = await firestore.fetchFavorites();
+      print(list.toString());
       _favoriteList = list;
       notifyListeners();
     } catch (e) {
       _error = e.toString();
+      print(e.toString());
+
       notifyListeners();
     } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
+ bool isLiked(Food item) {
+  return _favoriteList.any((f) => f.id == item.id);
+}
 }

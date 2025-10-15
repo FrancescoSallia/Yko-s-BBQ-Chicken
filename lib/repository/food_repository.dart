@@ -3,6 +3,8 @@ import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/model/extra.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 
+// Die IDs der Food-Objekte sind fest gesetzt, damit Favoriten korrekt funktionieren.
+
 class FoodRepository {
   // ✅ 1. Privater Konstruktor – verhindert, dass jemand versehentlich eine neue Instanz erstellt
   FoodRepository._privateConstructor();
@@ -11,8 +13,9 @@ class FoodRepository {
   static final instance = FoodRepository._privateConstructor();
 
   List<Food> getFoodsOrDrinks() {
-    final List<Food> _list = [
+    final List<Food> list = [
       Food(
+        id: "1",
         name: "Chicken Drumstick's",
         description:
             "Juicy, tender, and perfectly seasoned with a shattering crunch.",
@@ -30,6 +33,7 @@ class FoodRepository {
       ),
       // 1. Gegrillte Spieße
       Food(
+        id: "2",
         name: "Flame-Grilled Skewers",
         description:
             "Tender cubes of chicken breast, marinated in garlic-lime and flame-kissed.",
@@ -46,6 +50,7 @@ class FoodRepository {
       ),
       // 2. Scharf-Süße Flügel
       Food(
+        id: "3",
         name: "Sweet Chili Wings",
         description:
             "Crisp wings coated in a sticky, sweet-spicy chili glaze. Perfect for sharing.",
@@ -61,6 +66,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "4",
         name: "Pizza Angela",
         description:
             "with tomatosauce, Mozzarella, spicy Salami, Mushroom's and Onion's.",
@@ -76,6 +82,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "5",
         name: "Pizza Tonno",
         description: "with tomatosauce, Mozzarella, Tuna and Onion's.",
         category: Category(
@@ -90,6 +97,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "6",
         name: "Pizza Gattopardo",
         description:
             "with tomatosauce, Mozzarella, spicy Salami and Stracciatella.",
@@ -105,6 +113,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "7",
         name: "Pizza della Nonna",
         description:
             "with tomatosauce, Mozzarella, black Olive's, caper's, anchovies and artichokes .",
@@ -121,6 +130,7 @@ class FoodRepository {
       ),
 
       Food(
+        id: "8",
         name: "Rindersteak mit Kräuterbutter",
         description: "Grilled beef steak served with herb butter and fries.",
         category: Category(
@@ -135,6 +145,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "9",
         name: "Hähnchenbrustfilet mit Gemüse",
         description:
             "Grilled chicken breast with seasonal vegetables and rice.",
@@ -152,6 +163,7 @@ class FoodRepository {
 
       // Pasta Gerichte
       Food(
+        id: "10",
         name: "Spaghetti Carbonara",
         description:
             "Classic Italian pasta with creamy sauce, bacon and Parmesan.",
@@ -167,6 +179,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "11",
         name: "Penne Arrabbiata",
         description: "Spicy tomato sauce with garlic, chili and olive oil.",
         category: Category(
@@ -182,6 +195,7 @@ class FoodRepository {
       ),
 
       Food(
+        id: "12",
         name: "Cocktail Sunrise",
         description: "Cocktail Sunrise with Orange slice and ice cubes",
         category: Category(
@@ -196,6 +210,7 @@ class FoodRepository {
         extras: [],
       ),
       Food(
+        id: "13",
         name: "Cocktail Orange Rum",
         description:
             "Cocktail Orange Rum with Orange slice and ice cubes and Orange juice",
@@ -212,7 +227,7 @@ class FoodRepository {
       ),
     ];
 
-    return _list;
+    return list;
   }
 
   // Funktion: Liefert eine Liste von Extras

@@ -64,9 +64,12 @@ class Food {
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       category:
-          (json['category'] != null)
+          (json['category'] is Map)
               ? Category.fromJson(Map<String, dynamic>.from(json['category']))
-              : Category(name: 'Unbekannt', categoryImg: ''),
+              : Category(
+                name: json['category']?.toString() ?? 'Unbekannt',
+                categoryImg: '',
+              ),
       imgAsset: json['imgAsset'],
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       note: json['note'] ?? '',

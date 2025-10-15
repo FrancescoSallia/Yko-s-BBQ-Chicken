@@ -16,7 +16,7 @@ import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
-import 'package:ykos_bbq_chicken/viewmodel/viewmodel_auth.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_user.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -191,7 +191,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
-    final viewModelAuth = context.watch<ViewmodelAuth>();
+    final viewModelAuth = context.watch<ViewmodelUser>();
 
     final cartItems = viewModelMenu.cartList;
     return Scaffold(
