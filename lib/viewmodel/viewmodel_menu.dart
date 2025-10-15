@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ykos_bbq_chicken/Service/fire_firestore.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
@@ -11,6 +12,10 @@ import 'package:ykos_bbq_chicken/model/user.dart';
 import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 
 class ViewmodelMenu extends ChangeNotifier {
+  final firestore = FireFirestore();
+
+  String? _error;
+  String? get error => _error;
   //FoodRepository
   final foodRepo = FoodRepository.instance;
 
@@ -254,10 +259,12 @@ class ViewmodelMenu extends ChangeNotifier {
     TimeOfDay? selectedTimeFromPicker,
     DateTime? selectedDateFromPicker,
     User? user,
-    int? selectedDeliveryIndex
+    int? selectedDeliveryIndex,
   ) {
     if (isDeliverySelected) {
-      if (selectedAdress != null && selectedPayment != null && selectedDeliveryIndex != null) {
+      if (selectedAdress != null &&
+          selectedPayment != null &&
+          selectedDeliveryIndex != null) {
         return true;
       } else {
         return false;
@@ -274,10 +281,12 @@ class ViewmodelMenu extends ChangeNotifier {
     }
   }
 
-  final List<Order> _orderList = [];
+  List<Order> _orderList = [];
   List<Order> get orderList => _orderList;
 
-  void addToOrderList(Order order) {
+  Future<void> addToOrderList(Order order) async {
+    _error = null;
+
     final newOrder = Order(
       pickUpUser: order.pickUpUser,
       isDelivery: order.isDelivery,
@@ -287,11 +296,34 @@ class ViewmodelMenu extends ChangeNotifier {
       payment: order.payment,
       orderSummary: order.orderSummary,
     );
-    _orderList.add(newOrder);
-    notifyListeners();
+
+    try {
+      _orderList.add(newOrder);
+      await firestore.addOrder(newOrder);
+      notifyListeners();
+    } on Exception catch (e) {
+      print(e.toString());
+      _error = e.toString();
+      notifyListeners();
+    } finally {
+      _error = null;
+      notifyListeners();
+    }
   }
 
-  List<Order> loadOrdersList() {
-    return _orderList;
+  Future<void> loadOrdersList() async {
+    _error = null;
+    notifyListeners();
+    try {
+      _orderList = await firestore.fetchOrders();
+      notifyListeners();
+    } on Exception catch (e) {
+      print(e.toString());
+      _error = e.toString();
+      notifyListeners();
+    } finally {
+      _error = null;
+      notifyListeners();
+    }
   }
 }

@@ -20,8 +20,11 @@ class _OrderPageState extends State<OrderPage> {
   final timeRepo = TimeRepository();
   @override
   void initState() {
-    final viewModelMenu = context.read<ViewmodelMenu>();
-    viewModelMenu.loadOrdersList();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      await viewModelMenu.loadOrdersList();
+    });
+
     super.initState();
   }
 

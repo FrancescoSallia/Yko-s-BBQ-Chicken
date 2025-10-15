@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
@@ -31,10 +32,68 @@ class Order {
     required this.selectedDate,
     required this.payment,
     required this.orderSummary,
-  }) : orderId = Uuid().v4(),
-       currentTime = TimeOfDay.now(),
-       currentDate = DateTime.now(),
-       orderStatus =
-           OrderStatusEnum
-               .recieved; // wenn keine orderId oder aktuelle zeit eingegeben wird, denn wird eins generiert!
+  })  : orderId = orderId ?? const Uuid().v4(),
+        currentTime = currentTime ?? TimeOfDay.now(),
+        currentDate = currentDate ?? DateTime.now(),
+        orderStatus = orderStatus ?? OrderStatusEnum.recieved;
+
+  Map<String, dynamic> toJson() {
+    return {
+      "pickUpUser": pickUpUser?.toJson(),
+      "orderId": orderId,
+      "currentTime": {
+        "hour": currentTime.hour,
+        "minute": currentTime.minute,
+      },
+      "currentDate": Timestamp.fromDate(currentDate),
+      "isDelivery": isDelivery,
+      "deliveryAdress": deliveryAdress?.toJson(),
+      "selectedTime": selectedTime != null
+          ? {
+              "hour": selectedTime!.hour,
+              "minute": selectedTime!.minute,
+            }
+          : null,
+      "selectedDate":
+          selectedDate != null ? Timestamp.fromDate(selectedDate!) : null,
+      "payment": payment.toJson(),
+      "orderSummary": orderSummary.toJson(),
+      "orderStatus": orderStatus.name,
+    };
+  }
+
+  factory Order.fromJson(Map<String, dynamic> json) {
+    return Order(
+      pickUpUser: json["pickUpUser"] != null
+          ? User.fromJson(json["pickUpUser"])
+          : null,
+      orderId: json["orderId"],
+      currentTime: json["currentTime"] != null
+          ? TimeOfDay(
+              hour: json["currentTime"]["hour"],
+              minute: json["currentTime"]["minute"],
+            )
+          : TimeOfDay.now(),
+      currentDate: (json["currentDate"] as Timestamp).toDate(),
+      isDelivery: json["isDelivery"] ?? false,
+      deliveryAdress: json["deliveryAdress"] != null
+          ? Adress.fromJson(json["deliveryAdress"])
+          : null,
+      selectedTime: json["selectedTime"] != null
+          ? TimeOfDay(
+              hour: json["selectedTime"]["hour"],
+              minute: json["selectedTime"]["minute"],
+            )
+          : null,
+      selectedDate: json["selectedDate"] != null
+          ? (json["selectedDate"] as Timestamp).toDate()
+          : null,
+      payment: Payment.fromJson(json["payment"]),
+      orderSummary: OrderSummary.fromJson(json["orderSummary"]),
+      orderStatus: OrderStatusEnum.values.firstWhere(
+        (e) => e.name == json["orderStatus"],
+        orElse: () => OrderStatusEnum.recieved,
+      ),
+    );
+  }
 }

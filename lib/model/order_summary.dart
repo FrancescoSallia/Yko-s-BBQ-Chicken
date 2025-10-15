@@ -47,4 +47,24 @@ class OrderSummary {
 
   /// 8️⃣ Endsumme (MwSt wird **nicht** addiert, nur informativ)
   double get endSummeMitMwSt => endSumme;
+
+  Map<String, dynamic> toJson() {
+    return {
+      "foods": foods.map((f) => f.toJson()).toList(),
+      "discount": discount,
+      "deliveryCharge": deliveryCharge,
+    };
+  }
+
+  factory OrderSummary.fromJson(Map<String, dynamic> json) {
+    return OrderSummary(
+      foods:
+          (json["foods"] as List<dynamic>?)
+              ?.map((item) => Food.fromJson(item as Map<String, dynamic>))
+              .toList() ??
+          [],
+      discount: (json["discount"] as num?)?.toDouble(),
+      deliveryCharge: (json["deliveryCharge"] as num?)?.toDouble() ?? 0.0,
+    );
+  }
 }

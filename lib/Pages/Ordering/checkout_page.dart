@@ -541,7 +541,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       viewModelAuth.pickUpUser,
                       selectedDeliveryIndex,
                     )
-                    ? () {
+                    ? () async {
                       final newOrder = Order(
                         pickUpUser: viewModelAuth.pickUpUser,
                         isDelivery: isDeliverySelected,
@@ -553,9 +553,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           isDeliverySelected,
                         ),
                       );
-                      viewModelMenu.addToOrderList(newOrder);
+                      final navigator = Navigator.of(context);
+                      await viewModelMenu.addToOrderList(newOrder);
+                      if (!mounted) return;
                       viewModelMenu.clearAnyList(viewModelMenu.cartList);
-                      Navigator.of(context).pushReplacement(
+                      navigator.pushReplacement(
                         CupertinoPageRoute(builder: (context) => OrderPage()),
                       );
                     }
