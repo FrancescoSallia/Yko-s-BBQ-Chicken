@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/complete_button.dart';
@@ -239,18 +240,24 @@ class _UpdateAdressPageState extends State<UpdateAdressPage> {
                             telefon: _telefonController.text,
                           );
                           final navigator = Navigator.of(context);
-                          final messenger = ScaffoldMessenger.of(context);
+                          final snack = IconSnackBar.show(
+                            context,
+                            label: "Adresse Aktuallisiert",
+                            snackBarType: SnackBarType.success,
+                          );
+
                           //Fügt die neue Adresse in die Liste.
                           await viewModelAdress.updateAdress(newAdress);
                           if (!mounted) return;
                           // Alles korrekt ✅
                           navigator.pop();
                           navigator.pop();
-                          messenger.showSnackBar(
-                            const SnackBar(
-                              content: Text('Adresse Aktualisiert'),
-                            ),
+                          await Future.delayed(
+                            Duration(seconds: 2),
+                            () => snack,
                           );
+
+                          // snack;
                         } else {
                           // Fehler — das Feld zeigt jetzt den roten Rahmen ❌
                         }
