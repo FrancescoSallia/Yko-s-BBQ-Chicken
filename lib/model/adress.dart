@@ -26,4 +26,32 @@ class Adress {
            id ??
            const Uuid()
                .v4(); // ✅ wenn kein id übergeben wird, automatisch generieren
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "street": street,
+      "houseNumber": houseNumber,
+      "plz": plz,
+      "place": place,
+      "icon": icon?.json(),
+      "information": information,
+      "telefon": telefon,
+    };
+  }
+
+  factory Adress.fromJson(Map<String, dynamic> json) {
+    return Adress(
+      id: json["id"],
+      name: json["name"],
+      telefon: json["telefon"],
+      street: json["street"],
+      houseNumber: json["houseNumber"],
+      plz: json["plz"],
+      place: json["place"],
+      icon: json["icon"] != null ? AdressSymbol.fromJson(json["icon"]) : null,
+      information: json["information"],
+    );
+  }
 }

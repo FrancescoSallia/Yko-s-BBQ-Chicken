@@ -18,8 +18,11 @@ class AdressPage extends StatefulWidget {
 class _AdressPageState extends State<AdressPage> {
   @override
   void initState() {
-    final viewModelAdress = context.read<ViewmodelAdress>();
-    viewModelAdress.fetchAdressList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModelAdress = context.read<ViewmodelAdress>();
+      viewModelAdress.fetchAdressList();
+    });
+
     super.initState();
   }
 
@@ -179,14 +182,13 @@ class _AdressPageState extends State<AdressPage> {
                                 return FractionallySizedBox(
                                   heightFactor: 0.35,
                                   child: SheetOptions(
-                                    confirmDeleteDialogFunction: () {
-                                      setState(() {
-                                        viewModelAdress.removeFromAdressList(
-                                          index,
-                                        );
-                                      });
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
+                                    confirmDeleteDialogFunction: () async {
+                                      final navigator = Navigator.of(context);
+                                      await viewModelAdress
+                                          .removeFromAdressList(adress);
+                                      if (!mounted) return;
+                                      navigator.pop();
+                                      navigator.pop();
                                     },
                                     navigateToUpdateFunction: () {
                                       Navigator.of(context).push(
@@ -207,7 +209,10 @@ class _AdressPageState extends State<AdressPage> {
                             padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100),
-                              border: Border.all(width: 1.0, color: Colors.black),
+                              border: Border.all(
+                                width: 1.0,
+                                color: Colors.black,
+                              ),
                             ),
                             child: Center(
                               child: Icon(Icons.more_horiz, size: 20),

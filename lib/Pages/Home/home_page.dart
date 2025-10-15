@@ -4,9 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/settings_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Ordering/adress_page.dart';
 import 'package:ykos_bbq_chicken/components/card_item.dart';
 import 'package:ykos_bbq_chicken/components/category_item.dart';
 import 'package:ykos_bbq_chicken/components/my_search_field.dart';
+import 'package:ykos_bbq_chicken/enum/adress_enum.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/extension/my_extensions.dart';
 import 'package:ykos_bbq_chicken/model/category.dart';
@@ -72,15 +74,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ],
       ),
       drawer: Drawer(
+        width: 200,
         backgroundColor: AppColors.secondary,
         child: SafeArea(
           child: Column(
             children: [
               ListTile(
                 title: Text("Settings"),
+                trailing: Icon(Icons.settings_outlined),
                 onTap:
                     () => Navigator.of(context).push(
                       CupertinoPageRoute(builder: (context) => SettingsPage()),
+                    ),
+              ),
+              ListTile(
+                title: Text("Adress"),
+                trailing: Icon(AdressEnum.suit.label),
+                onTap:
+                    () => Navigator.of(context).push(
+                      CupertinoPageRoute(builder: (context) => AdressPage()),
                     ),
               ),
             ],

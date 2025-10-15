@@ -223,7 +223,7 @@ class _UpdateAdressPageState extends State<UpdateAdressPage> {
 
                     CompleteButton(
                       text: "Aktualisieren",
-                      gesture: () {
+                      gesture: () async {
                         // 🔹 Hier wird der Validator tatsächlich ausgeführt
                         if (_formKey.currentState!.validate()) {
                           //Erstellt die Adresse, anhand der angegebenen Daten.
@@ -238,13 +238,15 @@ class _UpdateAdressPageState extends State<UpdateAdressPage> {
                             name: _nameController.text,
                             telefon: _telefonController.text,
                           );
-
+                          final navigator = Navigator.of(context);
+                          final messenger = ScaffoldMessenger.of(context);
                           //Fügt die neue Adresse in die Liste.
-                          viewModelAdress.updateAdress(newAdress);
+                          await viewModelAdress.updateAdress(newAdress);
+                          if (!mounted) return;
                           // Alles korrekt ✅
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          navigator.pop();
+                          navigator.pop();
+                          messenger.showSnackBar(
                             const SnackBar(
                               content: Text('Adresse Aktualisiert'),
                             ),

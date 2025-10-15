@@ -29,8 +29,23 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
 
   @override
   void initState() {
-    context.read<ViewmodelAdress>();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final viewModelAdress = context.read<ViewmodelAdress>();
+      await viewModelAdress.fetchAdressList();
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _adressController.dispose();
+    _houseNumberController.dispose();
+    _plzController.dispose();
+    _placeController.dispose();
+    _telefonController.dispose();
+    _informationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -206,7 +221,7 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
 
                     CompleteButton(
                       text: "Speichern",
-                      gesture: () {
+                      gesture: () async {
                         // 🔹 Hier wird der Validator tatsächlich ausgeführt
                         if (_formKey.currentState!.validate()) {
                           //Erstellt die Adresse, anhand der angegebenen Daten.
@@ -221,11 +236,15 @@ class _SheetAddAdressState extends State<SheetAddAdress> {
                             telefon: _telefonController.text,
                           );
 
+                          final navigator = Navigator.of(context);
+                          final messenger = ScaffoldMessenger.of(context);
+
                           //Fügt die neue Adresse in die Liste.
-                          viewModelAdress.addToAdressList(newAdress);
+                          await viewModelAdress.addToAdressList(newAdress);
+                          if (!mounted) return;
                           // Alles korrekt ✅
-                          Navigator.of(context).pop();
-                          ScaffoldMessenger.of(context).showSnackBar(
+                          navigator.pop();
+                          messenger.showSnackBar(
                             const SnackBar(
                               content: Text('Adresse gespeichert'),
                             ),
