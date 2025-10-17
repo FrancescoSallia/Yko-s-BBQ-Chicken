@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 import 'package:ykos_bbq_chicken/Service/fire_firestore.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
@@ -13,6 +16,19 @@ import 'package:ykos_bbq_chicken/repository/food_repository.dart';
 
 class ViewmodelMenu extends ChangeNotifier {
   final firestore = FireFirestore();
+  final auth = FireAuth.auth;
+
+  StreamSubscription? _sub;
+
+  ViewmodelMenu() {
+    _listenToOrdersStream();
+  }
+
+  @override
+  void dispose() {
+    _sub?.cancel();
+    super.dispose();
+  }
 
   String? _error;
   String? get error => _error;
@@ -289,6 +305,7 @@ class ViewmodelMenu extends ChangeNotifier {
 
     final newOrder = Order(
       pickUpUser: order.pickUpUser,
+      userId: auth.currentUser!.uid.toString(),
       isDelivery: order.isDelivery,
       deliveryAdress: order.deliveryAdress,
       selectedTime: order.selectedTime,
@@ -325,5 +342,20 @@ class ViewmodelMenu extends ChangeNotifier {
       _error = null;
       notifyListeners();
     }
+  }
+
+  void _listenToOrdersStream() {
+    _error = null;
+    notifyListeners();
+    _sub = firestore.fetchOrdersStream().listen(
+      (newOrders) {
+        _orderList = newOrders;
+        notifyListeners();
+      },
+      onError: (e) {
+        _error = e.toString();
+        notifyListeners();
+      },
+    );
   }
 }

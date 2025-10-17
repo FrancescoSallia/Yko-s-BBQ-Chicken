@@ -4,6 +4,7 @@ import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 
 class ViewmodelFireAuth extends ChangeNotifier {
   final auth = FireAuth();
+  final currentUser = FireAuth.auth.currentUser;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;

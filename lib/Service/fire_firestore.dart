@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart' hide Order;
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:uuid/uuid.dart';
 import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
@@ -124,6 +123,26 @@ class FireFirestore {
     } on FirebaseException {
       rethrow;
     }
+  }
+
+  Stream<List<Order>> fetchOrdersStream() {
+    final user = auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: "no-current-user",
+        message: "Kein Benutzer ist derzeit eingeloggt.",
+      );
+    }
+    return firestore
+     .collection("ykos_bbq_chicken")
+      .doc(user.uid)
+      .collection("orders")
+      .snapshots()
+      .map((snapshot) {
+        return snapshot.docs
+            .map((doc) => Order.fromJson(doc.data()))
+            .toList();
+      });
   }
 
   //Remove Order (optional)

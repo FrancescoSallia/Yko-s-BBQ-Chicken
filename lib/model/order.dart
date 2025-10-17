@@ -9,6 +9,7 @@ import 'package:ykos_bbq_chicken/model/user.dart';
 
 class Order {
   final User? pickUpUser;
+  final String userId;
   final String orderId;
   final TimeOfDay currentTime;
   final DateTime currentDate;
@@ -20,8 +21,9 @@ class Order {
   final OrderSummary orderSummary;
   final OrderStatusEnum orderStatus;
 
-  Order({
+  Order( {
     required this.pickUpUser,
+    required this.userId,
     String? orderId,
     TimeOfDay? currentTime,
     DateTime? currentDate,
@@ -40,6 +42,7 @@ class Order {
   Map<String, dynamic> toJson() {
     return {
       "pickUpUser": pickUpUser?.toJson(),
+      "userId" : userId,
       "orderId": orderId,
       "currentTime": {
         "hour": currentTime.hour,
@@ -67,6 +70,7 @@ class Order {
       pickUpUser: json["pickUpUser"] != null
           ? User.fromJson(json["pickUpUser"])
           : null,
+          userId: json["userId"],
       orderId: json["orderId"],
       currentTime: json["currentTime"] != null
           ? TimeOfDay(

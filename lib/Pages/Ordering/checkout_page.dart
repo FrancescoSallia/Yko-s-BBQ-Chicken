@@ -16,6 +16,7 @@ import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire_auth.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_user.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
@@ -179,6 +180,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void initState() {
     final viewModelMenu = context.read<ViewmodelMenu>();
+    final viewModelAuth = context.read<ViewmodelFireAuth>();
     if (closedDays.contains(DateTime.now().weekday)) {
       selectedDeliveryIndex = null;
     } else {
@@ -191,7 +193,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
-    final viewModelAuth = context.watch<ViewmodelUser>();
+    final viewModelUser = context.watch<ViewmodelUser>();
+    final viewModelAuth = context.watch<ViewmodelFireAuth>();
 
     final cartItems = viewModelMenu.cartList;
     return Scaffold(
@@ -248,23 +251,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         ? selectedAdress != null
                             ? selectedAdress!.name
                             : "Lieferadresse"
-                        : viewModelAuth.pickUpUser != null
-                        ? "${viewModelAuth.pickUpUser!.name} ${viewModelAuth.pickUpUser!.lastName}"
+                        : viewModelUser.pickUpUser != null
+                        ? "${viewModelUser.pickUpUser!.name} ${viewModelUser.pickUpUser!.lastName}"
                         : "Abholer/in",
                 announcementText:
                     isDeliverySelected
                         ? selectedAdress != null
                             ? "${selectedAdress!.street} ${selectedAdress!.houseNumber}, ${selectedAdress!.plz} ${selectedAdress!.place}"
                             : "Zum Fortfahren hier tippen"
-                        : viewModelAuth.pickUpUser != null
-                        ? viewModelAuth.pickUpUser!.telefon
+                        : viewModelUser.pickUpUser != null
+                        ? viewModelUser.pickUpUser!.telefon
                         : "zu Personenbezogenen Daten",
                 iconData:
                     isDeliverySelected
                         ? selectedAdress != null
                             ? Icons.check_circle_rounded
                             : Icons.location_on_outlined
-                        : viewModelAuth.pickUpUser != null
+                        : viewModelUser.pickUpUser != null
                         ? Icons.shopping_bag
                         : Icons.shopping_bag_outlined,
                 img: null,
@@ -499,7 +502,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         isDeliverySelected,
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
-                        viewModelAuth.pickUpUser,
+                        viewModelUser.pickUpUser,
                         selectedDeliveryIndex,
                       )
                       ? WidgetStatePropertyAll(3)
@@ -511,7 +514,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         isDeliverySelected,
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
-                        viewModelAuth.pickUpUser,
+                        viewModelUser.pickUpUser,
                         selectedDeliveryIndex,
                       )
                       ? WidgetStatePropertyAll(AppColors.timerPrimary2)
@@ -525,7 +528,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         isDeliverySelected,
                         selectedTimeFromPicker,
                         selectedDateFromPicker,
-                        viewModelAuth.pickUpUser,
+                        viewModelUser.pickUpUser,
                         selectedDeliveryIndex,
                       )
                       ? WidgetStatePropertyAll(AppColors.primaryButton)
@@ -538,12 +541,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       isDeliverySelected,
                       selectedTimeFromPicker,
                       selectedDateFromPicker,
-                      viewModelAuth.pickUpUser,
+                      viewModelUser.pickUpUser,
                       selectedDeliveryIndex,
                     )
                     ? () async {
                       final newOrder = Order(
-                        pickUpUser: viewModelAuth.pickUpUser,
+                        pickUpUser: viewModelUser.pickUpUser,
+                        userId: viewModelAuth.currentUser!.uid.toString(),
                         isDelivery: isDeliverySelected,
                         deliveryAdress: selectedAdress,
                         selectedTime: selectedTimeFromPicker,

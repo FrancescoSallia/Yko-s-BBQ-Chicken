@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/components/complete_orders.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/components/timer.dart';
@@ -8,13 +9,35 @@ import 'package:ykos_bbq_chicken/enum/order_status_enum.dart';
 import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/repository/time_repository.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
+import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
 
-class TimerPage extends StatelessWidget {
+class TimerPage extends StatefulWidget {
   final Order order;
   const TimerPage({super.key, required this.order});
 
   @override
+  State<TimerPage> createState() => _TimerPageState();
+}
+
+class _TimerPageState extends State<TimerPage> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<ViewmodelMenu>();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<ViewmodelMenu>();
+
+    // Suche die aktuelle Version der Bestellung im ViewModel
+    //Reagiert auf Stream um auch in der detailansicht in echtzeit die daten aktuallisieren zukönnen.
+    final order = viewModel.orderList.firstWhere(
+      (o) => o.orderId == widget.order.orderId,
+      orElse: () => widget.order,
+    );
     final timeRepo = TimeRepository();
     return Scaffold(
       backgroundColor: AppColors.secondary,
@@ -134,7 +157,7 @@ class TimerPage extends StatelessWidget {
                         child: Image.asset(order.payment.img),
                       ),
                       Text(
-                        order.payment.name,
+                        widget.order.payment.name,
                         style: GoogleFonts.inter(fontWeight: FontWeight.w600),
                       ),
                     ],
