@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart' hide Order;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:uuid/uuid.dart';
 import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
@@ -76,43 +77,61 @@ class FireFirestore {
       rethrow;
     }
   }
+
   //Update Adress
-    Future<void> updateAdress(Adress updatedItem) async {
+  Future<void> updateAdress(Adress updatedItem) async {
     try {
-      await userRef.collection('adress').doc(updatedItem.id).update(updatedItem.toJson());
+      await userRef
+          .collection('adress')
+          .doc(updatedItem.id)
+          .update(updatedItem.toJson());
     } on FirebaseException {
       rethrow;
     }
   }
 
-
   //Order
+  //Add Order
+  Future<void> addOrder(Order item) async {
+    final user = auth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(
+        code: 'no-current-user',
+        message: 'Kein Benutzer ist derzeit eingeloggt.',
+      );
+    }
+    try {
+      // Speichern unter dem Benutzer
+      await userRef.collection('orders').doc(item.orderId).set(item.toJson());
 
-//Add Order
-Future<void> addOrder(Order item) async {
-  try {
-    await userRef.collection('orders').doc(item.orderId).set(item.toJson());
-  } on FirebaseException {
-    rethrow;
+      // Zusätzlich global speichern (yokos kitchen)
+      await firestore
+          .collection("yokos_kitchen")
+          .doc(user.uid)
+          .collection("all_orders")
+          .doc(item.orderId)
+          .set(item.toJson());
+    } on FirebaseException {
+      rethrow;
+    }
   }
-}
 
-//Fetch Orders
-Future<List<Order>> fetchOrders() async {
-  try {
-    final snapshot = await userRef.collection('orders').get();
-    return snapshot.docs.map((doc) => Order.fromJson(doc.data())).toList();
-  } on FirebaseException {
-    rethrow;
+  //Fetch Orders
+  Future<List<Order>> fetchOrders() async {
+    try {
+      final snapshot = await userRef.collection('orders').get();
+      return snapshot.docs.map((doc) => Order.fromJson(doc.data())).toList();
+    } on FirebaseException {
+      rethrow;
+    }
   }
-}
 
-//Remove Order (optional)
-Future<void> removeOrder(Order item) async {
-  try {
-    await userRef.collection('orders').doc(item.orderId).delete();
-  } on FirebaseException {
-    rethrow;
+  //Remove Order (optional)
+  Future<void> removeOrder(Order item) async {
+    try {
+      await userRef.collection('orders').doc(item.orderId).delete();
+    } on FirebaseException {
+      rethrow;
+    }
   }
-}
 }
