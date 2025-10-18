@@ -32,13 +32,6 @@ class _OrderPendingPageState extends State<OrderPendingPage> {
               orElse: () => widget.newOrder,
             );
 
-            logger.d("orderId: ${order.orderId}");
-            logger.d("confirmKitchen: ${order.confirmedByKitchen}");
-            logger.d("widget.order.orderId: ${widget.newOrder.orderId}");
-            logger.d(
-              "widget.order.confirmkitchen: ${widget.newOrder.confirmedByKitchen}",
-            );
-
             // 🔹 Navigation nur einmal ausführen, wenn bestätigt
             if (order.confirmedByKitchen && !_navigated) {
               _navigated = true;
