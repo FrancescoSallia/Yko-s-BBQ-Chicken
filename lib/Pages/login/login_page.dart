@@ -1,12 +1,10 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/login/reset_password_page.dart';
 import 'package:ykos_bbq_chicken/components/complete_button.dart';
 import 'package:ykos_bbq_chicken/components/my_logo.dart';
 import 'package:ykos_bbq_chicken/components/my_textfield.dart';
-import 'package:ykos_bbq_chicken/navigation/floating_bottom_nav.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_fire_auth.dart';
 

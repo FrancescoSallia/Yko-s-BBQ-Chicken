@@ -5,10 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pick_up.dart';
 import 'package:ykos_bbq_chicken/Pages/Ordering/adress_page.dart';
-import 'package:ykos_bbq_chicken/Pages/Timer/order_page.dart';
+import 'package:ykos_bbq_chicken/Pages/order_pending_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
-import 'package:ykos_bbq_chicken/components/my_textfield.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/model/adress.dart';
@@ -37,11 +36,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   Adress? selectedAdress;
   final TextEditingController _discountController = TextEditingController();
 
-  final List<int> closedDays = [
-    DateTime.monday,
-    DateTime.friday,
-    DateTime.saturday,
-  ]; // Montag geschlossen
+  final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
 
   Future<bool> showDateTimePicker(BuildContext context) async {
     final today = DateTime.now();
@@ -180,7 +175,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   void initState() {
     final viewModelMenu = context.read<ViewmodelMenu>();
-    final viewModelAuth = context.read<ViewmodelFireAuth>();
+    // final viewModelAuth = context.read<ViewmodelFireAuth>();
     if (closedDays.contains(DateTime.now().weekday)) {
       selectedDeliveryIndex = null;
     } else {
@@ -545,11 +540,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       selectedDeliveryIndex,
                     )
                     ? () async {
+                      // Berechne Fast-Delivery-Zeit, falls "so schnell wie möglich"
+                      TimeOfDay? fastTime;
+
+                      if (selectedDeliveryIndex == 0 && isDeliverySelected) {
+                        final now = DateTime.now().add(
+                          const Duration(minutes: 30),
+                        ); // z. B. 30 Min später
+                        fastTime = TimeOfDay.fromDateTime(now);
+                      }
+
                       final newOrder = Order(
                         pickUpUser: viewModelUser.pickUpUser,
                         userId: viewModelAuth.currentUser!.uid.toString(),
                         isDelivery: isDeliverySelected,
                         deliveryAdress: selectedAdress,
+                        fastDeliveryTime: fastTime,
                         selectedTime: selectedTimeFromPicker,
                         selectedDate: selectedDateFromPicker,
                         payment: selectedPayment!,
@@ -561,8 +567,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       await viewModelMenu.addToOrderList(newOrder);
                       if (!mounted) return;
                       viewModelMenu.clearAnyList(viewModelMenu.cartList);
+
+                      // 👉 Pending-Seite anzeigen, bis Bestellung angenommen wird
                       navigator.pushReplacement(
-                        CupertinoPageRoute(builder: (context) => OrderPage()),
+                        CupertinoPageRoute(
+                          builder:
+                              (context) => OrderPendingPage(newOrder: newOrder),
+                        ),
                       );
                     }
                     : null,

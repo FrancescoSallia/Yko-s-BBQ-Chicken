@@ -304,10 +304,12 @@ class ViewmodelMenu extends ChangeNotifier {
     _error = null;
 
     final newOrder = Order(
+      orderId: order.orderId,
       pickUpUser: order.pickUpUser,
       userId: auth.currentUser!.uid.toString(),
       isDelivery: order.isDelivery,
       deliveryAdress: order.deliveryAdress,
+      fastDeliveryTime: order.fastDeliveryTime,
       selectedTime: order.selectedTime,
       selectedDate: order.selectedDate,
       payment: order.payment,

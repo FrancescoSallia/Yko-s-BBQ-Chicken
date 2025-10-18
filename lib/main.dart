@@ -50,6 +50,7 @@ class MyApp extends StatelessWidget {
         stream: FireAuth.auth.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data != null) {
+            // return OrderPendingPage();
             return FloatingBottomNav();
           } else {
             return LoginPage();

@@ -105,7 +105,8 @@ class FireFirestore {
 
       // Zusätzlich global speichern (yokos kitchen)
       await firestore
-          .collection("yokos_kitchen")
+          .collection("ykos_kitchen")
+          // .doc("global_orders") // ⚡ fix: nicht userId verwenden!
           .doc(user.uid)
           .collection("all_orders")
           .doc(item.orderId)
@@ -134,15 +135,15 @@ class FireFirestore {
       );
     }
     return firestore
-     .collection("ykos_bbq_chicken")
-      .doc(user.uid)
-      .collection("orders")
-      .snapshots()
-      .map((snapshot) {
-        return snapshot.docs
-            .map((doc) => Order.fromJson(doc.data()))
-            .toList();
-      });
+        .collection("ykos_bbq_chicken")
+        .doc(user.uid)
+        .collection("orders")
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs
+              .map((doc) => Order.fromJson(doc.data()))
+              .toList();
+        });
   }
 
   //Remove Order (optional)

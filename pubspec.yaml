@@ -44,6 +44,8 @@ dependencies:
   cloud_firestore: ^6.0.2
   flutter_icon_snackbar: ^1.2.1
   animated_snack_bar: ^0.4.0
+  logger: ^2.6.2
+
 
 dev_dependencies:
   flutter_test:
