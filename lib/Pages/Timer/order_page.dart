@@ -44,6 +44,56 @@ class _OrderPageState extends State<OrderPage> {
       appBar: AppBar(
         backgroundColor: AppColors.secondary,
         surfaceTintColor: Colors.transparent,
+        actions: [
+          TextButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return CupertinoAlertDialog(
+                    title: Text("Alle Bestellungen wirklich löschen?"),
+                    content: Text(
+                      "Alle Bestellungen werden gelöscht und kann nicht mehr rückgängig gemacht werden.",
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () async {
+                          final navigator = Navigator.of(context);
+                          for (var order in viewModelMenu.orderList) {
+                            await viewModelMenu.deleteOrderFromList(order);
+                          }
+                          if (!mounted) return;
+
+                          navigator.pop();
+                        },
+                        child: Text(
+                          "Ja, Löschen",
+                          style: GoogleFonts.inter(color: Colors.red),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Abbrechen",
+                          style: GoogleFonts.inter(color: Colors.black),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: Text(
+              "Liste leeren",
+              style: GoogleFonts.inter(
+                color: Colors.red,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
         title: Text(
           "Alle Bestellungen",
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),

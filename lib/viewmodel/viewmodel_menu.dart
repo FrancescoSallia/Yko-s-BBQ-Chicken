@@ -347,6 +347,20 @@ class ViewmodelMenu extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteOrderFromList(Order order) async {
+    _error = null;
+    notifyListeners();
+
+    try {
+      await firestore.removeOrder(order);
+      notifyListeners();
+    } on Exception catch (e) {
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
+      notifyListeners();
+    }
+  }
+
   void _listenToOrdersStream() {
     _error = null;
     notifyListeners();
