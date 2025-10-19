@@ -545,7 +545,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
                       if (selectedDeliveryIndex == 0 && isDeliverySelected) {
                         final now = DateTime.now().add(
-                          const Duration(minutes: 30),
+                          const Duration(minutes: 40),
                         ); // z. B. 30 Min später
                         fastTime = TimeOfDay.fromDateTime(now);
                       }

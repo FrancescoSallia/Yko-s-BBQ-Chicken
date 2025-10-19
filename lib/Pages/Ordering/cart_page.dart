@@ -61,7 +61,7 @@ class _CartPageState extends State<CartPage> {
                         width: 220,
                         child: Opacity(
                           opacity: 0.8,
-                          child: Image.asset("lib/img/besorgen.png"),
+                          child: Image.asset("lib/img/expresszustellung.png"),
                         ),
                       ),
                       SizedBox(height: 5),

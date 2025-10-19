@@ -105,11 +105,11 @@ class _OrderPageState extends State<OrderPage> {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 SizedBox(
                                   height: 70,
-                                  width: 70,
+                                  width: 90,
                                   child: Container(
                                     padding: EdgeInsets.all(8),
                                     decoration: BoxDecoration(
@@ -122,50 +122,67 @@ class _OrderPageState extends State<OrderPage> {
                                     child: Lottie.asset(
                                       animate: true,
                                       order.orderStatus.lottieAnimation,
-                                      repeat: true,
+                                      repeat:
+                                          order.orderStatus ==
+                                                  OrderStatusEnum.delivered
+                                              ? false
+                                              : true,
                                     ),
                                   ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        timeRepo.dateDayMonthYearToString(
-                                          order.currentDate,
+                                SizedBox(
+                                  width: 240,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        order.isDelivery
+                                            ? "Lieferung"
+                                            : "Abholung",
+                                        style: GoogleFonts.inter(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.w700,
                                         ),
-                                        SizedBox(width: 10),
-                                        timeRepo.timeToString(
-                                          order.currentTime,
-                                          context,
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      order.isDelivery
-                                          ? order.deliveryAdress!.name
-                                          : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
-                                    ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text("Bestellt: "),
 
-                                    Text(
-                                      order.orderStatus.labelText,
-                                      style: GoogleFonts.inter(
-                                        color: Colors.green,
-                                        fontWeight: FontWeight.w500,
+                                          timeRepo.dateDayMonthYearToString(
+                                            order.currentDate,
+                                          ),
+                                          SizedBox(width: 10),
+                                          timeRepo.timeToString(
+                                            order.currentTime,
+                                            context,
+                                          ),
+                                        ],
                                       ),
-                                    ),
-                                    Text(
-                                      order.isDelivery
-                                          ? "Lieferung"
-                                          : "Abholung",
-                                      style: GoogleFonts.inter(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.w500,
+                                      Text(
+                                        order.isDelivery
+                                            ? order.deliveryAdress!.name
+                                            : "${order.pickUpUser!.name} ${order.pickUpUser!.lastName}",
+                                        style: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+
+                                      Text(
+                                        order.isDelivery &&
+                                                order.orderStatus !=
+                                                    OrderStatusEnum.ready
+                                            ? order.orderStatus.labelText
+                                            : OrderStatusEnum.ready.labelText,
+                                        style: GoogleFonts.inter(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 // Icon(Icons.arrow_forward_ios_rounded, size: 20),
                               ],

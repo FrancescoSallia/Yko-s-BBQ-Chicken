@@ -119,7 +119,8 @@ class FireFirestore {
   //Fetch Orders
   Future<List<Order>> fetchOrders() async {
     try {
-      final snapshot = await userRef.collection('orders').get();
+      final snapshot =
+          await userRef.collection('orders').orderBy("currentDate").get();
       return snapshot.docs.map((doc) => Order.fromJson(doc.data())).toList();
     } on FirebaseException {
       rethrow;
