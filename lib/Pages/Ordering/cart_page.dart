@@ -53,18 +53,31 @@ class _CartPageState extends State<CartPage> {
             cartItems.isEmpty
                 // 🛒 Wenn leer
                 ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "No Orders in Cart yet 🛒",
-                      style: GoogleFonts.inter(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[700],
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 220,
+                        width: 220,
+                        child: Opacity(
+                          opacity: 0.8,
+                          child: Image.asset("lib/img/besorgen.png"),
+                        ),
                       ),
-                      textAlign: TextAlign.center,
-                      softWrap: true,
-                    ),
+                      SizedBox(height: 5),
+                      Text(
+                        "( your Cart is still Empty )",
+                        style: GoogleFonts.inter(
+                          fontStyle: FontStyle.italic,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.grey[700],
+                        ),
+                        textAlign: TextAlign.center,
+                        softWrap: true,
+                      ),
+                      SizedBox(height: 35),
+                    ],
                   ),
                 )
                 // ✅ Wenn nicht leer

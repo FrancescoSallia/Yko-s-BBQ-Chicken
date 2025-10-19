@@ -124,28 +124,31 @@ class _FavoritedPageState extends State<FavoritedPage>
                 ),
               )
               : Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "No Favorites yet ",
-                        style: GoogleFonts.inter(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.grey[700],
-                        ),
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                      ),
-                      SizedBox(width: 8),
-                      SizedBox(
-                        width: 25,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 220,
+                      height: 220,
+                      child: Opacity(
+                        opacity: 0.8,
                         child: Image.asset("lib/img/logo_ykos.png"),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 5),
+                    Text(
+                      "( No Favorites yet )",
+                      style: GoogleFonts.inter(
+                        fontStyle: FontStyle.italic,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey[700],
+                      ),
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                    ),
+                    SizedBox(height: 40),
+                  ],
                 ),
               ),
     );
