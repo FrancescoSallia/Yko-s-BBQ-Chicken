@@ -71,7 +71,7 @@ class _CartPageState extends State<CartPage> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        "( your Cart is still Empty )",
+                        "(Keine aktuelle Bestellungen)",
                         style: GoogleFonts.inter(
                           fontStyle: FontStyle.italic,
                           fontSize: 18,

@@ -30,7 +30,7 @@ class MyToCartButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Add to Cart",
+              "Hinzufügen",
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
                 fontSize: 14,

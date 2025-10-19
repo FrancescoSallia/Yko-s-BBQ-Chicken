@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -18,6 +19,20 @@ class OrderPendingPage extends StatefulWidget {
 class _OrderPendingPageState extends State<OrderPendingPage> {
   bool _navigated = false; // Verhindert mehrfaches Navigieren
   var logger = Logger();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        );
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

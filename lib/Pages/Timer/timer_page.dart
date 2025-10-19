@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,13 @@ class _TimerPageState extends State<TimerPage> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ViewmodelMenu>();
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        );
+      }
     });
     super.initState();
   }

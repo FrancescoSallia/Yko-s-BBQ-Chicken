@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -423,6 +424,11 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                         extra.anzahl = 0;
                                       }
                                     });
+
+                                    AnimatedSnackBar.material(
+                                      "Zur Bestellung hinzugefügt",
+                                      type: AnimatedSnackBarType.success,
+                                    ).show(context);
                                   },
                                   totalPriceWithExtraAndAmount:
                                       widget.item.totalWithExtras

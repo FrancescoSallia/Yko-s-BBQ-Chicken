@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,8 +24,14 @@ class _OrderPageState extends State<OrderPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final viewModelMenu = context.read<ViewmodelMenu>();
       await viewModelMenu.loadOrdersList();
-    });
 
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        );
+      }
+    });
     super.initState();
   }
 
@@ -38,7 +45,7 @@ class _OrderPageState extends State<OrderPage> {
         backgroundColor: AppColors.secondary,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          "Order's",
+          "Alle Bestellungen",
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
       ),
@@ -60,7 +67,7 @@ class _OrderPageState extends State<OrderPage> {
                       ),
                     ),
                     Text(
-                      "( No Orders yet )",
+                      "(Keine Bestellungen)",
                       style: GoogleFonts.inter(
                         fontStyle: FontStyle.italic,
                         fontSize: 18,

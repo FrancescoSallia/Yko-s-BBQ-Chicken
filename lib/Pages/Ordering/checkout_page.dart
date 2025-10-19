@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pay.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_pick_up.dart';
 import 'package:ykos_bbq_chicken/Pages/Ordering/adress_page.dart';
-import 'package:ykos_bbq_chicken/Pages/order_pending_page.dart';
+import 'package:ykos_bbq_chicken/Pages/Timer/order_pending_page.dart';
 import 'package:ykos_bbq_chicken/components/delivery_time_container.dart';
 import 'package:ykos_bbq_chicken/components/forward_box.dart';
 import 'package:ykos_bbq_chicken/components/order_item.dart';
@@ -34,9 +34,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final TimeRepository timeRepo = TimeRepository();
   Payment? selectedPayment;
   Adress? selectedAdress;
-  final TextEditingController _discountController = TextEditingController();
+  // final TextEditingController _discountController = TextEditingController();
 
   final List<int> closedDays = [DateTime.monday]; // Montag geschlossen
+
+  bool get isRestaurantOpen {
+    final now = TimeOfDay.now();
+    final today = DateTime.now();
+    final isClosedDay = closedDays.contains(today.weekday);
+
+    final isBeforeOpening = now.hour < timeRepo.openingHour;
+    final isAfterClosing =
+        now.hour > timeRepo.closingHour ||
+        (now.hour == timeRepo.closingHour && now.minute > 0);
+
+    return !(isClosedDay || isBeforeOpening || isAfterClosing);
+  }
 
   Future<bool> showDateTimePicker(BuildContext context) async {
     final today = DateTime.now();
@@ -190,6 +203,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final viewModelMenu = context.watch<ViewmodelMenu>();
     final viewModelUser = context.watch<ViewmodelUser>();
     final viewModelAuth = context.watch<ViewmodelFireAuth>();
+
+    final canPlaceOrder =
+        viewModelMenu.itsFilledOut(
+          selectedAdress,
+          selectedPayment,
+          isDeliverySelected,
+          selectedTimeFromPicker,
+          selectedDateFromPicker,
+          viewModelUser.pickUpUser,
+          selectedDeliveryIndex,
+        ) &&
+        (
+        // Restaurant ist geöffnet
+        isRestaurantOpen
+            // oder es ist eine zukünftige Zeit ausgewählt (Vorbestellung)
+            ||
+            (selectedDateFromPicker != null && selectedTimeFromPicker != null));
 
     final cartItems = viewModelMenu.cartList;
     return Scaffold(
@@ -440,6 +470,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ),
                 ),
+
                 // Padding(
                 //   padding: const EdgeInsets.symmetric(
                 //     horizontal: 10.0,
@@ -452,26 +483,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 //     icon: Icons.card_giftcard,
                 //   ),
                 // ),
-                TextButton(
-                  //TODO: Gutschein generator erstellen, um Gutscheine zu erstellen die man hier eingeben kann!
-                  onPressed: () {
-                    setState(() {
-                      // Erlaubt die Eingabe von Prozentzahlen wie 20 und wandelt sie in 0.20 um
-                      final input = _discountController.text.replaceAll(
-                        ',',
-                        '.',
-                      );
-                      final value = double.tryParse(input);
-                      if (value != null) {
-                        viewModelMenu.currentDiscount = value / 100.0;
-                      } else {
-                        viewModelMenu.currentDiscount = null;
-                      }
-                    });
-                  },
-                  child: Text("Gutschein Einlösen"),
-                ),
-
+                // TextButton(
+                //   //TODO: Gutschein generator erstellen, um Gutscheine zu erstellen die man hier eingeben kann!
+                //   onPressed: () {
+                //     setState(() {
+                //       // Erlaubt die Eingabe von Prozentzahlen wie 20 und wandelt sie in 0.20 um
+                //       final input = _discountController.text.replaceAll(
+                //         ',',
+                //         '.',
+                //       );
+                //       final value = double.tryParse(input);
+                //       if (value != null) {
+                //         viewModelMenu.currentDiscount = value / 100.0;
+                //       } else {
+                //         viewModelMenu.currentDiscount = null;
+                //       }
+                //     });
+                //   },
+                //   child: Text("Gutschein Einlösen"),
+                // ),
                 SummaryBox(
                   orderSummary: viewModelMenu.orderSummeryBox(
                     isDeliverySelected,
@@ -491,54 +521,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
           child: ElevatedButton(
             style: ButtonStyle(
               elevation:
-                  viewModelMenu.itsFilledOut(
-                        selectedAdress,
-                        selectedPayment,
-                        isDeliverySelected,
-                        selectedTimeFromPicker,
-                        selectedDateFromPicker,
-                        viewModelUser.pickUpUser,
-                        selectedDeliveryIndex,
-                      )
-                      ? WidgetStatePropertyAll(3)
-                      : WidgetStatePropertyAll(0),
+                  canPlaceOrder
+                      ? const WidgetStatePropertyAll(3)
+                      : const WidgetStatePropertyAll(0),
               backgroundColor:
-                  viewModelMenu.itsFilledOut(
-                        selectedAdress,
-                        selectedPayment,
-                        isDeliverySelected,
-                        selectedTimeFromPicker,
-                        selectedDateFromPicker,
-                        viewModelUser.pickUpUser,
-                        selectedDeliveryIndex,
-                      )
-                      ? WidgetStatePropertyAll(AppColors.timerPrimary2)
+                  canPlaceOrder
+                      ? const WidgetStatePropertyAll(AppColors.timerPrimary2)
                       : WidgetStatePropertyAll(
                         Colors.black.withValues(alpha: 0.2),
                       ),
               foregroundColor:
-                  viewModelMenu.itsFilledOut(
-                        selectedAdress,
-                        selectedPayment,
-                        isDeliverySelected,
-                        selectedTimeFromPicker,
-                        selectedDateFromPicker,
-                        viewModelUser.pickUpUser,
-                        selectedDeliveryIndex,
-                      )
-                      ? WidgetStatePropertyAll(AppColors.primaryButton)
-                      : WidgetStatePropertyAll(Colors.white),
+                  canPlaceOrder
+                      ? const WidgetStatePropertyAll(AppColors.primaryButton)
+                      : const WidgetStatePropertyAll(Colors.white),
             ),
             onPressed:
-                viewModelMenu.itsFilledOut(
-                      selectedAdress,
-                      selectedPayment,
-                      isDeliverySelected,
-                      selectedTimeFromPicker,
-                      selectedDateFromPicker,
-                      viewModelUser.pickUpUser,
-                      selectedDeliveryIndex,
-                    )
+                canPlaceOrder
                     ? () async {
                       // Berechne Fast-Delivery-Zeit, falls "so schnell wie möglich"
                       TimeOfDay? fastTime;
@@ -546,7 +544,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       if (selectedDeliveryIndex == 0 && isDeliverySelected) {
                         final now = DateTime.now().add(
                           const Duration(minutes: 40),
-                        ); // z. B. 30 Min später
+                        );
                         fastTime = TimeOfDay.fromDateTime(now);
                       }
 
@@ -568,7 +566,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       if (!mounted) return;
                       viewModelMenu.clearAnyList(viewModelMenu.cartList);
 
-                      // 👉 Pending-Seite anzeigen, bis Bestellung angenommen wird
                       navigator.pushReplacement(
                         CupertinoPageRoute(
                           builder:

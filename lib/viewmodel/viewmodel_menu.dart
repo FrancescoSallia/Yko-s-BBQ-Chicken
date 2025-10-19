@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:ykos_bbq_chicken/Error/app_error_handler.dart';
 import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 import 'package:ykos_bbq_chicken/Service/fire_firestore.dart';
 import 'package:ykos_bbq_chicken/enum/category_enum.dart';
@@ -321,8 +322,8 @@ class ViewmodelMenu extends ChangeNotifier {
       await firestore.addOrder(newOrder);
       notifyListeners();
     } on Exception catch (e) {
-      print(e.toString());
-      _error = e.toString();
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
       notifyListeners();
     } finally {
       _error = null;
@@ -337,8 +338,8 @@ class ViewmodelMenu extends ChangeNotifier {
       _orderList = await firestore.fetchOrders();
       notifyListeners();
     } on Exception catch (e) {
-      print(e.toString());
-      _error = e.toString();
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
       notifyListeners();
     } finally {
       _error = null;
@@ -355,7 +356,8 @@ class ViewmodelMenu extends ChangeNotifier {
         notifyListeners();
       },
       onError: (e) {
-        _error = e.toString();
+        final message = AppErrorHandler.getMessageFromException(e);
+        _error = message;
         notifyListeners();
       },
     );

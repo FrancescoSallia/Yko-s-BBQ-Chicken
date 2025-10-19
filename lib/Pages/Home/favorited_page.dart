@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,6 +27,13 @@ class _FavoritedPageState extends State<FavoritedPage>
       // viewModel.loadFavoritedList();
       final viewModelFirestore = context.read<ViewmodelFirestore>();
       viewModelFirestore.fetchFavorites();
+
+      if (viewModelFirestore.error != null) {
+        AnimatedSnackBar.material(
+          viewModelFirestore.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+      }
     });
     _controller = AnimationController(
       vsync: this,
@@ -115,6 +123,13 @@ class _FavoritedPageState extends State<FavoritedPage>
                               await viewModelFirestore.toggleFavorite(
                                 favoritedItem,
                               );
+
+                              if (!mounted) return;
+
+                              AnimatedSnackBar.material(
+                                "von den Favoriten entfernt",
+                                type: AnimatedSnackBarType.success,
+                              ).show(context);
                             },
                           ),
                         );
@@ -137,7 +152,7 @@ class _FavoritedPageState extends State<FavoritedPage>
                     ),
                     SizedBox(height: 5),
                     Text(
-                      "( No Favorites yet )",
+                      "(Noch keine Favorisierte Gerichte)",
                       style: GoogleFonts.inter(
                         fontStyle: FontStyle.italic,
                         fontSize: 18,

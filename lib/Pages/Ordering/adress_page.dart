@@ -1,4 +1,6 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Sheet/sheet_add_adress.dart';
@@ -20,6 +22,13 @@ class _AdressPageState extends State<AdressPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModelAdress = context.read<ViewmodelAdress>();
       viewModelAdress.fetchAdressList();
+
+      if (viewModelAdress.error != null) {
+        AnimatedSnackBar.material(
+          viewModelAdress.error.toString(),
+          type: AnimatedSnackBarType.error,
+        );
+      }
     });
 
     super.initState();
@@ -183,9 +192,15 @@ class _AdressPageState extends State<AdressPage> {
                                   child: SheetOptions(
                                     confirmDeleteDialogFunction: () async {
                                       final navigator = Navigator.of(context);
+                                      final snack = IconSnackBar.show(
+                                        context,
+                                        label: "Adresse Erfolgreich entfernt",
+                                        snackBarType: SnackBarType.success,
+                                      );
                                       await viewModelAdress
                                           .removeFromAdressList(adress);
                                       if (!mounted) return;
+                                      snack;
                                       navigator.pop();
                                       navigator.pop();
                                     },

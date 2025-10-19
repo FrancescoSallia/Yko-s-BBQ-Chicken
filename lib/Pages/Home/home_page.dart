@@ -1,5 +1,7 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
@@ -35,6 +37,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       final viewModelMenu = context.read<ViewmodelMenu>();
       viewModelMenu.getCategoriesFromFoods(viewModelMenu.menuList);
       viewModelMenu.loadMenuFromCategory(CategoryEnum.chicken.label);
+
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        );
+      }
     });
 
     _animationController = AnimationController(

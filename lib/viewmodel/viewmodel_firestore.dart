@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:ykos_bbq_chicken/Error/app_error_handler.dart';
 import 'package:ykos_bbq_chicken/Service/fire_firestore.dart';
 import 'package:ykos_bbq_chicken/model/food.dart';
 
@@ -28,8 +29,9 @@ class ViewmodelFirestore extends ChangeNotifier {
       }
 
       notifyListeners();
-    } catch (e) {
-      _error = e.toString();
+    } on Exception catch (e) {
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
       notifyListeners();
     } finally {
       _isLoading = false;
@@ -44,10 +46,11 @@ class ViewmodelFirestore extends ChangeNotifier {
     notifyListeners();
     try {
       await firestore.addFavorite(item);
-      // notifyListeners();
-    } catch (e) {
-      _error = e.toString();
-      // notifyListeners();
+      notifyListeners();
+    } on Exception catch (e) {
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
+      notifyListeners();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -62,10 +65,11 @@ class ViewmodelFirestore extends ChangeNotifier {
     try {
       await firestore.removeFromFavorite(item);
       // notifyListeners();
-    } catch (e) {
-      _error = e.toString();
+    } on Exception catch (e) {
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
       // print(e.toString());
-      // notifyListeners();
+      notifyListeners();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -84,10 +88,9 @@ class ViewmodelFirestore extends ChangeNotifier {
       final list = await firestore.fetchFavorites();
       _favoriteList = list;
       notifyListeners();
-    } catch (e) {
-      _error = e.toString();
-      print(e.toString());
-
+    } on Exception catch (e) {
+      final message = AppErrorHandler.getMessageFromException(e);
+      _error = message;
       notifyListeners();
     } finally {
       _isLoading = false;
