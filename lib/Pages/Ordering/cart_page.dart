@@ -6,6 +6,7 @@ import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
+import 'package:iconsax/iconsax.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -42,7 +43,11 @@ class _CartPageState extends State<CartPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Cart", style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+            Text(
+              "Bestellung",
+              style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+            ),
+            SizedBox(width: 10),
             Icon(Icons.shopping_bag, color: AppColors.timerPrimary2),
           ],
         ),
@@ -144,7 +149,7 @@ class _CartPageState extends State<CartPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Checkout",
+                                  "Zur Kasse",
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,

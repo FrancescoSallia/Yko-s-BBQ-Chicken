@@ -6,13 +6,13 @@ extension AdressLabelText on AdressEnum {
   String get labelText {
     switch (this) {
       case AdressEnum.suit:
-        return "Suit";
+        return "Wohnung";
       case AdressEnum.house:
-        return "House";
+        return "Haus";
       case AdressEnum.office:
-        return "Office";
+        return "Büro";
       case AdressEnum.outdoor:
-        return "Outdoor";
+        return "Draußen";
     }
   }
 }

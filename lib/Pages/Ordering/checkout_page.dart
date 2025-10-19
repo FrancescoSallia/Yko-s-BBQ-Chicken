@@ -199,7 +199,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         backgroundColor: AppColors.secondary,
         surfaceTintColor: Colors.transparent,
         title: Text(
-          "Checkout",
+          "KASSE",
           style: GoogleFonts.inter(fontWeight: FontWeight.w600),
         ),
       ),
@@ -628,8 +628,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildToggleButton("Delivery", true),
-                  _buildToggleButton("Pick Up", false),
+                  _buildToggleButton("Lieferung", true),
+                  _buildToggleButton("Abholung", false),
                 ],
               ),
             ],

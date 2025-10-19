@@ -92,10 +92,10 @@ class _TimerPageState extends State<TimerPage> {
                   SizedBox(width: 10),
                   Text(
                     order.isDelivery
-                        ? order.selectedTime != null ||
+                        ? order.selectedTime != null &&
                                 order.selectedDate != null
                             ? "${timeRepo.dateDayMonthYearToString(order.selectedDate).data} - ca. ${timeRepo.timeToString(order.selectedTime, context).data}"
-                            : "ca. 40- 50 min"
+                            : "Heute - ca. ${timeRepo.timeToString(order.selectedTime ?? order.fastDeliveryTime, context).data}"
                         : "${timeRepo.dateDayMonthYearToString(order.selectedDate).data} - ${timeRepo.timeToString(order.selectedTime, context).data}",
                     style: GoogleFonts.inter(
                       color: AppColors.timerTextPrimary,

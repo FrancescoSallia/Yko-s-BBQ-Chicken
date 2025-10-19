@@ -49,7 +49,7 @@ class SummaryBox extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Sub-Total", style: GoogleFonts.inter(fontSize: 14)),
+                  Text("Zwischensumme", style: GoogleFonts.inter(fontSize: 14)),
                   Text(
                     "${orderSummary.basisPreis.toStringAsFixed(2)}€",
                     style: GoogleFonts.inter(fontSize: 14),
@@ -62,7 +62,7 @@ class SummaryBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Delivery Charge",
+                      "Liefer-Gebühren",
                       style: GoogleFonts.inter(fontSize: 14),
                     ),
                     Text(
@@ -79,7 +79,7 @@ class SummaryBox extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Discount (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
+                      "Gutschein (${(orderSummary.discount! * 100).toStringAsFixed(0)}%)",
                       style: GoogleFonts.inter(fontSize: 14),
                     ),
                     Text(
@@ -94,7 +94,8 @@ class SummaryBox extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Speisen MwSt. (7%)",
+                    //Getränke mwst.
+                    "inkl. MwSt. (7%)",
                     style: GoogleFonts.inter(fontSize: 14),
                   ),
                   Text(
@@ -111,8 +112,9 @@ class SummaryBox extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    //Getränke mwst.
                     Text(
-                      "Getränke MwSt. (19%)",
+                      "inkl. MwSt. (19%)",
                       style: GoogleFonts.inter(fontSize: 14),
                     ),
                     Text(
@@ -126,7 +128,7 @@ class SummaryBox extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Total",
+                    "Gesamt",
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.bold,
                       fontSize: 18,

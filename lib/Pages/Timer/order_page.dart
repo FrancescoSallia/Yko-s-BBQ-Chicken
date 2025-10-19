@@ -171,11 +171,14 @@ class _OrderPageState extends State<OrderPage> {
                                       ),
 
                                       Text(
-                                        order.isDelivery &&
-                                                order.orderStatus !=
-                                                    OrderStatusEnum.ready
-                                            ? order.orderStatus.labelText
-                                            : OrderStatusEnum.ready.labelText,
+                                        !order.isDelivery &&
+                                                order.orderStatus.labelText ==
+                                                    OrderStatusEnum
+                                                        .delivered
+                                                        .labelText
+                                            ? OrderStatusEnum.ready.labelText
+                                            : order.orderStatus.labelText,
+
                                         style: GoogleFonts.inter(
                                           color: Colors.green,
                                           fontWeight: FontWeight.w600,

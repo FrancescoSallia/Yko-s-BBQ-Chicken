@@ -33,6 +33,10 @@ class _SheetNotePageState extends State<SheetNotePage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          // Text(
+          //   "Anmerkung zu deinem Gericht hinzufügen",
+          //   style: GoogleFonts.inter(fontWeight: FontWeight.w500),
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -47,13 +51,14 @@ class _SheetNotePageState extends State<SheetNotePage> {
               ),
             ],
           ),
+
           Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Note",
+                  "Notiz",
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
@@ -78,18 +83,18 @@ class _SheetNotePageState extends State<SheetNotePage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                 ),
-                hintText: "E.g: without Onion's ",
+                hintText: "z.ß Ohne Zwiebeln etc.",
               ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: SizedBox(
-              width: 150,
+              width: 180,
               child: OutlinedButton(
                 onPressed: () {
                   setState(() {
-                    widget.foodItem.note = _textFieldController.text ;
+                    widget.foodItem.note = _textFieldController.text;
                     viewModelMenu.updateMeal(widget.foodItem);
                     Navigator.of(context).pop();
                   });
@@ -101,7 +106,7 @@ class _SheetNotePageState extends State<SheetNotePage> {
                   backgroundColor: AppColors.primaryButton,
                   foregroundColor: Colors.white,
                 ),
-                child: const Text("Save"),
+                child: const Text("Notiz Speichern"),
               ),
             ),
           ),
