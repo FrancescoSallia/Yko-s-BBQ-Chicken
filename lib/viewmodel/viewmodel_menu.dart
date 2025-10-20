@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:flutter/material.dart';
 import 'package:ykos_bbq_chicken/Error/app_error_handler.dart';
 import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
@@ -22,7 +23,19 @@ class ViewmodelMenu extends ChangeNotifier {
   StreamSubscription? _sub;
 
   ViewmodelMenu() {
-    _listenToOrdersStream();
+    // _listenToOrdersStream();
+
+    // nur starten, wenn user eingeloggt
+    if (FirebaseAuth.instance.currentUser != null) {
+      _listenToOrdersStream();
+    }
+
+    // optional: listener auf AuthStateChanges, um dynamisch zu starten
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if (user != null) {
+        _listenToOrdersStream();
+      }
+    });
   }
 
   @override
@@ -35,10 +48,9 @@ class ViewmodelMenu extends ChangeNotifier {
   String? get error => _error;
 
   void clearError() {
-  _error = null;
-  notifyListeners();
-}
-
+    _error = null;
+    notifyListeners();
+  }
 
   //FoodRepository
   final foodRepo = FoodRepository.instance;

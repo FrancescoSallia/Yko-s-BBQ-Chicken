@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ykos_bbq_chicken/Error/app_error_handler.dart';
 import 'package:ykos_bbq_chicken/Service/fire_auth.dart';
 
 class ViewmodelFireAuth extends ChangeNotifier {
   final auth = FireAuth();
-  final currentUser = FireAuth.auth.currentUser;
+  User? get currentUser => FireAuth.auth.currentUser;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
@@ -21,7 +22,7 @@ class ViewmodelFireAuth extends ChangeNotifier {
   String? deleteUserError;
   String? logoutSuccess;
 
-   void clearError() {
+  void clearError() {
     loginError = null;
     notifyListeners();
   }
@@ -33,6 +34,7 @@ class ViewmodelFireAuth extends ChangeNotifier {
     loginError = null;
     notifyListeners();
     try {
+      await auth.logOut();
       await auth.logIn(email, password);
       loginSuccess = "Succesfully logged in";
       notifyListeners();
@@ -55,6 +57,7 @@ class ViewmodelFireAuth extends ChangeNotifier {
     registerError = null;
     notifyListeners();
     try {
+      await auth.logOut();
       await auth.register(email, password);
       registerSuccess = "Registation Successful";
       notifyListeners();

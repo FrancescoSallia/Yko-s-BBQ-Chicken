@@ -562,6 +562,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
             onPressed:
                 canPlaceOrder
                     ? () async {
+                      final user = viewModelAuth.currentUser;
+                      if (user == null) {
+                        AnimatedSnackBar.material(
+                          "Bitte logge dich ein, um eine Bestellung aufzugeben.",
+                          type: AnimatedSnackBarType.warning,
+                        ).show(context);
+                        return;
+                      }
                       // Berechne Fast-Delivery-Zeit, falls "so schnell wie möglich"
                       TimeOfDay? fastTime;
 
