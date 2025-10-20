@@ -104,12 +104,24 @@ Besonderes Augenmerk liegt auf:
 ## 📱 Screenshots & Animationen
 
 <p align="center">
- <img src="./gifs/login.gif" width="200"> 
- <img src="./gifs/home.gif" width="200">  
- <img src="./gifs/order.gif" width="200">  
- <img src="./gifs/timer.gif" width="200">  
- <img src="./gifs/favorite.gif" width="200">  
- <img src="./gifs/address.gif" width="200">  
+ <img src="./img/login.png" width="200"> 
+ <img src="./img/home.png" width="200"> 
+ <img src="./img/detail.gif" width="200"> 
+ <img src="./img/search.png" width="200"> 
+ <img src="./img/favorites.gif" width="200"> 
+ <img src="./img/cart.png" width="200"> 
+ <img src="./img/delivery.png" width="200">
+ <img src="./img/pickup.png" width="200"> 
+ <img src="./img/adress_list.png" width="200"> 
+ <img src="./img/adress.png" width="200"> 
+ <img src="./img/payment.png" width="200"> 
+ <img src="./img/picker.png" width="200"> 
+ <img src="./img/wait.gif" width="200"> 
+ <img src="./img/timer.gif" width="200"> 
+ 
+ 
+ 
+  
 </p>
 
 ---
