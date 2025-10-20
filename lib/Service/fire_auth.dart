@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class FireAuth {
   static var auth = FirebaseAuth.instance;
- 
 
   Future<void> register(String email, String password) async {
     try {
@@ -19,6 +18,9 @@ class FireAuth {
 
   Future<void> logIn(String email, String password) async {
     try {
+      // 🔹 vorherigen Zustand zurücksetzen
+      await auth.signOut();
+
       await auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException {
       rethrow;
@@ -53,7 +55,7 @@ class FireAuth {
     }
   }
 
-    Future<void> logOut() async {
+  Future<void> logOut() async {
     try {
       await auth.signOut();
     } on FirebaseAuthException {

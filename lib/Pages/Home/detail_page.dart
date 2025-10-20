@@ -35,6 +35,26 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
           .fetchFavorites(); // 🔥 Favoriten aus Firestore laden
       viewModelFirestore.isLiked(widget.item);
       viewModelMenu.loadExtrasForItem(widget.item.category.name);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (viewModelMenu.error != null) {
+          AnimatedSnackBar.material(
+            viewModelMenu.error.toString(),
+            type: AnimatedSnackBarType.error,
+          ).show(context);
+          viewModelMenu.clearError();
+        }
+      });
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (viewModelFirestore.error != null) {
+          AnimatedSnackBar.material(
+            viewModelFirestore.error.toString(),
+            type: AnimatedSnackBarType.error,
+          ).show(context);
+          viewModelFirestore.clearError();
+        }
+      });
     });
     super.initState();
 
@@ -72,8 +92,27 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
     final viewModelFirestore = context.watch<ViewmodelFirestore>();
-
     final size = MediaQuery.of(context).size;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelFirestore.error != null) {
+        AnimatedSnackBar.material(
+          viewModelFirestore.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelFirestore.clearError();
+      }
+    });
 
     return PopScope(
       //wenn man zurück navigiert mit wischen z.ß. darauf zugreifen.
@@ -263,20 +302,6 @@ class _DetailPageState extends State<DetailPage> with TickerProviderStateMixin {
                                         child: Image.asset(label, height: 36),
                                       );
                                     }).toList(),
-                              )
-                            else
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    "lib/img/peper_detail.png",
-                                    height: 36,
-                                  ),
-                                  const SizedBox(width: 6),
-                                  Image.asset(
-                                    "lib/img/peper_detail.png",
-                                    height: 36,
-                                  ),
-                                ],
                               ),
                           ],
                         ),

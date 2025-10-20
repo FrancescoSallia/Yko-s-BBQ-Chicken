@@ -29,7 +29,8 @@ class _TimerPageState extends State<TimerPage> {
         AnimatedSnackBar.material(
           viewModelMenu.error.toString(),
           type: AnimatedSnackBarType.error,
-        );
+        ).show(context);
+        viewModelMenu.clearError();
       }
     });
     super.initState();
@@ -38,6 +39,16 @@ class _TimerPageState extends State<TimerPage> {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ViewmodelMenu>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModel.error != null) {
+        AnimatedSnackBar.material(
+          viewModel.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModel.clearError();
+      }
+    });
 
     // Suche die aktuelle Version der Bestellung im ViewModel
     //Reagiert auf Stream um auch in der detailansicht in echtzeit die daten aktuallisieren zukönnen.

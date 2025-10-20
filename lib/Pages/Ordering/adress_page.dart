@@ -27,7 +27,8 @@ class _AdressPageState extends State<AdressPage> {
         AnimatedSnackBar.material(
           viewModelAdress.error.toString(),
           type: AnimatedSnackBarType.error,
-        );
+        ).show(context);
+        viewModelAdress.clearError();
       }
     });
 

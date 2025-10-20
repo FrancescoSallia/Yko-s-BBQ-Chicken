@@ -14,8 +14,25 @@ class FoodRepository {
 
   List<Food> getFoodsOrDrinks() {
     final List<Food> list = [
+      // 2. Scharf-Süße Flügel
       Food(
         id: "1",
+        name: "Sweet Chili Wings",
+        description:
+            "Crisp wings coated in a sticky, sweet-spicy chili glaze. Perfect for sharing.",
+        category: Category(
+          name: CategoryEnum.chicken.label,
+          categoryImg: "lib/img/chicken_category_icon.png",
+        ),
+        imgAsset: "lib/img/food1.png",
+        artikelNr: null,
+        price: 9.90,
+        labels: ["lib/img/chili.png"],
+        allergens: ["G", "S"],
+        extras: [],
+      ),
+      Food(
+        id: "2",
         name: "Chicken Drumstick's",
         description:
             "Juicy, tender, and perfectly seasoned with a shattering crunch.",
@@ -33,7 +50,7 @@ class FoodRepository {
       ),
       // 1. Gegrillte Spieße
       Food(
-        id: "2",
+        id: "3",
         name: "Flame-Grilled Skewers",
         description:
             "Tender cubes of chicken breast, marinated in garlic-lime and flame-kissed.",
@@ -48,23 +65,7 @@ class FoodRepository {
         allergens: ["2", "1", "P"],
         extras: [],
       ),
-      // 2. Scharf-Süße Flügel
-      Food(
-        id: "3",
-        name: "Sweet Chili Wings",
-        description:
-            "Crisp wings coated in a sticky, sweet-spicy chili glaze. Perfect for sharing.",
-        category: Category(
-          name: CategoryEnum.chicken.label,
-          categoryImg: "lib/img/chicken_category_icon.png",
-        ),
-        imgAsset: "lib/img/food1.png",
-        artikelNr: null,
-        price: 9.90,
-        labels: [],
-        allergens: ["G", "S"],
-        extras: [],
-      ),
+
       Food(
         id: "4",
         name: "Pizza Angela",
@@ -77,7 +78,7 @@ class FoodRepository {
         imgAsset: "lib/img/pizza_angela1.png",
         artikelNr: null,
         price: 12.50,
-        labels: [],
+        labels: ["lib/img/glutenfrei.png"],
         allergens: ["2", "1", "P"],
         extras: [],
       ),
@@ -92,7 +93,7 @@ class FoodRepository {
         imgAsset: "lib/img/pizza_tonno1.png",
         artikelNr: null,
         price: 14.90,
-        labels: ["lib/img/peper.png", "lib/img/peper.png"],
+        labels: ["lib/img/chili.png", "lib/img/glutenfrei.png"],
         allergens: ["A", "F"],
         extras: [],
       ),
@@ -108,7 +109,7 @@ class FoodRepository {
         imgAsset: "lib/img/pizza4.png",
         artikelNr: null,
         price: 16.90,
-        labels: [],
+        labels: ["lib/img/chili.png"],
         allergens: ["A", "F"],
         extras: [],
       ),
@@ -124,7 +125,7 @@ class FoodRepository {
         imgAsset: "lib/img/pizza_nonna.png",
         artikelNr: null,
         price: 15.90,
-        labels: [],
+        labels: ["lib/img/vegetarier.png"],
         allergens: ["2", "LM", "P"],
         extras: [],
       ),
@@ -189,7 +190,7 @@ class FoodRepository {
         imgAsset: "lib/img/pasta2.png",
         artikelNr: null,
         price: 12.50,
-        labels: [],
+        labels: ["lib/img/chili.png"],
         allergens: ["A"],
         extras: [],
       ),
@@ -272,13 +273,13 @@ class FoodRepository {
         extraCategory: CategoryEnum.recommend,
         anzahl: 0,
       ),
-      Extra(name: "Gurken", price: 0.5, extraCategory: CategoryEnum.drinks),
+      Extra(name: "Gurken", price: 0.5, extraCategory: CategoryEnum.salat),
 
       // Nudeln Extras
       Extra(
         name: "Parmesan",
         price: 1.0,
-        extraCategory: CategoryEnum.drinks,
+        extraCategory: CategoryEnum.pasta,
         anzahl: 0,
       ),
       Extra(name: "Basilikum", price: 0.5, extraCategory: CategoryEnum.pasta),

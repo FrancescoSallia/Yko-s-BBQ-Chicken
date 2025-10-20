@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -31,7 +32,7 @@ class _UpdateAdressPageState extends State<UpdateAdressPage> {
 
   @override
   void initState() {
-    context.read<ViewmodelAdress>();
+    final viewModelAdress = context.read<ViewmodelAdress>();
     _nameController.text = widget.adress.name;
     _adressController.text = widget.adress.street;
     _houseNumberController.text = widget.adress.houseNumber;
@@ -41,12 +42,31 @@ class _UpdateAdressPageState extends State<UpdateAdressPage> {
     _informationController.text = widget.adress.information ?? "";
     selectedAdressSymbol = widget.adress.icon;
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelAdress.error != null) {
+        AnimatedSnackBar.material(
+          viewModelAdress.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelAdress.clearError();
+      }
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final viewModelAdress = context.watch<ViewmodelAdress>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelAdress.error != null) {
+        AnimatedSnackBar.material(
+          viewModelAdress.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelAdress.clearError();
+      }
+    });
 
     List<AdressSymbol> adressSymbolList = [
       AdressSymbol(

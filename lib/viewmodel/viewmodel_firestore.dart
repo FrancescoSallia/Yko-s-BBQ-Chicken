@@ -12,6 +12,11 @@ class ViewmodelFirestore extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+   void clearError() {
+  _error = null;
+  notifyListeners();
+}
+
   Future<void> toggleFavorite(Food item) async {
     try {
       _isLoading = true;

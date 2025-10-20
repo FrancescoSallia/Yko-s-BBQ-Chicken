@@ -118,12 +118,7 @@ class CardItem extends StatelessWidget {
                                                   ),
                                                 )
                                                 .toList()
-                                            : [
-                                              Image.asset(
-                                                "lib/img/peper.png",
-                                                width: 30,
-                                              ),
-                                            ],
+                                            : [],
                                   ),
                                 ],
                               ),

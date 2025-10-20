@@ -31,6 +31,11 @@ class ViewmodelAdress extends ChangeNotifier {
   String? _error;
   String? get error => _error;
 
+  void clearError() {
+    _error = null;
+    notifyListeners();
+  }
+
   Future<void> addToAdressList(Adress adress) async {
     _error = null;
     try {

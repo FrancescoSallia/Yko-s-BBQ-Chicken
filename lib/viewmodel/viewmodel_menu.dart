@@ -33,6 +33,13 @@ class ViewmodelMenu extends ChangeNotifier {
 
   String? _error;
   String? get error => _error;
+
+  void clearError() {
+  _error = null;
+  notifyListeners();
+}
+
+
   //FoodRepository
   final foodRepo = FoodRepository.instance;
 

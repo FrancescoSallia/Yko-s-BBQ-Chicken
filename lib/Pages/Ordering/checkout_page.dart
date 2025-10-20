@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -187,14 +188,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   void initState() {
-    final viewModelMenu = context.read<ViewmodelMenu>();
-    // final viewModelAuth = context.read<ViewmodelFireAuth>();
-    if (closedDays.contains(DateTime.now().weekday)) {
-      selectedDeliveryIndex = null;
-    } else {
-      selectedDeliveryIndex = 0;
-    }
-    viewModelMenu.loadCartList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final viewModelMenu = context.read<ViewmodelMenu>();
+      // final viewModelAuth = context.read<ViewmodelFireAuth>();
+      if (closedDays.contains(DateTime.now().weekday)) {
+        selectedDeliveryIndex = null;
+      } else {
+        selectedDeliveryIndex = 0;
+      }
+      viewModelMenu.loadCartList();
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (viewModelMenu.error != null) {
+          AnimatedSnackBar.material(
+            viewModelMenu.error.toString(),
+            type: AnimatedSnackBarType.error,
+          ).show(context);
+          viewModelMenu.clearError();
+        }
+      });
+    });
+
     super.initState();
   }
 
@@ -203,6 +217,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final viewModelMenu = context.watch<ViewmodelMenu>();
     final viewModelUser = context.watch<ViewmodelUser>();
     final viewModelAuth = context.watch<ViewmodelFireAuth>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
 
     final canPlaceOrder =
         viewModelMenu.itsFilledOut(

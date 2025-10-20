@@ -28,7 +28,8 @@ class _OrderPendingPageState extends State<OrderPendingPage> {
         AnimatedSnackBar.material(
           viewModelMenu.error.toString(),
           type: AnimatedSnackBarType.error,
-        );
+        ).show(context);
+        viewModelMenu.clearError();
       }
     });
     super.initState();
@@ -36,6 +37,17 @@ class _OrderPendingPageState extends State<OrderPendingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModelMenu = context.watch<ViewmodelMenu>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(

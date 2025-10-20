@@ -25,11 +25,12 @@ class _OrderPageState extends State<OrderPage> {
       final viewModelMenu = context.read<ViewmodelMenu>();
       await viewModelMenu.loadOrdersList();
 
+      if (!mounted) return;
       if (viewModelMenu.error != null) {
         AnimatedSnackBar.material(
           viewModelMenu.error.toString(),
           type: AnimatedSnackBarType.error,
-        );
+        ).show(context);
       }
     });
     super.initState();
@@ -38,6 +39,16 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.secondary,

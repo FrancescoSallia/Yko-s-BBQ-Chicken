@@ -28,6 +28,7 @@ class _SettingsPageState extends State<SettingsPage> {
           viewModelFireAuth.logoutError.toString(),
           type: AnimatedSnackBarType.error,
         ).show(context);
+        viewModelFireAuth.logoutError = null;
       }
     });
 

@@ -1,7 +1,6 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icon_snackbar/flutter_icon_snackbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:ykos_bbq_chicken/Pages/Home/detail_page.dart';
@@ -42,7 +41,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         AnimatedSnackBar.material(
           viewModelMenu.error.toString(),
           type: AnimatedSnackBarType.error,
-        );
+        ).show(context);
+        viewModelMenu.clearError();
       }
     });
 
@@ -69,6 +69,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
@@ -220,7 +230,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               child: CardItem(
                 scaleAnimation: _animation,
                 rotationAnimation: _animation,
-                largeTitle: 'Recommanded',
+                largeTitle: "Empfehlungen",
 
                 menuList:
                     viewModelMenu

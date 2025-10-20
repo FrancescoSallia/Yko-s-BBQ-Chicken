@@ -72,7 +72,7 @@ class _MySearchFieldState extends State<MySearchField> {
               focusNode: FocusNode(
                 canRequestFocus: false,
               ), //Close a Keyboard after selected an Category
-              hintText: "Search by category or product...",
+              hintText: "Suche nach Kategorie oder Gericht...",
               leading: const Icon(Icons.search),
               backgroundColor: WidgetStatePropertyAll(Colors.white),
               shape: WidgetStatePropertyAll(

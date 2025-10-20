@@ -21,6 +21,11 @@ class ViewmodelFireAuth extends ChangeNotifier {
   String? deleteUserError;
   String? logoutSuccess;
 
+   void clearError() {
+    loginError = null;
+    notifyListeners();
+  }
+
   //Login
   Future<void> logIn(String email, String password) async {
     _isLoading = true;

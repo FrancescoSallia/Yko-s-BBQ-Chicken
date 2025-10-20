@@ -106,8 +106,8 @@ class FireFirestore {
       // Zusätzlich global speichern (yokos kitchen)
       await firestore
           .collection("ykos_kitchen")
-          // .doc("global_orders") // ⚡ fix: nicht userId verwenden!
-          .doc(user.uid)
+          .doc("global_orders") // ⚡ fix: nicht userId verwenden!
+          // .doc(user.uid)
           .collection("all_orders")
           .doc(item.orderId)
           .set(item.toJson());

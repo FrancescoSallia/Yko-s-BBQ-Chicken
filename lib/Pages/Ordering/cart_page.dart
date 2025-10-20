@@ -1,3 +1,4 @@
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +7,6 @@ import 'package:ykos_bbq_chicken/components/order_item.dart';
 import 'package:ykos_bbq_chicken/components/summary_box.dart';
 import 'package:ykos_bbq_chicken/theme/colors.dart';
 import 'package:ykos_bbq_chicken/viewmodel/viewmodel_menu.dart';
-import 'package:iconsax/iconsax.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -21,6 +21,16 @@ class _CartPageState extends State<CartPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModelMenu = context.read<ViewmodelMenu>();
       viewModelMenu.loadCartList();
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
     });
     super.initState();
   }
@@ -29,6 +39,16 @@ class _CartPageState extends State<CartPage> {
   Widget build(BuildContext context) {
     final viewModelMenu = context.watch<ViewmodelMenu>();
     final cartItems = viewModelMenu.cartList;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (viewModelMenu.error != null) {
+        AnimatedSnackBar.material(
+          viewModelMenu.error.toString(),
+          type: AnimatedSnackBarType.error,
+        ).show(context);
+        viewModelMenu.clearError();
+      }
+    });
 
     return Scaffold(
       backgroundColor: AppColors.secondary,
