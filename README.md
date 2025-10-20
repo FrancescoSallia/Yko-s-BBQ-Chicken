@@ -1,3 +1,9 @@
+<p align="center">
+ <img src="./img/yokos_presentation.png" width="1000"> 
+</p>
+
+---
+
 # 🍗 YKOS BBQ Chicken – Good Chicken, Fast Delivery
 
 **Dein direkter Weg zu frischem, leckerem Essen – schnell, einfach und modern.**
@@ -80,26 +86,6 @@ Der Kunde sieht diese Änderungen in **Echtzeit** über einen **visuellen Timer*
 
 ---
 
-## 🧪 Tests & Stabilität
-
-Das System wurde mit Unit- und Integrationstests auf Zuverlässigkeit geprüft.  
-Besonderes Augenmerk liegt auf:
-- der korrekten Synchronisation zwischen Firestore und den ViewModels,  
-- der Stabilität der Authentifizierung,  
-- der Handhabung von Offline-Szenarien.  
-
----
-
-## 🚀 Ausblick
-
-- [ ] Integration von **Online-Zahlungsmethoden** (PayPal, Apple Pay, Google Pay)  
-- [ ] Erweiterte **Push-Benachrichtigungen** für Status-Updates  
-- [ ] **Live-Tracking für Lieferfahrer**  
-- [ ] **Rabatt- & Bonusprogramme** für wiederkehrende Kunden  
-- [ ] **Mehrsprachigkeit** (Deutsch / Englisch / Türkisch)  
-- [ ] **Kundensupport-Chat** direkt in der App  
-
----
 
 ## 📱 Screenshots & Animationen
 
@@ -118,11 +104,28 @@ Besonderes Augenmerk liegt auf:
  <img src="./img/picker.png" width="200"> 
  <img src="./img/wait.gif" width="200"> 
  <img src="./img/timer.gif" width="200"> 
- 
- 
- 
-  
 </p>
+
+---
+
+## 🧪 Tests & Stabilität
+
+Das System wurde mit Unit- und Integrationstests auf Zuverlässigkeit geprüft.  
+Besonderes Augenmerk liegt auf:
+- der korrekten Synchronisation zwischen Firestore und den ViewModels,  
+- der Stabilität der Authentifizierung,  
+- der Handhabung von Offline-Szenarien.  
+
+---
+
+## 🚀 Ausblick
+
+- [ ] Integration von **Online-Zahlungsmethoden** (PayPal, Apple Pay, Google Pay)  
+- [ ] Erweiterte **Push-Benachrichtigungen** für Status-Updates  
+- [ ] **Live-Tracking für Lieferfahrer**  
+- [ ] **Rabatt- & Bonusprogramme** für wiederkehrende Kunden  
+- [ ] **Mehrsprachigkeit** (Deutsch / Englisch / Italienisch)  
+- [ ] **Kundensupport-Chat** direkt in der App  
 
 ---
 
