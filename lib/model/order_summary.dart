@@ -28,7 +28,7 @@ class OrderSummary {
         .where(
           (f) =>
               !f.category.name.toLowerCase().contains(
-                CategoryEnum.drinks.label,
+                CategoryEnum.drinks.label.toLowerCase(),
               ),
         )
         .fold(0.0, (sum, f) => sum + (f.totalWithExtras * rabattFaktor) * 0.07);
@@ -38,7 +38,11 @@ class OrderSummary {
   double get getraenkeMwst {
     final rabattFaktor = 1 - (discount ?? 0.0);
     return foods
-        .where((f) => f.category.name.contains(CategoryEnum.drinks.label))
+        .where(
+          (f) => f.category.name.toLowerCase().contains(
+            CategoryEnum.drinks.label.toLowerCase(),
+          ),
+        )
         .fold(0.0, (sum, f) => sum + (f.totalWithExtras * rabattFaktor) * 0.19);
   }
 

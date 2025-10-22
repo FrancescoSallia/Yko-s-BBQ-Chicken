@@ -49,7 +49,9 @@ class FireAuth {
 
   Future<void> deleteUser() async {
     try {
-      await auth.currentUser!.delete();
+      if (auth.currentUser != null) {
+        await auth.currentUser!.delete();
+      }
     } on FirebaseAuthException {
       rethrow;
     }
