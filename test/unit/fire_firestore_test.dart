@@ -12,7 +12,6 @@ import 'package:ykos_bbq_chicken/model/category.dart';
 import 'package:ykos_bbq_chicken/model/order.dart';
 import 'package:ykos_bbq_chicken/model/order_summary.dart';
 import 'package:ykos_bbq_chicken/model/payment.dart';
-import 'package:ykos_bbq_chicken/model/user.dart';
 
 void main() {
   late MockFirebaseAuth mockAuth;
@@ -204,6 +203,54 @@ void main() {
       final orderList = await fireFirestore.fetchOrders();
       expect(orderList.length, 1);
       expect(orderList, isNotEmpty);
+    });
+
+    test("remove Order from List", () async {
+      final foods = [
+        Food(
+          artikelNr: 'A1',
+          name: 'BBQ Chicken',
+          description: 'Leckeres gegrilltes Hähnchen',
+          category: Category(name: 'Chicken', categoryImg: ''),
+          imgAsset: null,
+          price: 12.0,
+          labels: ['Hot'],
+          allergens: [],
+          count: 2,
+        ),
+        Food(
+          artikelNr: 'D1',
+          name: 'Cola',
+          description: 'Erfrischungsgetränk',
+          category: Category(name: 'Drinks', categoryImg: ''),
+          imgAsset: null,
+          price: 2.5,
+          labels: [],
+          allergens: [],
+          count: 1,
+        ),
+      ];
+      final order = Order(
+        pickUpUser: null,
+        userId: 'user123',
+        isDelivery: true,
+        deliveryAdress: null, // optional, kann auch ein Adress-Objekt sein
+        fastDeliveryTime: null,
+        selectedTime: TimeOfDay(hour: 18, minute: 30),
+        selectedDate: DateTime.now().add(Duration(days: 1)),
+        payment: Payment(name: 'Bar', img: "lib/img/applepay.png"),
+        orderSummary: OrderSummary(
+          foods: foods,
+          discount: 0.1,
+          deliveryCharge: 2.5,
+        ),
+        orderStatus: OrderStatusEnum.recieved,
+      );
+      await fireFirestore.addOrder(order);
+      await fireFirestore.removeOrder(order);
+      final orderList = await fireFirestore.fetchOrders();
+      expect(orderList.length, 0);
+      expect(orderList, isEmpty);
     });
   });
 }
