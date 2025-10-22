@@ -53,6 +53,9 @@ dev_dependencies:
     sdk: flutter
   firebase_auth_mocks: ^0.15.1
   fake_cloud_firestore: ^4.0.0
+
+  integration_test:
+    sdk: flutter
   
 
   # The "flutter_lints" package below contains a set of recommended lints to
