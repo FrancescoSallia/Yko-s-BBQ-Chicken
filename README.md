@@ -6,88 +6,87 @@
 
 # 🍗 YKOS BBQ Chicken – Good Chicken, Fast Delivery
 
-**Dein direkter Weg zu frischem, leckerem Essen – schnell, einfach und modern.**
+**Your direct way to fresh, delicious food – fast, easy, and modern.**
 
-YKOS BBQ Chicken ist die offizielle Liefer- und Bestell-App von **YKO’S**, die dir ermöglicht, deine Lieblingsgerichte bequem online zu bestellen – ob für **Lieferung nach Hause** oder **Selbstabholung**.  
-Neben den beliebten Chicken-Gerichten bietet YKOS jetzt auch **neue Speisen wie Pizzen, Pasta und mehr** an.  
+YKOS BBQ Chicken is the official delivery and ordering app from **YKO’S**, allowing you to conveniently order your favorite dishes online – for **home delivery** or **pickup**.  
+In addition to the popular chicken dishes, YKOS now also offers **new meals such as pizzas, pasta, and more**.  
 
-Das Herzstück der App ist die **Echtzeit-Verbindung** zur internen **Ykos Kitchen App**:  
-Sobald du bestellst, erscheint deine Bestellung in der Küchenanwendung, wo das Team deine Order live verwaltet, Zeiten aktualisiert und dir den **aktuellen Status** übermittelt – alles **in Echtzeit** mit einem **Countdown-Timer**, damit du immer weißt, wann dein Essen fertig oder auf dem Weg ist.
+The heart of the app is the **real-time connection** to the internal **Ykos Kitchen App**:  
+As soon as you place an order, it appears in the kitchen application, where the team manages your order live, updates times, and sends you the **current status** – all **in real time** with a **countdown timer**, so you always know when your food is ready or on the way.
 
 ---
 
 ## 🍔 Features
 
-- [x] **Echtzeit-Bestellstatus** – Dank direkter Verbindung zur YKOS Kitchen App.  
-- [x] **Lieferung oder Abholung** – Wähle flexibel deinen bevorzugten Bestellmodus.  
-- [x] **Timer-Tracking** – Verfolge den Fortschritt deiner Bestellung live.  
-- [x] **Login & Registrierung** – Persönliche oder geschäftliche Adressen sicher speichern.  
-- [x] **Favoriten-System** – Lieblingsgerichte mit einem Klick speichern.  
-- [x] **Vorbestellungen** – Plane Bestellungen im Voraus für bestimmte Tage oder Zeiten.  
-- [x] **Animierte Benutzeroberfläche** – Angenehme UI mit Lottie-Animationen und modernen Designs.  
+- [x] **Real-time order status** – Thanks to direct connection with the YKOS Kitchen App.  
+- [x] **Delivery or pickup** – Choose your preferred ordering mode flexibly.  
+- [x] **Timer tracking** – Track your order’s progress live.  
+- [x] **Login & registration** – Safely store personal or business addresses.  
+- [x] **Favorites system** – Save your favorite dishes with one click.  
+- [x] **Pre-orders** – Schedule orders in advance for specific days or times.  
+- [x] **Animated user interface** – Pleasant UI with Lottie animations and modern design.  
 
 ---
 
-## 🔧 Technischer Aufbau
+## 🔧 Technical Setup
 
-Das Projekt wurde mit **Flutter** entwickelt und folgt dem **MVVM-Prinzip (Model-View-ViewModel)** mit **Provider** als State-Management-Lösung.  
-Für Authentifizierung und Datenspeicherung wird **Firebase** verwendet.
+The project was developed with **Flutter** and follows the **MVVM principle (Model-View-ViewModel)** using **Provider** as a state management solution.  
+**Firebase** is used for authentication and data storage.
 
-### 📁 Struktur
+### 📁 Structure
 
 **• Models:**  
-Enthalten alle Datenstrukturen (z. B. Bestellung, Benutzer, Menüartikel) und kommunizieren mit Firestore.
+Contain all data structures (e.g., order, user, menu item) and communicate with Firestore.
 
 **• ViewModels:**  
-Steuern die Logik zwischen Firestore, Authentifizierung und der UI.  
-Nutzen das Provider-Paket für reaktives State-Management und Echtzeit-Updates.
+Control the logic between Firestore, authentication, and the UI.  
+Use the Provider package for reactive state management and real-time updates.
 
 **• Views (Pages):**  
-Flutter-Widgets, die die Benutzeroberfläche darstellen.  
-Jede View ist minimalistisch, performant und verwendet Animationen für ein modernes Nutzererlebnis.
+Flutter widgets that represent the user interface.  
+Each view is minimalist, high-performing, and uses animations for a modern user experience.
 
 **• Services:**  
-Abstraktionsschicht zur Firebase-Kommunikation (Auth, Firestore).  
-Beispiele:  
-- `FireAuth` → Login, Registrierung, Passwort-Reset  
-- `ViewmodelOrders` → Bestellverarbeitung & Timer-Tracking  
-- `ViewmodelMenu` → Menüverwaltung  
+Abstraction layer for Firebase communication (Auth, Firestore).  
+Examples:  
+- `FireAuth` → Login, registration, password reset  
+- `ViewmodelOrders` → Order processing & timer tracking  
+- `ViewmodelMenu` → Menu management  
 
 ---
 
 ## ☁️ Firebase Integration
 
-### Verwendete Firebase-Services
+### Firebase Services Used
 
 - **Firebase Authentication**  
-  Für Login, Registrierung und Passwort-Zurücksetzen per E-Mail.  
+  For login, registration, and password reset via email.  
 
 - **Cloud Firestore**  
-  Speicherung aller Bestellungen, Benutzerinformationen und Menüartikel.  
-  Dank **Echtzeit-Listener** wird der Bestellstatus automatisch aktualisiert.  
+  Stores all orders, user information, and menu items.  
+  Thanks to **real-time listeners**, the order status is automatically updated.  
 
-### Vorteile:
+### Advantages:
 
-✅ **Echtzeit-Synchronisierung** zwischen Kunden- und Küchen-App  
-✅ **Offline-Fähigkeit** durch lokale Zwischenspeicherung  
-✅ **Sichere Authentifizierung** über FirebaseAuth  
-
----
-
-## 🔁 Verbindung zur YKOS Kitchen App
-
-Die YKOS BBQ Chicken App ist direkt mit der **Ykos Kitchen App** verbunden.  
-Bestellungen erscheinen automatisch im Küchen-Dashboard, wo Mitarbeiter:  
-- den Bestellstatus ändern (z. B. „in Bearbeitung“, „unterwegs“, „fertig“),  
-- Liefer- und Abholzeiten anpassen,  
-- den Fortschritt live zurück an die Kunden-App übermitteln.  
-
-Der Kunde sieht diese Änderungen in **Echtzeit** über einen **visuellen Timer** in der App.
+✅ **Real-time synchronization** between customer and kitchen app  
+✅ **Offline capability** through local caching  
+✅ **Secure authentication** via FirebaseAuth  
 
 ---
 
+## 🔁 Connection to the YKOS Kitchen App
 
-## 📱 Screenshots & Animationen
+The YKOS BBQ Chicken App is directly connected to the **Ykos Kitchen App**.  
+Orders automatically appear in the kitchen dashboard, where employees can:  
+- change the order status (e.g., “in progress,” “on the way,” “ready”),  
+- adjust delivery and pickup times,  
+- send progress updates back to the customer app live.  
+
+Customers see these changes **in real time** through a **visual timer** in the app.
+
+---
+
+## 📱 Screenshots & Animations
 
 <p align="center">
  <img src="./img/login.png" width="200"> 
@@ -108,59 +107,59 @@ Der Kunde sieht diese Änderungen in **Echtzeit** über einen **visuellen Timer*
 
 ---
 
-## 🧪 Tests & Stabilität
+## 🧪 Testing & Stability
 
-Das System wurde mit Unit- und Integrationstests auf Zuverlässigkeit geprüft.  
-Besonderes Augenmerk liegt auf:
-- der korrekten Synchronisation zwischen Firestore und den ViewModels,  
-- der Stabilität der Authentifizierung,  
-- der Handhabung von Offline-Szenarien.  
-
----
-
-## 🚀 Ausblick
-
-- [ ] Integration von **Online-Zahlungsmethoden** (PayPal, Apple Pay, Google Pay)  
-- [ ] Erweiterte **Push-Benachrichtigungen** für Status-Updates  
-- [ ] **Live-Tracking für Lieferfahrer**  
-- [ ] **Rabatt- & Bonusprogramme** für wiederkehrende Kunden  
-- [ ] **Mehrsprachigkeit** (Deutsch / Englisch / Italienisch)  
-- [ ] **Kundensupport-Chat** direkt in der App  
+The system has been tested for reliability with unit and integration tests.  
+Special focus is placed on:
+- correct synchronization between Firestore and ViewModels,  
+- stable authentication,  
+- handling of offline scenarios.  
 
 ---
 
-## 🧩 Verwendete Packages & Frameworks
+## 🚀 Outlook
 
-| Technologie | Beschreibung |
-|--------------|---------------|
-| **Flutter** | UI-Framework für Android & iOS |
-| **Provider** | State-Management für MVVM-Struktur |
-| **FirebaseAuth** | Authentifizierungssystem |
-| **Cloud Firestore** | Echtzeit-Datenbank |
-| **Lottie** | Animierte Benutzeroberflächen |
-| **Google Fonts** | Typografie & Design |
-| **Animated SnackBar** | Benutzerfreundliche Benachrichtigungen |
-| **Logger** | Debugging und Logging |
-| **UUID** | Eindeutige IDs für Bestellungen & Nutzer |
+- [ ] Integration of **online payment methods** (PayPal, Apple Pay, Google Pay)  
+- [ ] Extended **push notifications** for status updates  
+- [ ] **Live tracking for delivery drivers**  
+- [ ] **Discount & bonus programs** for returning customers  
+- [ ] **Multilingual support** (German / English / Italian)  
+- [ ] **Customer support chat** directly in the app  
 
 ---
 
-### 🏗️ Architektur-Zusammenfassung
+## 🧩 Used Packages & Frameworks
 
-| Ordner / Datei | Beschreibung |
-|----------------|---------------|
-| 📂 `model/` | Datenmodelle (Order, User, MenuItem) |
-| 📂 `viewmodel/` | Business-Logik & State (Provider) |
-| 📂 `service/` | Firebase Services (Auth, Firestore) |
-| 📂 `Pages/` | UI-Ansichten (Login, Menu, Checkout, Timer etc.) |
+| Technology | Description |
+|-------------|--------------|
+| **Flutter** | UI framework for Android & iOS |
+| **Provider** | State management for MVVM structure |
+| **FirebaseAuth** | Authentication system |
+| **Cloud Firestore** | Real-time database |
+| **Lottie** | Animated user interfaces |
+| **Google Fonts** | Typography & design |
+| **Animated SnackBar** | User-friendly notifications |
+| **Logger** | Debugging and logging |
+| **UUID** | Unique IDs for orders & users |
+
+---
+
+### 🏗️ Architecture Summary
+
+| Folder / File | Description |
+|----------------|--------------|
+| 📂 `model/` | Data models (Order, User, MenuItem) |
+| 📂 `viewmodel/` | Business logic & state (Provider) |
+| 📂 `service/` | Firebase services (Auth, Firestore) |
+| 📂 `Pages/` | UI views (Login, Menu, Checkout, Timer, etc.) |
 | 📂 `navigation/` | Navigation & BottomNav |
-| 📂 `Error/` | Zentrale Fehlerbehandlung |
-| 📄 `main.dart` | Einstiegspunkt der App |
+| 📂 `Error/` | Central error handling |
+| 📄 `main.dart` | App entry point |
 
 ---
 
-## ❤️ Fazit
+## ❤️ Conclusion
 
-**YKOS BBQ Chicken** vereint modernes App-Design mit echter Funktionalität.  
-Kunden bestellen mit nur wenigen Klicks, während die Küche live reagiert – alles nahtlos verbunden über Firebase.  
-Schnell, transparent und zuverlässig – **Good Chicken, Fast Delivery.**
+**YKOS BBQ Chicken** combines modern app design with real functionality.  
+Customers can order with just a few clicks, while the kitchen reacts live – all seamlessly connected through Firebase.  
+Fast, transparent, and reliable – **Good Chicken, Fast Delivery.**
