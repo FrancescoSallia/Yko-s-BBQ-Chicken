@@ -163,3 +163,6 @@ Special focus is placed on:
 **YKOS BBQ Chicken** combines modern app design with real functionality.  
 Customers can order with just a few clicks, while the kitchen reacts live – all seamlessly connected through Firebase.  
 Fast, transparent, and reliable – **Good Chicken, Fast Delivery.**
+
+
+Design inspiration: Jewel Thompson-Adiuku
